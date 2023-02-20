@@ -52,6 +52,7 @@ public class MainRenderer implements GamePageInterface {
 
     @Override
     public void draw() {
+        shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
         fpsPoligon.setRedrawNeeded(true);
@@ -62,6 +63,7 @@ public class MainRenderer implements GamePageInterface {
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
+        fpsPoligon.redrawNow();
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
     }
 

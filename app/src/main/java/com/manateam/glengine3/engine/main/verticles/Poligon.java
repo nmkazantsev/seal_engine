@@ -168,27 +168,6 @@ public class Poligon implements VerticleSet {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, 0);
     }
 
-    private int createTexture() {
-        final int[] textureIds = new int[1];
-        //создаем пустой массив из одного элемента
-        //в этот массив OpenGL ES запишет свободный номер текстуры,
-        // получаем свободное имя текстуры, которое будет записано в names[0]
-        glGenTextures(1, textureIds, 0);
-        if (textureIds[0] == 0) {
-            return 0;
-        }
-        // настройка объекта текстуры
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureIds[0]);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-        // сброс target
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        return textureIds[0];
-    }
-
     public void prepareAndDraw(Point a, Point b, Point c) {
         prepareData(a, b, c);
         bindData();
