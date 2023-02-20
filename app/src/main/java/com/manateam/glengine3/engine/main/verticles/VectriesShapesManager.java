@@ -17,7 +17,6 @@ public class VectriesShapesManager {
             if (allShapes.get(i).get() != null) {
                 if (allShapes.get(i).get().isRedrawNeeded()) {
                     allShapes.get(i).get().onRedraw();
-                    allShapes.get(i).get().updateTextureConncetion();
                 }
             }
         }
@@ -36,7 +35,6 @@ public class VectriesShapesManager {
             if (allShapesToRedraw.get(i).get() != null) {
                 if (allShapesToRedraw.get(i).get().isRedrawNeeded()) {
                     allShapesToRedraw.get(i).get().onRedraw();
-                    allShapesToRedraw.get(i).get().updateTextureConncetion();
                 }
             }
         }
@@ -49,7 +47,6 @@ public class VectriesShapesManager {
         for (int i = 0; i < allShapes.size(); i++) {
             if (allShapes.get(i).get() != null) {
                 allShapes.get(i).get().onRedrawSetup();
-                allShapes.get(i).get().updateTextureConncetion();
             }
         }
         Iterator<WeakReference<VerticleSet>> iterator = allShapes.iterator();

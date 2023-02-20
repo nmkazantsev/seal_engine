@@ -13,19 +13,20 @@ import android.opengl.GLES20;
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.OpenGLRenderer;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Texture {
-    private static List<Texture> textures;
+    private static List<Texture> textures = new ArrayList<>();
     private int id;
-    private String owner = null;
+    private String creatorClassName = null;
 
-    Texture(GamePageInterface creator) {
+    public Texture(GamePageInterface creator) {
         textures.add(this);
-        owner = (String) creator.getClass().getName();
+        creatorClassName = (String) creator.getClass().getName();
         if(creator==null){
-            owner=null;
+            creatorClassName =null;
         }
         id = createTexture();
     }
@@ -52,7 +53,7 @@ public class Texture {
     }
 
     private String getCreatorClassName() {
-        return (String) owner;
+        return (String) creatorClassName;
     }
 
     private void reload(){
@@ -71,6 +72,7 @@ public class Texture {
             }
         }
     }
+
     public static void reloadAll(){
         Iterator<Texture> iterator = textures.iterator();
         while (iterator.hasNext()) {
@@ -81,5 +83,9 @@ public class Texture {
 
     public void deleteTexture() {
         glDeleteTextures(1, new int[]{id}, 0);//удалить текстуру с id texture, отступ ноль длина массива 1
+    }
+
+    public int getId(){
+        return id;
     }
 }

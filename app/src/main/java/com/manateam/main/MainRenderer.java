@@ -43,7 +43,7 @@ public class MainRenderer implements GamePageInterface {
     private CameraSettings cameraSettings;
 
     public MainRenderer() {
-        shader = new Shader(R.raw.vertex_shader_light, R.raw.fragment_shader_light, this);
+        shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();

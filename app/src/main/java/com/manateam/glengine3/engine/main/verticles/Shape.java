@@ -251,11 +251,6 @@ public class Shape implements VerticleSet {
 
     private void postToGl() {
         postToGlNeeded = false;
-        if (isTextureDeleted()) {
-            texture = this.createTexture();
-            updateTextureConncetion();
-            setTextureDeleted(false);
-        }
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, this.texture);
 
@@ -314,23 +309,6 @@ public class Shape implements VerticleSet {
         return redrawNeeded;
     }
 
-    @Override
-    public void deleteTexture() {
-        //удалаяет все: и битмап, и текстуру с видюхи. Ставит флаги redrawNeeded и postToGlNeeded;
-        //если не трогать флаги, то текустура будет автоматически создана при следующей рисовке
-        //если не пререрисовать текстуру - ведет себя непредсказуемо
-        //но если перед каждой рисовкой стоит проверка на redrawNeed - все нормально
-        glDeleteTextures(1, new int[]{texture}, 0);//удалить текстуру с id texture, отступ ноль длина массива 1
-        setTextureDeleted(true);
-        texture = -1;
-        image.delete();
-        setRedrawNeeded(true);
-    }
-
-    @Override
-    public boolean isTextureDeleted() {
-        return isTextureDeleted;
-    }
 
     @Override
     public void onRedraw() {
@@ -343,12 +321,7 @@ public class Shape implements VerticleSet {
         }
     }
 
-    @Override
-    public void updateTextureConncetion() {
-        if (texturePoligonConnector.get() != null) {
-            texturePoligonConnector.get().setTexture(texture);
-        }
-    }
+
 
     @Override
     public String getCreatorClassName() {

@@ -24,6 +24,7 @@ import android.opengl.GLUtils;
 
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.engine.main.images.PImage;
+import com.manateam.glengine3.engine.main.textures.Texture;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.utils.Utils;
 
@@ -37,7 +38,8 @@ import java.util.function.Function;
 
 //это 3д glShape так теперь называется)
 public class Poligon implements VerticleSet {
-    private int texture;
+    private Texture texture;
+    private String creatorClassName;
     private static FloatBuffer vertexData;
     private final static int POSITION_COUNT = 3;
     private static final int TEXTURE_COUNT = 2;
@@ -45,44 +47,27 @@ public class Poligon implements VerticleSet {
             + TEXTURE_COUNT) * 4;
 
     protected boolean postToGlNeeded = true;
-    private boolean isTextureDeleted = true;
-    protected boolean saveMemory = false;
     protected boolean redrawNeeded = true;
     public PImage image;
     public List<String> redrawParams = new ArrayList<>();//change it in the way you like
 
     private Function<List<String>, PImage> redrawFunction;
-    private WeakReference<TexturePoligonConnector> texturePoligonConnector;
-    private String creatorClassName;
+
 
     public Poligon(Function<List<String>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
         this.redrawFunction = redrawFunction;
         VectriesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
-        texturePoligonConnector = VectriesShapesManager.addTexPoliLinnk(new WeakReference<>(this));
-        this.saveMemory = saveMemory;
-
+        texture = new Texture(page);
         for (int i = 0; i < paramSize; i++) {
             redrawParams.add("");
         }
         redrawNow();
-        if(page!=null) {
-            this.creatorClassName = (String) page.getClass().getName();
-            texturePoligonConnector.get().setCreatorClassName(creatorClassName);
+        creatorClassName = (String) page.getClass().getName();
+        if (page == null) {
+            creatorClassName = null;
         }
     }
 
-
-    @Override
-    public void updateTextureConncetion() {
-        if (texturePoligonConnector.get() != null) {
-            texturePoligonConnector.get().setTexture(texture);
-        }
-    }
-
-    @Override
-    public String getCreatorClassName() {
-        return creatorClassName;
-    }
 
     public void newParamsSize(int paramSize) {
         redrawParams = new ArrayList<String>();
@@ -162,7 +147,7 @@ public class Poligon implements VerticleSet {
             // помещаем текстуру в target 2D юнита 0
             glActiveTexture(GL_TEXTURE0);
             if (!postToGlNeeded) {
-                glBindTexture(GL_TEXTURE_2D, texture);
+                glBindTexture(GL_TEXTURE_2D, texture.getId());
             }
             if (postToGlNeeded) {
                 postToGl();
@@ -177,19 +162,10 @@ public class Poligon implements VerticleSet {
     }
 
     private void postToGl() {
-        postToGlNeeded = false;
-        if (isTextureDeleted()) {
-            texture = this.createTexture();
-            updateTextureConncetion();
-            setTextureDeleted(false);
-        }
+        postToGlNeeded=false;
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, this.texture);
-
+        glBindTexture(GL_TEXTURE_2D, texture.getId());
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, 0);
-        if (saveMemory) {
-            image.delete();
-        }
     }
 
     private int createTexture() {
@@ -228,41 +204,17 @@ public class Poligon implements VerticleSet {
     @Override
     public void onRedrawSetup() {
         setRedrawNeeded(true);
-        setTextureDeleted(true);
     }
 
     @Override
     public void setRedrawNeeded(boolean redrawNeeded) {
         this.redrawNeeded = redrawNeeded;
         postToGlNeeded = true;
-        if (texturePoligonConnector.get() != null) {
-            if (redrawNeeded) {
-                VectriesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
-            }
-        }
     }
 
     @Override
     public boolean isRedrawNeeded() {
         return redrawNeeded;
-    }
-
-    @Override
-    public void deleteTexture() {
-        //удалаяет все: и битмап, и текстуру с видюхи. Ставит флаги redrawNeeded и postToGlNeeded;
-        //если не трогать флаги, то текустура будет автоматически создана при следующей рисовке
-        //если не пререрисовать текстуру - ведет себя непредсказуемо
-        //но если перед каждой рисовкой стоит проверка на redrawNeed - все нормально
-        glDeleteTextures(1, new int[]{texture}, 0);//удалить текстуру с id texture, отступ ноль длина массива 1
-        setTextureDeleted(true);
-        texture = -1;
-        image.delete();
-        setRedrawNeeded(true);
-    }
-
-    @Override
-    public boolean isTextureDeleted() {
-        return isTextureDeleted;
     }
 
     @Override
@@ -274,11 +226,12 @@ public class Poligon implements VerticleSet {
         setRedrawNeeded(false);
     }
 
-    public void redrawNow() {
-        onRedraw();
+    @Override
+    public String getCreatorClassName() {
+        return creatorClassName;
     }
 
-    protected void setTextureDeleted(boolean textureDeleted) {
-        isTextureDeleted = textureDeleted;
+    public void redrawNow() {
+        onRedraw();
     }
 }

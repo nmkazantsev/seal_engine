@@ -12,13 +12,7 @@ interface VerticleSet {
 
      boolean isRedrawNeeded();
 
-     void deleteTexture();
-
-     boolean isTextureDeleted();
-
      void onRedraw();
-
-     void updateTextureConncetion();
 
      String getCreatorClassName();
 }
