@@ -71,7 +71,7 @@ public class Shader { //means shader program
         GLES20.glDeleteProgram(link);
     }
 
-    private int c = 0;
+
     public static void applyShader(Shader s) {
         if (s.reloadNeeded){
             s.reload();
