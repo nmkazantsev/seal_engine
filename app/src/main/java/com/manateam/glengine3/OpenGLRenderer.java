@@ -12,6 +12,7 @@ import static com.manateam.glengine3.MainActivity.touchEvents;
 import static com.manateam.glengine3.MainActivity.touchEventsNumb;
 import static com.manateam.glengine3.MainActivity.touches;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
+import static com.manateam.glengine3.utils.Utils.delay;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
 import static com.manateam.glengine3.utils.Utils.millis;
@@ -65,13 +66,13 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
         MainConfigurationFunctions.context = context;
+        Utils.context = context;
+        gaphicsSetup();
         glClearColor(0f, 0f, 0f, 1f);
         glEnable(GL_DEPTH_TEST);
         mMatrix = resetTranslateMatrix(mMatrix);
-        gaphicsSetup();
         if (firstStart) {
             programStartTime = System.currentTimeMillis();
-            Utils.context = context;
             setup();
             firstStart = false;
         }
@@ -86,15 +87,16 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceChanged(GL10 arg0, int width, int height) {
         glViewport(0, 0, width, height);
+        Log.e("surface changed",String.valueOf(x));
     }
 
     private void gaphicsSetup() {
+        Shader.updateAllLocations();
         Texture.reloadAll();
         VectriesShapesManager.onRedrawSetup();
         FrameBuffer.onRedraw();
         glShape.allShapesRedrawSetup();
         VideoShape.redrawAll();
-        Shader.redrawSetup();
     }
 
     private void setup() {

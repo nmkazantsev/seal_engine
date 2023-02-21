@@ -3,18 +3,16 @@ package com.manateam.glengine3.engine.main.shaders;
 import static com.manateam.glengine3.engine.main.shaders.ShaderUtils.createShaderProgram;
 
 import android.opengl.GLES20;
-import android.util.Log;
 
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.OpenGLRenderer;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Shader { //means shader program
-    private static List<WeakReference<Shader>> allShaders = new ArrayList<>();
+    private static List<Shader> allShaders = new ArrayList<>();
     private int link;
     private int vertex, fragment, geom = -1;
     private String page = "";
@@ -27,7 +25,7 @@ public class Shader { //means shader program
         if (page != null) {
             this.page = (String) page.getClass().getName();
         }
-        allShaders.add(new WeakReference<>(this));
+        allShaders.add(this);
     }
 
     public Shader(int vertex, int fragment, int geom, GamePageInterface page) {
@@ -38,15 +36,11 @@ public class Shader { //means shader program
         if (page != null) {
             this.page = (String) page.getClass().getName();
         }
-        allShaders.add(new WeakReference<>(this));
-    }
-
-    private void updateLocation() {
-        reloadNeeded = true;
+        allShaders.add(this);
     }
 
     private void reload() {
-        this.delete();
+        //this.delete();
         if (geom == -1) {
             link = createShaderProgram(vertex, fragment);
         } else {
@@ -56,14 +50,14 @@ public class Shader { //means shader program
 
     public static void updateAllLocations() {
         for (int i = 0; i < allShaders.size(); i++) {
-            if (allShaders.get(i).get() != null) {
-                allShaders.get(i).get().updateLocation();
+            if (allShaders.get(i) != null) {
+                allShaders.get(i).reloadNeeded = true;
             }
         }
     }
 
-    private boolean unneded() {
-        if(this.page.equals("")){
+    private boolean unneeded() {
+        if (this.page.equals("")) {
             return false;
         }
         if (!this.page.equals(OpenGLRenderer.getPageClassName())) {
@@ -77,10 +71,10 @@ public class Shader { //means shader program
         GLES20.glDeleteProgram(link);
     }
 
+    private int c = 0;
     public static void applyShader(Shader s) {
-        if (s.reloadNeeded && redrawPassed) {
+        if (s.reloadNeeded){
             s.reload();
-            Log.e("reloaf", "sdf");
             s.reloadNeeded = false;
         }
         ShaderUtils.applyShader(s.link);
@@ -88,20 +82,16 @@ public class Shader { //means shader program
 
 
     public static void onPageChange() {
-        Iterator<WeakReference<Shader>> iterator = allShaders.iterator();
+        ShaderUtils.prevProgramId=-1;
+        Iterator<Shader> iterator = allShaders.iterator();
         while (iterator.hasNext()) {
-            WeakReference<Shader> e = iterator.next();
-            if (e.get() == null) {
+            Shader e = iterator.next();
+            if (e == null) {
                 iterator.remove();
-            } else if (e.get().unneded()) {
+            } else if (e.unneeded()) {
+                e.delete();
                 iterator.remove();
             }
         }
-    }
-
-    private static boolean redrawPassed = false;
-
-    public static void redrawSetup() {
-        redrawPassed = true;
     }
 }

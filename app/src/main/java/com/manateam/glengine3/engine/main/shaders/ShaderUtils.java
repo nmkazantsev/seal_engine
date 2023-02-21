@@ -113,14 +113,14 @@ public class ShaderUtils {
         return programId;
     }
 
-    private static int prevProgramId;
+    static int prevProgramId;
 
     protected static void applyShader(int programId) {
-        if (programId != prevProgramId) {
+       // if (programId != prevProgramId) {
             getLocations(programId);//update the most important locations
             glUseProgram(programId);
             prevProgramId = programId;
-        }
+        //}
     }
 
 }

@@ -37,13 +37,13 @@ import com.manateam.glengine3.engine.oldEngine.glShape;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.redrawFunctions.MainRedrawFunctions;
 
-public class MainRenderer implements GamePageInterface {
+public class SecondRenderer implements GamePageInterface {
     private Poligon fpsPoligon;
     private Shader shader;
     private ProjectionMatrixSettings projectionMatrixSettings;
     private CameraSettings cameraSettings;
 
-    public MainRenderer() {
+    public SecondRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         cameraSettings = new CameraSettings(x, y);
@@ -55,7 +55,7 @@ public class MainRenderer implements GamePageInterface {
     public void draw() {
         //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         applyShader(shader);
-        glClearColor(1f, 1f, 1f, 1);
+        glClearColor(0f, 1f, 1f, 1);
         fpsPoligon.setRedrawNeeded(true);
         cameraSettings.resetFor2d();
         projectionMatrixSettings.resetFor2d();
@@ -71,7 +71,7 @@ public class MainRenderer implements GamePageInterface {
     @Override
     public void touchStarted() {
         Log.e("touch", "statred");
-        OpenGLRenderer.startNewPage(new SecondRenderer());
+        OpenGLRenderer.startNewPage(new MainRenderer());
         //startNewPage(new LightRender());
     }
 
