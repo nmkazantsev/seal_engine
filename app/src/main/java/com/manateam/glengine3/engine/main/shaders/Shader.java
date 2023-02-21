@@ -49,6 +49,7 @@ public class Shader { //means shader program
     }
 
     public static void updateAllLocations() {
+        ShaderUtils.prevProgramId = -1;
         for (int i = 0; i < allShaders.size(); i++) {
             if (allShaders.get(i) != null) {
                 allShaders.get(i).reloadNeeded = true;
@@ -73,7 +74,7 @@ public class Shader { //means shader program
 
 
     public static void applyShader(Shader s) {
-        if (s.reloadNeeded){
+        if (s.reloadNeeded) {
             s.reload();
             s.reloadNeeded = false;
         }
@@ -82,7 +83,6 @@ public class Shader { //means shader program
 
 
     public static void onPageChange() {
-        ShaderUtils.prevProgramId=-1;
         Iterator<Shader> iterator = allShaders.iterator();
         while (iterator.hasNext()) {
             Shader e = iterator.next();

@@ -59,7 +59,7 @@ public class VectriesShapesManager {
     }
 
     public static void CheckAllTextures() {
-        Iterator<TexturePoligonConnector> iterator = textureConnections.iterator();
+       /* Iterator<TexturePoligonConnector> iterator = textureConnections.iterator();
         while (iterator.hasNext()) {
             TexturePoligonConnector e = iterator.next();
             e.deleteTextIfReferetNull();
@@ -67,6 +67,7 @@ public class VectriesShapesManager {
                 iterator.remove();
             }
         }
+        */
     }
 
     public static WeakReference<TexturePoligonConnector> addTexPoliLinnk(WeakReference<VerticleSet> poligon) {

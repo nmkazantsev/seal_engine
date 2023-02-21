@@ -25,8 +25,8 @@ public class Texture {
     public Texture(GamePageInterface creator) {
         textures.add(this);
         creatorClassName = (String) creator.getClass().getName();
-        if(creator==null){
-            creatorClassName =null;
+        if (creator == null) {
+            creatorClassName = null;
         }
         id = createTexture();
     }
@@ -56,8 +56,8 @@ public class Texture {
         return (String) creatorClassName;
     }
 
-    private void reload(){
-        createTexture();//create it once again. Do not delete it, you may delete a previously created in this loop texture
+    private void reload() {
+        id = createTexture();//create it once again. Do not delete it, you may delete a previously created in this loop texture
     }
 
     public static void onPageChanged() {
@@ -73,7 +73,7 @@ public class Texture {
         }
     }
 
-    public static void reloadAll(){
+    public static void reloadAll() {
         Iterator<Texture> iterator = textures.iterator();
         while (iterator.hasNext()) {
             Texture e = iterator.next();
@@ -85,7 +85,7 @@ public class Texture {
         glDeleteTextures(1, new int[]{id}, 0);//удалить текстуру с id texture, отступ ноль длина массива 1
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 }
