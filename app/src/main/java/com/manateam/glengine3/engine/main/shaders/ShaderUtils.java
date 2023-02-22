@@ -17,7 +17,6 @@ import static android.opengl.GLES30.glGetShaderiv;
 import static android.opengl.GLES30.glLinkProgram;
 import static android.opengl.GLES30.glShaderSource;
 import static android.opengl.GLES32.GL_GEOMETRY_SHADER;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.getLocations;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -116,8 +115,7 @@ public class ShaderUtils {
     static int prevProgramId;
 
     protected static void applyShader(int programId) {
-        if (programId != prevProgramId|true) {
-            getLocations(programId);//update the most important locations
+        if (programId != prevProgramId) {
             glUseProgram(programId);
             prevProgramId = programId;
         }

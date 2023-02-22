@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.manateam.glengine3.engine.main.camera.CameraSettings;
 import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
+import com.manateam.glengine3.engine.main.shaders.Shader;
 
 public class MainConfigurationFunctions {
 
@@ -29,17 +30,6 @@ public class MainConfigurationFunctions {
 
     public static Context context;
 
-
-    public static void getLocations(int programId) {
-        aPositionLocation = glGetAttribLocation(programId, "aPos");
-        aTextureLocation = glGetAttribLocation(programId, "aTexCoord");
-        uTextureUnitLocation = glGetUniformLocation(programId, "u_TextureUnit");
-        projectionMatrixLoation=GLES30.glGetUniformLocation(programId, "projection");
-        viewMatrixLocation=GLES30.glGetUniformLocation(programId, "view");
-        modelMtrixLocation=GLES30.glGetUniformLocation(programId, "model");
-        normalsLocation=GLES30.glGetAttribLocation(programId, "normalVec");
-    }
-
     public static void bindAllMatrix(CameraSettings c, ProjectionMatrixSettings p, float[] mMatrix) {
         applyMatrix(mMatrix);
         applyProjectionMatrix(p);
@@ -53,22 +43,22 @@ public class MainConfigurationFunctions {
         } else {
             Matrix.orthoM(mProjectionMatrix, 0, p.left, p.right, p.bottom, p.top, p.near, p.far);
         }
-        glUniformMatrix4fv(projectionMatrixLoation, 1, false, mProjectionMatrix, 0);
+        glUniformMatrix4fv(Shader.getActiveShader().getAdaptor().getProjectionLocation(), 1, false, mProjectionMatrix, 0);
     }
 
     public static void applyProjectionMatrix(ProjectionMatrixSettings p) {
         //perspective is always enabled here
         Matrix.frustumM(mProjectionMatrix, 0, p.left, p.right, p.bottom, p.top, p.near, p.far);
-        glUniformMatrix4fv(projectionMatrixLoation, 1, false, mProjectionMatrix, 0);
+        glUniformMatrix4fv(Shader.getActiveShader().getAdaptor().getProjectionLocation(), 1, false, mProjectionMatrix, 0);
     }
 
     public static void applyCameraSettings(CameraSettings cam) {
         Matrix.setLookAtM(mViewMatrix, 0, cam.eyeX, cam.eyeY, cam.eyeZ, cam.centerX, cam.centerY, cam.centerZ, cam.upX, cam.upY, cam.upZ);
-        glUniformMatrix4fv(viewMatrixLocation, 1, false, mViewMatrix, 0);
+        glUniformMatrix4fv(Shader.getActiveShader().getAdaptor().getCameraLocation(), 1, false, mViewMatrix, 0);
     }
 
     public static void applyMatrix(float[] mMatrix) {
-        glUniformMatrix4fv(modelMtrixLocation, 1, false, mMatrix, 0);
+        glUniformMatrix4fv(Shader.getActiveShader().getAdaptor().getTransformMatrixLocation(), 1, false, mMatrix, 0);
     }
 
     public static float[] resetTranslateMatrix(float mMatrix[]) {

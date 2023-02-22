@@ -3,24 +3,17 @@ package com.manateam.main;
 import static android.opengl.GLES20.glClearColor;
 import static com.manateam.glengine3.OpenGLRenderer.fps;
 import static com.manateam.glengine3.OpenGLRenderer.mMatrix;
-import static com.manateam.glengine3.OpenGLRenderer.startNewPage;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyCameraSettings;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
-import static com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;
-import static com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
-import static com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
 import static com.manateam.glengine3.engine.oldEngine.glEngine.prepareAndDraw;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
-import static com.manateam.glengine3.utils.Utils.map;
-import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.x;
 import static com.manateam.glengine3.utils.Utils.y;
 
-import android.opengl.Matrix;
 import android.util.Log;
 
 import com.example.gl_engine_3_1.R;
@@ -28,14 +21,11 @@ import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.OpenGLRenderer;
 import com.manateam.glengine3.engine.main.camera.CameraSettings;
 import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
-import com.manateam.glengine3.engine.main.frameBuffers.FrameBuffer;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
-import com.manateam.glengine3.engine.main.verticles.Shape;
-import com.manateam.glengine3.engine.oldEngine.animshapes.VideoShape;
-import com.manateam.glengine3.engine.oldEngine.glShape;
 import com.manateam.glengine3.maths.Point;
-import com.manateam.glengine3.redrawFunctions.MainRedrawFunctions;
+import com.manateam.main.adaptors.MainShaderAdaptor;
+import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 
 public class SecondRenderer implements GamePageInterface {
     private Poligon fpsPoligon;
@@ -44,7 +34,7 @@ public class SecondRenderer implements GamePageInterface {
     private CameraSettings cameraSettings;
 
     public SecondRenderer() {
-        shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
+        shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();

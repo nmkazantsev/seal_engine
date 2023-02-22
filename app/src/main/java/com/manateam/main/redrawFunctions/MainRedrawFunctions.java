@@ -1,4 +1,4 @@
-package com.manateam.glengine3.redrawFunctions;
+package com.manateam.main.redrawFunctions;
 
 import static com.manateam.glengine3.utils.Utils.loadImage;
 

@@ -17,8 +17,10 @@ public class Shader { //means shader program
     private int vertex, fragment, geom = -1;
     private String page = "";
     private boolean reloadNeeded = false;
+    private Adaptor adaptor;
+    private static Shader activeShader;
 
-    public Shader(int vertex, int fragment, GamePageInterface page) {
+    public Shader(int vertex, int fragment, GamePageInterface page, Adaptor adaptor) {
         link = createShaderProgram(vertex, fragment);
         this.vertex = vertex;
         this.fragment = fragment;
@@ -26,9 +28,11 @@ public class Shader { //means shader program
             this.page = (String) page.getClass().getName();
         }
         allShaders.add(this);
+        this.adaptor = adaptor;
+        adaptor.setProgramId(link);
     }
 
-    public Shader(int vertex, int fragment, int geom, GamePageInterface page) {
+    public Shader(int vertex, int fragment, int geom, GamePageInterface page, Adaptor adaptor) {
         link = createShaderProgram(vertex, fragment, geom);
         this.vertex = vertex;
         this.fragment = fragment;
@@ -37,6 +41,8 @@ public class Shader { //means shader program
             this.page = (String) page.getClass().getName();
         }
         allShaders.add(this);
+        this.adaptor = adaptor;
+        adaptor.setProgramId(link);
     }
 
     private void reload() {
@@ -79,6 +85,9 @@ public class Shader { //means shader program
             s.reloadNeeded = false;
         }
         ShaderUtils.applyShader(s.link);
+        activeShader = s;
+        s.adaptor.programId=s.link;
+        s.adaptor.updateLocations();
     }
 
 
@@ -93,5 +102,13 @@ public class Shader { //means shader program
                 iterator.remove();
             }
         }
+    }
+
+    public Adaptor getAdaptor() {
+        return adaptor;
+    }
+
+    public static Shader getActiveShader() {
+        return activeShader;
     }
 }

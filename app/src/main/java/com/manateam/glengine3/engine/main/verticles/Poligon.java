@@ -24,6 +24,7 @@ import android.opengl.GLUtils;
 
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.engine.main.images.PImage;
+import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.textures.Texture;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.utils.Utils;
@@ -37,15 +38,11 @@ import java.util.List;
 import java.util.function.Function;
 
 //это 3д glShape так теперь называется)
-public class Poligon implements VerticleSet {
-    private Texture texture;
+public class Poligon implements VerticleSet, DrawableShape {
+    private boolean saveMemory;
     private String creatorClassName;
-    private static FloatBuffer vertexData;
-    private final static int POSITION_COUNT = 3;
-    private static final int TEXTURE_COUNT = 2;
-    private static final int STRIDE = (POSITION_COUNT
-            + TEXTURE_COUNT) * 4;
-
+    float[] vertexes, textCoords;
+    private Texture texture;
     protected boolean postToGlNeeded = true;
     protected boolean redrawNeeded = true;
     public PImage image;
@@ -61,13 +58,13 @@ public class Poligon implements VerticleSet {
         for (int i = 0; i < paramSize; i++) {
             redrawParams.add("");
         }
+        this.saveMemory = saveMemory;
         redrawNow();
         creatorClassName = (String) page.getClass().getName();
         if (page == null) {
             creatorClassName = null;
         }
     }
-
 
     public void newParamsSize(int paramSize) {
         redrawParams = new ArrayList<String>();
@@ -85,19 +82,19 @@ public class Poligon implements VerticleSet {
          */
 
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
-        float[] vertices = {
-                a.x, a.y, a.z, 0, 0,
-                d.x, d.y, d.z, 0, 1,
-                b.x, b.y, b.z, 1, 0,
-                c.x, c.y, c.z, 1, 1
+        vertexes = new float[]{
+                a.x, a.y, a.z,
+                d.x, d.y, d.z,
+                b.x, b.y, b.z,
+                c.x, c.y, c.z
         };
 
-        vertexData = null;
-        vertexData = ByteBuffer
-                .allocateDirect(vertices.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        vertexData.put(vertices);
+        textCoords = new float[]{
+                0, 0,
+                0, 1,
+                1, 0,
+                1, 1
+        };
     }
 
     protected void prepareData(Point A, Point B, float texx, float texy, float texa, float texb) {
@@ -112,60 +109,53 @@ public class Poligon implements VerticleSet {
         float a = A.x - B.x;
         float b = A.y - B.y;
         float z = A.z;
-        float[] vertices = {
-                x, y, z, texx, texy,
-                x + a, y, z, texx + texa, texy,
-                x, y + b, z, texx, texy + texb,
+        vertexes = new float[]{
+                x, y, z,
+                x + a, y, z,
+                x, y + b, z,
 
-                x, y + b, z, texx, texy + texb,
-                x + a, y + b, z, texx + texa, texy + texb,
-                x + a, y, z, texx + texa, texy
+                x, y + b, z,
+                x + a, y + b, z,
+                x + a, y, z
         };
+        textCoords = new float[]{
+                texx, texy,
+                texx + texa, texy,
+                texx, texy + texb,
 
-        vertexData = null;
-        vertexData = ByteBuffer
-                .allocateDirect(vertices.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        vertexData.put(vertices);
+                texx, texy + texb,
+                texx + texa, texy + texb,
+                texx + texa, texy
+        };
     }
 
     private void bindData() {
-        try {
-            // координаты вершин
-            vertexData.position(0);
-            glVertexAttribPointer(aPositionLocation, POSITION_COUNT, GL_FLOAT,
-                    false, STRIDE, vertexData);
-            glEnableVertexAttribArray(aPositionLocation);
 
-            // координаты текстур
-            vertexData.position(POSITION_COUNT);
-            glVertexAttribPointer(aTextureLocation, TEXTURE_COUNT, GL_FLOAT,
-                    false, STRIDE, vertexData);
-            glEnableVertexAttribArray(aTextureLocation);
-
-            // помещаем текстуру в target 2D юнита 0
-            glActiveTexture(GL_TEXTURE0);
-            if (!postToGlNeeded) {
-                glBindTexture(GL_TEXTURE_2D, texture.getId());
-            }
-            if (postToGlNeeded) {
-                postToGl();
-            }
-
-            // юнит текстуры
-            glUniform1i(uTextureUnitLocation, 0);
-        } catch (NullPointerException e) {
-            //if image was deleted before it was reloaded
-            redrawNow();
+        Shader.getActiveShader().getAdaptor().bindData(this);
+        // помещаем текстуру в target 2D юнита 0
+        glActiveTexture(GL_TEXTURE0);
+        if (!postToGlNeeded) {
+            glBindTexture(GL_TEXTURE_2D, texture.getId());
         }
+        if (postToGlNeeded) {
+            postToGl();
+        }
+        // юнит текстуры
+        glUniform1i(Shader.getActiveShader().getAdaptor().getTextureLocation(), 0);
+
     }
 
     private void postToGl() {
-        postToGlNeeded=false;
+        if (redrawNeeded||image.isLoaded()) {
+            redrawNow();
+        }
+        postToGlNeeded = false;
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.getId());
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, 0);
+        if (saveMemory) {
+            image.delete();
+        }
     }
 
     public void prepareAndDraw(Point a, Point b, Point c) {
@@ -202,6 +192,7 @@ public class Poligon implements VerticleSet {
             image.delete();
         }
         this.image = redrawFunction.apply(redrawParams);
+        image.setLoaded(true);
         setRedrawNeeded(false);
     }
 
@@ -212,5 +203,15 @@ public class Poligon implements VerticleSet {
 
     public void redrawNow() {
         onRedraw();
+    }
+
+    @Override
+    public float[] getVertexData() {
+        return vertexes;
+    }
+
+    @Override
+    public float[] getTextureData() {
+        return textCoords;
     }
 }
