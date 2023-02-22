@@ -46,12 +46,12 @@ public class Poligon implements VerticleSet, DrawableShape {
     protected boolean postToGlNeeded = true;
     protected boolean redrawNeeded = true;
     public PImage image;
-    public List<String> redrawParams = new ArrayList<>();//change it in the way you like
+    public List<Object> redrawParams = new ArrayList<>();//change it in the way you like
 
-    private Function<List<String>, PImage> redrawFunction;
+    private Function<List<Object>, PImage> redrawFunction;
 
 
-    public Poligon(Function<List<String>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
+    public Poligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
         this.redrawFunction = redrawFunction;
         VectriesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
         texture = new Texture(page);
@@ -60,14 +60,15 @@ public class Poligon implements VerticleSet, DrawableShape {
         }
         this.saveMemory = saveMemory;
         redrawNow();
-        creatorClassName = (String) page.getClass().getName();
         if (page == null) {
             creatorClassName = null;
+        } else {
+            creatorClassName = (String) page.getClass().getName();
         }
     }
 
     public void newParamsSize(int paramSize) {
-        redrawParams = new ArrayList<String>();
+        redrawParams = new ArrayList<Object>();
         for (int i = 0; i < paramSize; i++) {
             redrawParams.add("");
         }
@@ -146,7 +147,7 @@ public class Poligon implements VerticleSet, DrawableShape {
     }
 
     private void postToGl() {
-        if (redrawNeeded||image.isLoaded()) {
+        if (redrawNeeded || image.isLoaded()) {
             redrawNow();
         }
         postToGlNeeded = false;

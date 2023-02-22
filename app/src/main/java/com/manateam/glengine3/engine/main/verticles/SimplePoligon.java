@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class SimplePoligon extends Poligon {
-    public SimplePoligon(Function<List<String>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
+    public SimplePoligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
         super(redrawFunction, saveMemory, paramSize, page);
     }
 

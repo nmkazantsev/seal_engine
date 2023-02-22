@@ -24,9 +24,11 @@ public class Texture {
 
     public Texture(GamePageInterface creator) {
         textures.add(this);
-        creatorClassName = (String) creator.getClass().getName();
         if (creator == null) {
             creatorClassName = null;
+        }
+        else {
+            creatorClassName = (String) creator.getClass().getName();
         }
         id = createTexture();
     }

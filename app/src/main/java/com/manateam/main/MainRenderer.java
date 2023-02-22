@@ -23,6 +23,7 @@ import com.manateam.glengine3.engine.main.camera.CameraSettings;
 import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
+import com.manateam.glengine3.engine.main.verticles.SimplePoligon;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
@@ -32,6 +33,7 @@ public class MainRenderer implements GamePageInterface {
     private Shader shader;
     private ProjectionMatrixSettings projectionMatrixSettings;
     private CameraSettings cameraSettings;
+    private static SimplePoligon simplePoligon;
 
     public MainRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -41,6 +43,8 @@ public class MainRenderer implements GamePageInterface {
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
+        simplePoligon=new SimplePoligon(MainRedrawFunctions::redrawBox2,true,0,null);
+        simplePoligon.redrawNow();
     }
 
     @Override
@@ -56,16 +60,16 @@ public class MainRenderer implements GamePageInterface {
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
-       // fpsPoligon.redrawNow();
-        //fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
+        fpsPoligon.redrawNow();
+        fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
+        simplePoligon.prepareAndDraw(0,300,300,300,300,0.01f);
     }
 
     @Override
     public void touchStarted() {
         Log.e("touch", "statred");
         OpenGLRenderer.startNewPage(new SecondRenderer());
-        //startNewPage(new LightRender());
     }
 
     @Override
