@@ -7,7 +7,7 @@ public abstract class Adaptor {
     public void setProgramId(int id){
         this.programId=id;
     }
-    public abstract void bindData(DrawableShape drawableShape);
+    public abstract int bindData(DrawableShape drawableShape);
     public abstract void updateLocations();
     public abstract int getTransformMatrixLocation();
     public abstract int getCameraLocation();

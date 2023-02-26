@@ -11,9 +11,12 @@ import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
 import static com.manateam.glengine3.engine.oldEngine.glEngine.prepareAndDraw;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
+import static com.manateam.glengine3.utils.Utils.map;
+import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.x;
 import static com.manateam.glengine3.utils.Utils.y;
 
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.example.gl_engine_3_1.R;
@@ -54,7 +57,7 @@ public class MainRenderer implements GamePageInterface {
     public void draw() {
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
-        fpsPoligon.setRedrawNeeded(true);
+       /* fpsPoligon.setRedrawNeeded(true);
         cameraSettings.resetFor2d();
         projectionMatrixSettings.resetFor2d();
         applyProjectionMatrix(projectionMatrixSettings, false);
@@ -66,6 +69,21 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
+
+        */
+        cameraSettings.resetFor3d();
+        projectionMatrixSettings.resetFor3d();
+        cameraSettings.eyeZ=5;
+        applyCameraSettings(cameraSettings);
+        applyProjectionMatrix(projectionMatrixSettings);
+        mMatrix = resetTranslateMatrix(mMatrix);
+        Matrix.rotateM(mMatrix, 0, map(millis() % 30000, 0, 30000, 0, 360), 1, 0.5f, 0);
+        applyMatrix(mMatrix);
+
+        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
+        fpsPoligon.redrawNow();
+        fpsPoligon.prepareAndDraw(new Point(0,0,0), new Point(0,1,0), new Point(1,0,0));
+
         s.prepareAndDraw();
     }
 

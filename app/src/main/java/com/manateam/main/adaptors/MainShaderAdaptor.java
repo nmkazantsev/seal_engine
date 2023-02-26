@@ -1,21 +1,11 @@
 package com.manateam.main.adaptors;
 
 import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_TEXTURE0;
-import static android.opengl.GLES20.GL_TEXTURE_2D;
-import static android.opengl.GLES20.glActiveTexture;
-import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glGetUniformLocation;
-import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glVertexAttribPointer;
 
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aPositionLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aTextureLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.uTextureUnitLocation;
-
-import android.graphics.drawable.Drawable;
 import android.opengl.GLES30;
 
 import com.manateam.glengine3.engine.main.shaders.Adaptor;
@@ -40,13 +30,14 @@ public class MainShaderAdaptor extends Adaptor {
             + TEXTURE_COUNT) * 4;
 
 
-
     @Override
-    public void bindData(DrawableShape drawableShape) {
+    public int bindData(DrawableShape drawableShape) {
         float[] vertexes = drawableShape.getVertexData();
         float[] textCoord = drawableShape.getTextureData();
         float[] vertices = new float[vertexes.length + textCoord.length];
+        int vertexesNumber = 0;
         for (int i = 0; i < vertices.length / 5; i++) {
+            vertexesNumber++;
             //3 на координату, 2 на текстуру
             vertices[i * 5] = vertexes[i * 3];
             vertices[i * 5 + 1] = vertexes[i * 3 + 1];
@@ -70,6 +61,7 @@ public class MainShaderAdaptor extends Adaptor {
         glVertexAttribPointer(aTextureLocation, TEXTURE_COUNT, GL_FLOAT,
                 false, STRIDE, vertexData);
         glEnableVertexAttribArray(aTextureLocation);
+        return vertexesNumber;
     }
 
     @Override

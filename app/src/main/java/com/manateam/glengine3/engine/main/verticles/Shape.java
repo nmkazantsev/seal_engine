@@ -203,17 +203,17 @@ public class Shape implements VerticleSet, DrawableShape {
     public void prepareData() {
         //in order not to recalculate it every time
         if (coords != null) {
-            vertexData = null;
-            vertexData = ByteBuffer.allocateDirect(coords.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-            vertexData.put(coords);
-            vertexesNumber = coords.length / 8;//because every 8 point of it make 1 vectrie
-            coords = null;
+            //vertexData = null;
+            //vertexData = ByteBuffer.allocateDirect(coords.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+            //vertexData.put(coords);
+           // vertexesNumber = coords.length / 8;//because every 8 point of it make 1 vectrie
+           // coords = null;
         }
     }
 
 
     public void bindData() {
-        Shader.getActiveShader().getAdaptor().bindData(this);
+        vertexesNumber = Shader.getActiveShader().getAdaptor().bindData(this);
 
         // помещаем текстуру в target 2D юнита 0
         glActiveTexture(GL_TEXTURE0);
