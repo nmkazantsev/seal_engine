@@ -48,16 +48,18 @@ public class MainRenderer implements GamePageInterface {
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
-        simplePoligon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
-        simplePoligon.redrawNow();
-        s = new Shape("cube.obj", "box.jpg", this);
+        if(simplePoligon==null) {
+            simplePoligon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
+            simplePoligon.redrawNow();
+        }
+        s = new Shape("cube.obj", "cube.png", this);
     }
 
     @Override
     public void draw() {
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
-       /* fpsPoligon.setRedrawNeeded(true);
+        fpsPoligon.setRedrawNeeded(true);
         cameraSettings.resetFor2d();
         projectionMatrixSettings.resetFor2d();
         applyProjectionMatrix(projectionMatrixSettings, false);
@@ -70,10 +72,9 @@ public class MainRenderer implements GamePageInterface {
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
 
-        */
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ=5;
+        cameraSettings.eyeZ = 5;
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
@@ -82,7 +83,6 @@ public class MainRenderer implements GamePageInterface {
 
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
         fpsPoligon.redrawNow();
-        fpsPoligon.prepareAndDraw(new Point(0,0,0), new Point(0,1,0), new Point(1,0,0));
 
         s.prepareAndDraw();
     }

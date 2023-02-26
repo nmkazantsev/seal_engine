@@ -15,4 +15,6 @@ interface VerticleSet {
      void onRedraw();
 
      String getCreatorClassName();
+
+     void delete();
 }

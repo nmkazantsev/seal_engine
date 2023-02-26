@@ -1,5 +1,7 @@
 package com.manateam.glengine3.engine.main.verticles;
 
+import com.manateam.glengine3.OpenGLRenderer;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -199,19 +199,6 @@ public class Shape implements VerticleSet, DrawableShape {
         return arr;
     }
 
-
-    public void prepareData() {
-        //in order not to recalculate it every time
-        if (coords != null) {
-            //vertexData = null;
-            //vertexData = ByteBuffer.allocateDirect(coords.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-            //vertexData.put(coords);
-           // vertexesNumber = coords.length / 8;//because every 8 point of it make 1 vectrie
-           // coords = null;
-        }
-    }
-
-
     public void bindData() {
         vertexesNumber = Shader.getActiveShader().getAdaptor().bindData(this);
 
@@ -236,37 +223,15 @@ public class Shape implements VerticleSet, DrawableShape {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, GLES20.GL_UNSIGNED_BYTE, 0);
     }
 
-    public int createTexture() {
-        final int[] textureIds = new int[1];
-        //создаем пустой массив из одного элемента
-        //в этот массив OpenGL ES запишет свободный номер текстуры,
-        // получаем свободное имя текстуры, которое будет записано в names[0]
-        glGenTextures(1, textureIds, 0);
-        if (textureIds[0] == 0) {
-            return 0;
-        }
-        // настройка объекта текстуры
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureIds[0]);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-        // сброс target
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        return textureIds[0];
-    }
 
     public void prepareAndDraw() {
         if (isLoaded) {
-            prepareData();
             bindData();
             glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
             glDrawArrays(GL_TRIANGLES, 0, vertexesNumber);
             glDisable(GL_CULL_FACE);
         }
     }
-
 
     @Override
     public void onRedrawSetup() {
@@ -301,6 +266,11 @@ public class Shape implements VerticleSet, DrawableShape {
     @Override
     public String getCreatorClassName() {
         return null;
+    }
+
+    @Override
+    public void delete() {
+        image.delete();
     }
 
     public void redrawNow() {

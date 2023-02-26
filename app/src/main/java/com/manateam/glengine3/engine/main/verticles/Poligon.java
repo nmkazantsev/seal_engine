@@ -147,7 +147,7 @@ public class Poligon implements VerticleSet, DrawableShape {
     }
 
     private void postToGl() {
-        if (redrawNeeded || image.isLoaded()) {
+        if (redrawNeeded || !image.isLoaded()) {
             redrawNow();
         }
         postToGlNeeded = false;
@@ -200,6 +200,11 @@ public class Poligon implements VerticleSet, DrawableShape {
     @Override
     public String getCreatorClassName() {
         return creatorClassName;
+    }
+
+    @Override
+    public void delete() {
+        image.delete();
     }
 
     public void redrawNow() {
