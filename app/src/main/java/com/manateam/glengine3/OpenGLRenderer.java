@@ -152,7 +152,6 @@ public class OpenGLRenderer implements Renderer {
         System.gc();
         gamePage = newPage;
         Texture.onPageChanged();
-        VectriesShapesManager.CheckAllTextures();
         FrameBufferUtils.onPageChanged();
         glShape.onPageChanged();
         Shader.onPageChange();

@@ -23,33 +23,35 @@ import com.manateam.glengine3.engine.main.camera.CameraSettings;
 import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
+import com.manateam.glengine3.engine.main.verticles.Shape;
 import com.manateam.glengine3.engine.main.verticles.SimplePoligon;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 
 public class MainRenderer implements GamePageInterface {
-    private Poligon fpsPoligon,poligon;
+    private Poligon fpsPoligon, poligon;
     private Shader shader;
     private ProjectionMatrixSettings projectionMatrixSettings;
     private CameraSettings cameraSettings;
     private static SimplePoligon simplePoligon;
+    private Shape s;
 
     public MainRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
-        poligon=new Poligon(MainRedrawFunctions::redrawFps,true,0,this);
+        poligon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
         poligon.redrawNow();
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
-        simplePoligon=new SimplePoligon(MainRedrawFunctions::redrawBox2,true,0,null);
+        simplePoligon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
         simplePoligon.redrawNow();
+        s = new Shape("cube.obj", "box.jpg", this);
     }
 
     @Override
     public void draw() {
-        //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
         fpsPoligon.setRedrawNeeded(true);
@@ -63,7 +65,8 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.redrawNow();
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
-        simplePoligon.prepareAndDraw(0,300,300,300,300,0.01f);
+        simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
+        s.prepareAndDraw();
     }
 
     @Override

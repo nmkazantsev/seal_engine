@@ -8,7 +8,6 @@ import java.util.List;
 public class VectriesShapesManager {
     protected static List<WeakReference<VerticleSet>> allShapesToRedraw = new ArrayList<>();
     protected static List<WeakReference<VerticleSet>> allShapes = new ArrayList<>();
-    public static List<TexturePoligonConnector> textureConnections = new ArrayList<>();
 
     //called only after setup and redraws all shapes
     public static void redrawAllSetup() {
@@ -58,21 +57,5 @@ public class VectriesShapesManager {
         }
     }
 
-    public static void CheckAllTextures() {
-       /* Iterator<TexturePoligonConnector> iterator = textureConnections.iterator();
-        while (iterator.hasNext()) {
-            TexturePoligonConnector e = iterator.next();
-            e.deleteTextIfReferetNull();
-            if (e.poligonDeleted()) {
-                iterator.remove();
-            }
-        }
-        */
-    }
 
-    public static WeakReference<TexturePoligonConnector> addTexPoliLinnk(WeakReference<VerticleSet> poligon) {
-        TexturePoligonConnector t = new TexturePoligonConnector(poligon);
-        textureConnections.add(t);
-        return new WeakReference<>(t);
-    }
 }
