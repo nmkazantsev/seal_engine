@@ -24,6 +24,8 @@ import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.OpenGLRenderer;
 import com.manateam.glengine3.engine.main.camera.CameraSettings;
 import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
+import com.manateam.glengine3.engine.main.frameBuffers.FrameBuffer;
+import com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
 import com.manateam.glengine3.engine.main.verticles.Shape;
@@ -39,6 +41,7 @@ public class MainRenderer implements GamePageInterface {
     private CameraSettings cameraSettings;
     private static SimplePoligon simplePoligon;
     private Shape s;
+    private FrameBuffer frameBuffer;
 
     public MainRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -48,17 +51,32 @@ public class MainRenderer implements GamePageInterface {
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
-        if(simplePoligon==null) {
+        if (simplePoligon == null) {
             simplePoligon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePoligon.redrawNow();
         }
         s = new Shape("cube.obj", "cube.png", this);
+        frameBuffer = FrameBufferUtils.createFrameBuffer((int)x, (int)y, this);
     }
 
     @Override
     public void draw() {
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
+        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
+        cameraSettings.resetFor3d();
+        projectionMatrixSettings.resetFor3d();
+        cameraSettings.eyeZ = 5;
+        applyCameraSettings(cameraSettings);
+        applyProjectionMatrix(projectionMatrixSettings);
+        mMatrix = resetTranslateMatrix(mMatrix);
+        Matrix.rotateM(mMatrix, 0, map(millis() % 30000, 0, 30000, 0, 360), 1, 0.5f, 0);
+        applyMatrix(mMatrix);
+
+        s.prepareAndDraw();
+        FrameBufferUtils.connectDefaultFrameBuffer();
+
+
         fpsPoligon.setRedrawNeeded(true);
         cameraSettings.resetFor2d();
         projectionMatrixSettings.resetFor2d();
@@ -71,20 +89,7 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-
-        cameraSettings.resetFor3d();
-        projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ = 5;
-        applyCameraSettings(cameraSettings);
-        applyProjectionMatrix(projectionMatrixSettings);
-        mMatrix = resetTranslateMatrix(mMatrix);
-        Matrix.rotateM(mMatrix, 0, map(millis() % 30000, 0, 30000, 0, 360), 1, 0.5f, 0);
-        applyMatrix(mMatrix);
-
-        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
-        fpsPoligon.redrawNow();
-
-        s.prepareAndDraw();
+        frameBuffer.drawTexture(new Point(200 * kx, 500*ky, 1), new Point(300 * kx, 500*ky, 1), new Point(200 * kx, 600 * ky, 1));
     }
 
     @Override

@@ -16,6 +16,8 @@ import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aT
 import android.opengl.GLES20;
 
 import com.manateam.glengine3.GamePageInterface;
+import com.manateam.glengine3.engine.main.shaders.Shader;
+import com.manateam.glengine3.engine.main.verticles.DrawableShape;
 import com.manateam.glengine3.maths.Point;
 
 import java.lang.ref.WeakReference;
@@ -26,12 +28,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class FrameBuffer {
+public class FrameBuffer implements DrawableShape {
     protected static List<WeakReference<FrameBuffer>> allFrameBuffers = new ArrayList<>();
     private int texture, depth, frameBuffer;
     private int w;
     private int h;
     private String creatorClassName;
+    private float[] vertexes,textCoords;
 
     public FrameBuffer(int frameBuffer, int depth, int texture, GamePageInterface page) {
         this.frameBuffer = frameBuffer;
@@ -63,7 +66,7 @@ public class FrameBuffer {
     }
 
     public void onRedrawSetup() {
-        this.delete();
+        //this.delete();
         int[] frameBuffers = new int[1];
         GLES20.glGenFramebuffers(1, frameBuffers, 0);
 
@@ -97,41 +100,21 @@ public class FrameBuffer {
     }
 
     public void drawTexture(Point a, Point b, Point d) {
-        int POSITION_COUNT = 3;
-        int TEXTURE_COUNT = 2;
-        int STRIDE = (POSITION_COUNT
-                + TEXTURE_COUNT) * 4;
-        FloatBuffer vertexData;
-           /*
-        a-----b
-        |     |
-        |     |
-        d-----c
-         */
-
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
-        float[] vertices = {
-                a.x, a.y, a.z, 0, 0,
-                d.x, d.y, d.z, 0, 1,
-                b.x, b.y, b.z, 1, 0,
-                c.x, c.y, c.z, 1, 1
+        vertexes = new float[]{
+                a.x, a.y, a.z,
+                d.x, d.y, d.z,
+                b.x, b.y, b.z,
+                c.x, c.y, c.z
         };
-        vertexData = ByteBuffer
-                .allocateDirect(vertices.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        vertexData.put(vertices);
-        vertexData.position(0);
-        glVertexAttribPointer(aPositionLocation, POSITION_COUNT, GL_FLOAT,
-                false, STRIDE, vertexData);
-        glEnableVertexAttribArray(aPositionLocation);
 
-        // координаты текстур
-        vertexData.position(POSITION_COUNT);
-        glVertexAttribPointer(aTextureLocation, TEXTURE_COUNT, GL_FLOAT,
-                false, STRIDE, vertexData);
-        glEnableVertexAttribArray(aTextureLocation);
-
+        textCoords = new float[]{
+                0, 0,
+                0, 1,
+                1, 0,
+                1, 1
+        };
+        Shader.getActiveShader().getAdaptor().bindData(this);
         // помещаем текстуру в target 2D юнита 0
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -171,4 +154,13 @@ public class FrameBuffer {
         glDeleteTextures(1, new int[]{getTexture()}, 0);
     }
 
+    @Override
+    public float[] getVertexData() {
+        return vertexes;
+    }
+
+    @Override
+    public float[] getTextureData() {
+        return textCoords;
+    }
 }
