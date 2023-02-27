@@ -15,15 +15,6 @@ import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 
 public class MainConfigurationFunctions {
-
-    public static int aPositionLocation;
-    public static int aTextureLocation;
-    public static int uTextureUnitLocation;
-    private static int projectionMatrixLoation;
-    private static int viewMatrixLocation;
-    private static int modelMtrixLocation;
-    public static int normalsLocation;
-
     private static float[] mProjectionMatrix = new float[16];
     private static float[] mViewMatrix = new float[16];
 

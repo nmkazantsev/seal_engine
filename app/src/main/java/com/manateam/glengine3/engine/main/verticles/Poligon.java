@@ -8,17 +8,9 @@ import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
-import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glDrawArrays;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glGenTextures;
 import static android.opengl.GLES20.glUniform1i;
-import static android.opengl.GLES20.glVertexAttribPointer;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aPositionLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aTextureLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.uTextureUnitLocation;
 
-import android.graphics.Typeface;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
@@ -27,12 +19,8 @@ import com.manateam.glengine3.engine.main.images.PImage;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.textures.Texture;
 import com.manateam.glengine3.maths.Point;
-import com.manateam.glengine3.utils.Utils;
 
 import java.lang.ref.WeakReference;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;

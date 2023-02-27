@@ -3,23 +3,14 @@ package com.manateam.glengine3.engine.main.verticles;
 import static android.opengl.GLES10.GL_TRIANGLES;
 import static android.opengl.GLES10.glDisable;
 import static android.opengl.GLES20.GL_CULL_FACE;
-import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
-import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glEnable;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glGenTextures;
 import static android.opengl.GLES20.glUniform1i;
-import static android.opengl.GLES20.glVertexAttribPointer;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aPositionLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aTextureLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.normalsLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.uTextureUnitLocation;
 import static com.manateam.glengine3.maths.Point.normal;
 import static com.manateam.glengine3.utils.Utils.countSubstrs;
 import static com.manateam.glengine3.utils.Utils.loadFile;
@@ -38,9 +29,6 @@ import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.maths.Vec3;
 import com.manateam.glengine3.utils.Utils;
 
-import java.lang.ref.WeakReference;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -212,7 +200,7 @@ public class Shape implements VerticleSet, DrawableShape {
         }
 
         // юнит текстуры
-        glUniform1i(uTextureUnitLocation, 0);
+        glUniform1i(Shader.getActiveShader().getAdaptor().getTextureLocation(), 0);
     }
 
     private void postToGl() {

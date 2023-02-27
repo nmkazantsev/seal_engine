@@ -33,8 +33,6 @@ import com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.textures.Texture;
 import com.manateam.glengine3.engine.main.verticles.VectriesShapesManager;
-import com.manateam.glengine3.engine.oldEngine.animshapes.VideoShape;
-import com.manateam.glengine3.engine.oldEngine.glShape;
 import com.manateam.glengine3.utils.Utils;
 import com.manateam.main.MainRenderer;
 
@@ -95,8 +93,6 @@ public class OpenGLRenderer implements Renderer {
         Texture.reloadAll();
         VectriesShapesManager.onRedrawSetup();
         FrameBuffer.onRedraw();
-        glShape.allShapesRedrawSetup();
-        VideoShape.redrawAll();
     }
 
     private void setup() {
@@ -153,7 +149,6 @@ public class OpenGLRenderer implements Renderer {
         gamePage = newPage;
         Texture.onPageChanged();
         FrameBufferUtils.onPageChanged();
-        glShape.onPageChanged();
         Shader.onPageChange();
     }
 

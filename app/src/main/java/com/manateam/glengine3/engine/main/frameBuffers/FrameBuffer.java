@@ -8,10 +8,6 @@ import static android.opengl.GLES20.glDeleteFramebuffers;
 import static android.opengl.GLES20.glDeleteRenderbuffers;
 import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glDrawArrays;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glVertexAttribPointer;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aPositionLocation;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.aTextureLocation;
 
 import android.opengl.GLES20;
 

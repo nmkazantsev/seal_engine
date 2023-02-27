@@ -8,7 +8,6 @@ import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.ap
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
-import static com.manateam.glengine3.engine.oldEngine.glEngine.prepareAndDraw;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
 import static com.manateam.glengine3.utils.Utils.map;
