@@ -62,7 +62,7 @@ public class MainRenderer implements GamePageInterface {
     public void draw() {
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
-        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
+        //FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
         cameraSettings.eyeZ = 5;
@@ -88,7 +88,7 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-        frameBuffer.drawTexture(new Point(200 * kx, 500*ky, 1), new Point(300 * kx, 500*ky, 1), new Point(200 * kx, 600 * ky, 1));
+       // frameBuffer.drawTexture(new Point(200 * kx, 500*ky, 1), new Point(300 * kx, 500*ky, 1), new Point(200 * kx, 600 * ky, 1));
     }
 
     @Override
