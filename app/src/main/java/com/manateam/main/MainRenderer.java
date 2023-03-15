@@ -40,8 +40,6 @@ public class MainRenderer implements GamePageInterface {
     private CameraSettings cameraSettings;
     private static SimplePoligon simplePoligon;
     private Shape s;
-    private FrameBuffer frameBuffer;
-
     public MainRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
@@ -55,14 +53,12 @@ public class MainRenderer implements GamePageInterface {
             simplePoligon.redrawNow();
         }
         s = new Shape("cube.obj", "cube.png", this);
-        frameBuffer = FrameBufferUtils.createFrameBuffer((int)x, (int)y, this);
     }
 
     @Override
     public void draw() {
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
-        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
         cameraSettings.eyeZ = 5;
@@ -73,7 +69,6 @@ public class MainRenderer implements GamePageInterface {
         applyMatrix(mMatrix);
 
         s.prepareAndDraw();
-        FrameBufferUtils.connectDefaultFrameBuffer();
 
 
         fpsPoligon.setRedrawNeeded(true);
@@ -88,7 +83,6 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-        frameBuffer.drawTexture(new Point(200 * kx, 500*ky, 1), new Point(300 * kx, 500*ky, 1), new Point(200 * kx, 600 * ky, 1));
     }
 
     @Override
