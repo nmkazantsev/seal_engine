@@ -9,7 +9,6 @@ import static android.opengl.GLES20.glVertexAttribPointer;
 import android.opengl.GLES30;
 
 import com.manateam.glengine3.engine.main.shaders.Adaptor;
-import com.manateam.glengine3.engine.main.verticles.DrawableShape;
 import com.manateam.glengine3.engine.main.verticles.Face;
 
 import java.nio.ByteBuffer;
@@ -34,7 +33,7 @@ public class LightShaderAdaptor extends Adaptor {
 
 
     @Override
-    public int bindData(Face[] faces) {
+    public int  bindData(Face[] faces) {
         float[] vertices = new float[faces.length * 5];
         int vertexesNumber = 0;
         for (int i = 0; i < faces.length; i++) System.arraycopy(faces[i].getArrayRepresentation(), 0, vertices, i * 5, 5);

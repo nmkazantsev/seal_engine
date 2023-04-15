@@ -98,16 +98,16 @@ public class Shape implements VerticleSet, DrawableShape {
                                 object.getVertex(object.getFace(i).getVertexIndex(2)).getY(),
                                 object.getVertex(object.getFace(i).getVertexIndex(2)).getZ())},
                         new Point[]{
-                                new Point(object.getVertex(object.getFace(i).getTexCoordIndex(0)).getX(),
-                                        object.getVertex(object.getFace(i).getTexCoordIndex(0)).getY()),
-                                new Point(object.getVertex(object.getFace(i).getTexCoordIndex(1)).getX(),
-                                        object.getVertex(object.getFace(i).getTexCoordIndex(1)).getY()),
-                                new Point(object.getVertex(object.getFace(i).getTexCoordIndex(2)).getX(),
-                                        object.getVertex(object.getFace(i).getTexCoordIndex(2)).getY())},
+                                new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getX(),
+                                        object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getY()),
+                                new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getX(),
+                                        object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getY()),
+                                new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getX(),
+                                        object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getY())},
                         new Point(
-                                object.getVertex(object.getFace(i).getNormalIndex(0)).getX(),
-                                object.getVertex(object.getFace(i).getNormalIndex(0)).getY(),
-                                object.getVertex(object.getFace(i).getNormalIndex(0)).getZ()
+                                object.getNormal(object.getFace(i).getNormalIndex(0)).getX(),
+                                object.getNormal(object.getFace(i).getNormalIndex(0)).getY(),
+                                object.getNormal(object.getFace(i).getNormalIndex(0)).getZ()
                         ));
             }
             isLoaded = true;
@@ -151,8 +151,7 @@ public class Shape implements VerticleSet, DrawableShape {
         if (isLoaded) {
             bindData();
             glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
-            int i=object.getNumFaces();
-            glDrawArrays(GL_TRIANGLES, 0,object.getNumFaces()-1);
+            glDrawArrays(GL_TRIANGLES, 0,object.getNumFaces()*3);
             glDisable(GL_CULL_FACE);
         }
     }
