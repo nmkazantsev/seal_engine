@@ -31,7 +31,7 @@ public class MainShaderAdaptor extends Adaptor {
             + TEXTURE_COUNT) * 4;
 
     @Override
-    public int bindData(Face faces[]) {
+    public int bindData(Face[] faces) {
         float[] vertices = new float[faces.length * 15];
         int vertexesNumber = 0;
         for (int i = 0; i < faces.length; i++) {

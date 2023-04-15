@@ -70,14 +70,14 @@ public class Shape implements VerticleSet, DrawableShape {
         }
         texture = new Texture(page);
         new Thread(() -> {
-            String file = loadFile(fileName);
+           // String file = loadFile(fileName);
             //а как по-другому?
             /*if (!String.valueOf(2.0f).equals("2.0")) {
                 file = file.replace('.', ',');
             }*/
             InputStreamReader inputStream;
             try {
-                inputStream = new InputStreamReader(Utils.context.getAssets().open("8.obj"), StandardCharsets.UTF_8);
+                inputStream = new InputStreamReader(Utils.context.getAssets().open(fileName), StandardCharsets.UTF_8);
                 object = ObjUtils.convertToRenderable(
                         ObjReader.read(inputStream));
                 object.toString();
@@ -123,7 +123,7 @@ public class Shape implements VerticleSet, DrawableShape {
 
     public void bindData() {
 
-        //vertexesNumber = Shader.getActiveShader().getAdaptor().bindData(this.faces);
+        Shader.getActiveShader().getAdaptor().bindData(faces);
 
         // помещаем текстуру в target 2D юнита 0
         glActiveTexture(GL_TEXTURE0);
@@ -150,8 +150,9 @@ public class Shape implements VerticleSet, DrawableShape {
     public void prepareAndDraw() {
         if (isLoaded) {
             bindData();
-          //  glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
-            glDrawArrays(GL_TRIANGLES, 0,6);
+            glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
+            int i=object.getNumFaces();
+            glDrawArrays(GL_TRIANGLES, 0,object.getNumFaces()-1);
             glDisable(GL_CULL_FACE);
         }
     }
