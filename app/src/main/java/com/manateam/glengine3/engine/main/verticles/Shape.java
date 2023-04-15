@@ -70,11 +70,6 @@ public class Shape implements VerticleSet, DrawableShape {
         }
         texture = new Texture(page);
         new Thread(() -> {
-           // String file = loadFile(fileName);
-            //а как по-другому?
-            /*if (!String.valueOf(2.0f).equals("2.0")) {
-                file = file.replace('.', ',');
-            }*/
             InputStreamReader inputStream;
             try {
                 inputStream = new InputStreamReader(Utils.context.getAssets().open(fileName), StandardCharsets.UTF_8);

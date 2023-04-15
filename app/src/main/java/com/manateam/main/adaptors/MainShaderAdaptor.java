@@ -24,18 +24,20 @@ public class MainShaderAdaptor extends Adaptor {
     private int projectionMatrixLoation;
     private int viewMatrixLocation;
     private int modelMtrixLocation;
+    private int normalLocation;
 
     private final static int POSITION_COUNT = 3;
     private static final int TEXTURE_COUNT = 2;
+    private static final int NORMAL_COUNT = 3;
     private static final int STRIDE = (POSITION_COUNT
-            + TEXTURE_COUNT) * 4;
+            + TEXTURE_COUNT+NORMAL_COUNT) * 4;
 
     @Override
     public int bindData(Face[] faces) {
-        float[] vertices = new float[faces.length * 15];
+        float[] vertices = new float[faces.length * faces[0].verticesNumber()];
         int vertexesNumber = 0;
         for (int i = 0; i < faces.length; i++) {
-            System.arraycopy(faces[i].getArrayRepresentation(), 0, vertices, i * 15, 15);
+            System.arraycopy(faces[i].getArrayRepresentation(), 0, vertices, i * faces[i].verticesNumber(), faces[i].verticesNumber());
             vertexesNumber++;
         }
         FloatBuffer vertexData = ByteBuffer
@@ -54,6 +56,11 @@ public class MainShaderAdaptor extends Adaptor {
         glVertexAttribPointer(aTextureLocation, TEXTURE_COUNT, GL_FLOAT,
                 false, STRIDE, vertexData);
         glEnableVertexAttribArray(aTextureLocation);
+
+        vertexData.position(POSITION_COUNT + TEXTURE_COUNT);
+        glVertexAttribPointer(normalLocation, NORMAL_COUNT, GL_FLOAT,
+                false, STRIDE, vertexData);
+        glEnableVertexAttribArray(normalLocation);
         return vertexesNumber;
     }
 
@@ -61,6 +68,7 @@ public class MainShaderAdaptor extends Adaptor {
     public void updateLocations() {
         aPositionLocation = glGetAttribLocation(programId, "aPos");
         aTextureLocation = glGetAttribLocation(programId, "aTexCoord");
+        normalLocation = glGetAttribLocation(programId, "normal");
         uTextureUnitLocation = glGetUniformLocation(programId, "u_TextureUnit");
         projectionMatrixLoation = GLES30.glGetUniformLocation(programId, "projection");
         viewMatrixLocation = GLES30.glGetUniformLocation(programId, "view");
