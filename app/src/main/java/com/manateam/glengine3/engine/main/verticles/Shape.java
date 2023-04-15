@@ -29,22 +29,25 @@ import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.maths.Vec3;
 import com.manateam.glengine3.utils.Utils;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+import de.javagl.obj.Obj;
+import de.javagl.obj.ObjReader;
+import de.javagl.obj.ObjUtils;
+
 public class Shape implements VerticleSet, DrawableShape {
     private boolean isLoaded = false;
-    float[][] vectries;
-    float[][] vtextuers;
-    float[] coords;
-    private float[] vertexCoords, normalCoords, textureCoords;
-    private int vertexesNumber = 0;
-    private final String textureFileName;
 
-
-    private Texture texture;
+    private final Texture texture;
     private FloatBuffer vertexData;
+    private final String textureFileName;
+    private Obj object;
+    private Face[] faces;
 
     private final static int POSITION_COUNT = 3;
     private static final int TEXTURE_COUNT = 2;
@@ -60,132 +63,63 @@ public class Shape implements VerticleSet, DrawableShape {
 
     public Shape(String fileName, String textureFileName, GamePageInterface page) {
         this.redrawFunction = this::loadTexture;
+        this.textureFileName = textureFileName;
         VectriesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
         if (page != null) {
             creatorClassName = page.getClass().getName();
         }
-        this.textureFileName = textureFileName;
         texture = new Texture(page);
         new Thread(() -> {
             String file = loadFile(fileName);
             //а как по-другому?
-            if (!String.valueOf(2.0f).equals("2.0")) {
+            /*if (!String.valueOf(2.0f).equals("2.0")) {
                 file = file.replace('.', ',');
+            }*/
+            InputStreamReader inputStream;
+            try {
+                inputStream = new InputStreamReader(Utils.context.getAssets().open("8.obj"), StandardCharsets.UTF_8);
+                object = ObjUtils.convertToRenderable(
+                        ObjReader.read(inputStream));
+                object.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            file = formatFile(file);
-            //работает - не трогай 3 строки ниже:
-            vectries = loadVectries(file, 0);
-            vtextuers = loadTetxtures(file, finishedAt + 1);
-            loadCoords(file, finishedAt + 1);
-            //clean memory
-            vectries = null;
-            vtextuers = null;
+            //конвертируем в Face
+            this.faces = new Face[object.getNumFaces()];
+            for (int i = 0; i < object.getNumFaces(); i++) {
+                faces[i] = new Face(new Point[]{
+                        new Point(object.getVertex(object.getFace(i).getVertexIndex(0)).getX(),
+                                object.getVertex(object.getFace(i).getVertexIndex(0)).getY(),
+                                object.getVertex(object.getFace(i).getVertexIndex(0)).getZ()),
+                        new Point(object.getVertex(object.getFace(i).getVertexIndex(1)).getX(),
+                                object.getVertex(object.getFace(i).getVertexIndex(1)).getY(),
+                                object.getVertex(object.getFace(i).getVertexIndex(1)).getZ()),
+                        new Point(object.getVertex(object.getFace(i).getVertexIndex(2)).getX(),
+                                object.getVertex(object.getFace(i).getVertexIndex(2)).getY(),
+                                object.getVertex(object.getFace(i).getVertexIndex(2)).getZ())},
+                        new Point[]{
+                                new Point(object.getVertex(object.getFace(i).getTexCoordIndex(0)).getX(),
+                                        object.getVertex(object.getFace(i).getTexCoordIndex(0)).getY()),
+                                new Point(object.getVertex(object.getFace(i).getTexCoordIndex(1)).getX(),
+                                        object.getVertex(object.getFace(i).getTexCoordIndex(1)).getY()),
+                                new Point(object.getVertex(object.getFace(i).getTexCoordIndex(2)).getX(),
+                                        object.getVertex(object.getFace(i).getTexCoordIndex(2)).getY())},
+                        new Point(
+                                object.getVertex(object.getFace(i).getNormalIndex(0)).getX(),
+                                object.getVertex(object.getFace(i).getNormalIndex(0)).getY(),
+                                object.getVertex(object.getFace(i).getNormalIndex(0)).getZ()
+                        ));
+            }
             isLoaded = true;
         }).start();
         onRedrawSetup();
         redrawNow();
     }
 
-    private String formatFile(String file) {
-        String[] f = split1(file, '\n');
-        String r = "";
-        for (int i = 0; i < f.length; i++) {
-            String[] s = split1(f[i], ' ');
-            if (s[0].equals("v") || s[0].equals("vt") || s[0].equals("f")) {
-                r += f[i] + "#";
-            }
-        }
-        return r;
-    }
-
-
     private PImage loadTexture(Void v) {
         return loadImage(textureFileName);
     }
 
-    private int finishedAt = 0;
-
-    private float[][] loadVectries(String file, int startPos) {
-        float[][] v = new float[countSubstrs(file, "v ")][3];
-        String[] lines = split1(file, '#');
-        String[] s;
-        for (int i = startPos; i < lines.length; i++) {
-            s = split1(lines[i], ' ');
-            if (!s[0].equals("v")) {
-                break;
-            }
-            v[i - startPos][0] = Float.parseFloat(s[1]);
-            v[i - startPos][1] = Float.parseFloat(s[2]);
-            v[i - startPos][2] = Float.parseFloat(s[3]);
-            finishedAt = i;
-        }
-        return v;
-    }
-
-    private float[][] loadTetxtures(String file, int startPos) {
-        float[][] v = new float[countSubstrs(file, "vt ")][2];
-        String[] lines = split1(file, '#');
-        String[] s;
-        for (int i = startPos; i < lines.length; i++) {
-            s = split1(lines[i], ' ');
-            if (!s[0].equals("vt")) {
-                break;
-            }
-            v[i - startPos][0] = Float.parseFloat(s[1]);
-            v[i - startPos][1] = Float.parseFloat(s[2]);
-            finishedAt = i;
-        }
-        return v;
-    }
-
-    private void loadCoords(String file, int startPos) {
-        ArrayList<Float> vc = new ArrayList<Float>(), tc = new ArrayList<Float>(), nc = new ArrayList<Float>(); //vertex coord, texture coord, normal coord
-
-        String[] lines = split1(file, '#');
-        String[] s;
-        for (int i = startPos; i < lines.length; i++) {
-            s = split1(lines[i], ' ');
-            if (!s[0].equals("f")) {
-                break;
-            }
-            Point[] vertexes = new Point[3];//for coords of vert and calc normals
-            //это пробежка по вершинам. В одной строке инфа про 3 вершины
-            for (int g = 1; g < s.length; g++) {
-                String[] t = split1(s[g], '/');//разбиваем на конкретгые индексы
-                float[] vertex = vectries[Utils.parseInt(t[0]) - 1];//3д координаты вершины
-                float[] textureCoord = vtextuers[Utils.parseInt(t[1]) - 1];//2д координаты текстуры
-                if (g == 4) {
-                    Log.e("ERROR LOADING SHAPE", "WRONG TRIANGULATION, FOUND FACE WITH >3 VERTEXES");
-                }
-                vc.add(vertex[0]);
-                vc.add(vertex[1]);
-                vc.add(vertex[2]);
-                tc.add(textureCoord[0]);
-                tc.add(textureCoord[1]);
-                vertexes[g - 1] = new Point(vertex[0], vertex[1], vertex[2]);
-            }
-            //считаем нормаль
-            Vec3 n = normal(vertexes[0], vertexes[1], vertexes[2]);
-            nc.add(n.x);
-            nc.add(n.y);
-            nc.add(n.z);
-            finishedAt = i;
-
-            vertexCoords = toFloatArray(vc);
-            textureCoords = toFloatArray(tc);
-            normalCoords = toFloatArray(nc);
-
-        }
-    }
-
-    private float[] toFloatArray(ArrayList<Float> vc) {
-        int iter = 0;
-        float arr[] = new float[vc.size()];
-        for (Float f : vc) {
-            arr[iter++] = (f != null ? f : Float.NaN); // Or whatever default you want.
-        }
-        return arr;
-    }
 
     public void bindData() {
 
@@ -216,8 +150,8 @@ public class Shape implements VerticleSet, DrawableShape {
     public void prepareAndDraw() {
         if (isLoaded) {
             bindData();
-            glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
-            glDrawArrays(GL_TRIANGLES, 0, vertexesNumber);
+          //  glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
+            glDrawArrays(GL_TRIANGLES, 0,6);
             glDisable(GL_CULL_FACE);
         }
     }
