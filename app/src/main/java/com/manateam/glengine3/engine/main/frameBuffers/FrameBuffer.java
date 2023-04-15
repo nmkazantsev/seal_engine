@@ -14,6 +14,7 @@ import android.opengl.GLES20;
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.DrawableShape;
+import com.manateam.glengine3.engine.main.verticles.Face;
 import com.manateam.glengine3.maths.Point;
 
 import java.lang.ref.WeakReference;
@@ -30,7 +31,7 @@ public class FrameBuffer implements DrawableShape {
     private int w;
     private int h;
     private String creatorClassName;
-    private float[] vertexes,textCoords;
+    private float[][] vertexes,textCoords;
 
     public FrameBuffer(int frameBuffer, int depth, int texture, GamePageInterface page) {
         this.frameBuffer = frameBuffer;
@@ -97,20 +98,44 @@ public class FrameBuffer implements DrawableShape {
 
     public void drawTexture(Point a, Point b, Point d) {
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
-        vertexes = new float[]{
-                a.x, a.y, a.z,
-                d.x, d.y, d.z,
-                b.x, b.y, b.z,
-                c.x, c.y, c.z
+        vertexes = new float[][]{
+                {a.x, a.y, a.z},
+                {d.x, d.y, d.z},
+                {b.x, b.y, b.z},
+                {c.x, c.y, c.z}
         };
 
-        textCoords = new float[]{
-                0, 0,
-                0, 1,
-                1, 0,
-                1, 1
+        textCoords = new float[][]{
+                {0, 0},
+                {0, 1},
+                {1, 0},
+                {1, 1}
         };
-        Shader.getActiveShader().getAdaptor().bindData(this);
+        Face face1 = new Face(
+                new Point[]{
+                        new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
+                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                },
+                new Point[]{
+                        new Point(textCoords[0][0], textCoords[0][1]),
+                        new Point(textCoords[1][0], textCoords[1][1]),
+                        new Point(textCoords[3][0], textCoords[3][1]),
+                },
+                new Point(0, 0, 1));
+        Face face2 = new Face(
+                new Point[]{
+                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                        new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                },
+                new Point[]{
+                        new Point(textCoords[1][0], textCoords[1][1]),
+                        new Point(textCoords[2][0], textCoords[2][1]),
+                        new Point(textCoords[3][0], textCoords[3][1]),
+                },
+                new Point(0, 0, 1));
+        Shader.getActiveShader().getAdaptor().bindData(new Face[]{face1, face2});
         // помещаем текстуру в target 2D юнита 0
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -148,15 +173,5 @@ public class FrameBuffer implements DrawableShape {
         glDeleteFramebuffers(1, new int[]{getFrameBuffer()}, 0);
         glDeleteRenderbuffers(1, new int[]{getDepth()}, 0);
         glDeleteTextures(1, new int[]{getTexture()}, 0);
-    }
-
-    @Override
-    public float[] getVertexData() {
-        return vertexes;
-    }
-
-    @Override
-    public float[] getTextureData() {
-        return textCoords;
     }
 }

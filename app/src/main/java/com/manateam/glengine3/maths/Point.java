@@ -9,6 +9,11 @@ public class Point {
     this.y=y;
     this.z=z;
     }
+
+    public Point(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
     public float getDistanceToPoint(Point p){
         return Utils.sqrt(Utils.sq(p.x-this.x)+Utils.sq(p.y-this.y)+ Utils.sq(this.z-p.z));
     }

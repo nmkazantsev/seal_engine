@@ -188,7 +188,8 @@ public class Shape implements VerticleSet, DrawableShape {
     }
 
     public void bindData() {
-        vertexesNumber = Shader.getActiveShader().getAdaptor().bindData(this);
+
+        //vertexesNumber = Shader.getActiveShader().getAdaptor().bindData(this.faces);
 
         // помещаем текстуру в target 2D юнита 0
         glActiveTexture(GL_TEXTURE0);
@@ -263,15 +264,5 @@ public class Shape implements VerticleSet, DrawableShape {
 
     public void redrawNow() {
         onRedraw();
-    }
-
-    @Override
-    public float[] getVertexData() {
-        return vertexCoords;
-    }
-
-    @Override
-    public float[] getTextureData() {
-        return textureCoords;
     }
 }

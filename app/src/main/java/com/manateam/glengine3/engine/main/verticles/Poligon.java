@@ -1,6 +1,5 @@
 package com.manateam.glengine3.engine.main.verticles;
 
-import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
@@ -27,6 +26,8 @@ import java.util.function.Function;
 
 //это 3д glShape так теперь называется)
 public class Poligon implements VerticleSet, DrawableShape {
+    private Face face1;
+    private Face face2;
     private boolean saveMemory;
     private String creatorClassName;
     float[] vertexes, textCoords;
@@ -71,19 +72,43 @@ public class Poligon implements VerticleSet, DrawableShape {
          */
 
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
-        vertexes = new float[]{
-                a.x, a.y, a.z,
-                d.x, d.y, d.z,
-                b.x, b.y, b.z,
-                c.x, c.y, c.z
+        float[][] vertexes = new float[][]{
+                {a.x, a.y, a.z},
+                {d.x, d.y, d.z},
+                {b.x, b.y, b.z},
+                {c.x, c.y, c.z}
         };
 
-        textCoords = new float[]{
-                0, 0,
-                0, 1,
-                1, 0,
-                1, 1
+        float[][] textCoords = new float[][]{
+                {0, 0},
+                {0, 1},
+                {1, 0},
+                {1, 1}
         };
+        face1 = new Face(
+                new Point[]{
+                new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
+                new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+        },
+                new Point[]{
+                        new Point(textCoords[0][0], textCoords[0][1]),
+                        new Point(textCoords[1][0], textCoords[1][1]),
+                        new Point(textCoords[3][0], textCoords[3][1]),
+                },
+                new Point(0, 0, 1));
+        face2 = new Face(
+                new Point[]{
+                new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+        },
+                new Point[]{
+                        new Point(textCoords[1][0], textCoords[1][1]),
+                        new Point(textCoords[2][0], textCoords[2][1]),
+                        new Point(textCoords[3][0], textCoords[3][1]),
+                },
+                new Point(0, 0, 1));
     }
 
     protected void prepareData(Point A, Point B, float texx, float texy, float texa, float texb) {
@@ -120,7 +145,7 @@ public class Poligon implements VerticleSet, DrawableShape {
 
     private void bindData() {
 
-        Shader.getActiveShader().getAdaptor().bindData(this);
+        Shader.getActiveShader().getAdaptor().bindData(new Face[]{this.face1, this.face2});
         // помещаем текстуру в target 2D юнита 0
         glActiveTexture(GL_TEXTURE0);
         if (!postToGlNeeded) {
@@ -197,15 +222,5 @@ public class Poligon implements VerticleSet, DrawableShape {
 
     public void redrawNow() {
         onRedraw();
-    }
-
-    @Override
-    public float[] getVertexData() {
-        return vertexes;
-    }
-
-    @Override
-    public float[] getTextureData() {
-        return textCoords;
     }
 }

@@ -10,6 +10,7 @@ import android.opengl.GLES30;
 
 import com.manateam.glengine3.engine.main.shaders.Adaptor;
 import com.manateam.glengine3.engine.main.verticles.DrawableShape;
+import com.manateam.glengine3.engine.main.verticles.Face;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -29,21 +30,13 @@ public class MainShaderAdaptor extends Adaptor {
     private static final int STRIDE = (POSITION_COUNT
             + TEXTURE_COUNT) * 4;
 
-
     @Override
-    public int bindData(DrawableShape drawableShape) {
-        float[] vertexes = drawableShape.getVertexData();
-        float[] textCoord = drawableShape.getTextureData();
-        float[] vertices = new float[vertexes.length + textCoord.length];
+    public int bindData(Face faces[]) {
+        float[] vertices = new float[faces.length * 15];
         int vertexesNumber = 0;
-        for (int i = 0; i < vertices.length / 5; i++) {
+        for (int i = 0; i < faces.length; i++) {
+            System.arraycopy(faces[i].getArrayRepresentation(), 0, vertices, i * 15, 15);
             vertexesNumber++;
-            //3 на координату, 2 на текстуру
-            vertices[i * 5] = vertexes[i * 3];
-            vertices[i * 5 + 1] = vertexes[i * 3 + 1];
-            vertices[i * 5 + 2] = vertexes[i * 3 + 2];
-            vertices[i * 5 + 3] = textCoord[i * 2];
-            vertices[i * 5 + 4] = textCoord[i * 2 + 1];
         }
         FloatBuffer vertexData = ByteBuffer
                 .allocateDirect(vertices.length * 4)
