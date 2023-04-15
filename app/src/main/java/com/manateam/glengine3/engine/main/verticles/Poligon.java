@@ -89,12 +89,12 @@ public class Poligon implements VerticleSet, DrawableShape {
                 new Point[]{
                 new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
                 new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
         },
                 new Point[]{
                         new Point(textCoords[0][0], textCoords[0][1]),
                         new Point(textCoords[1][0], textCoords[1][1]),
-                        new Point(textCoords[3][0], textCoords[3][1]),
+                        new Point(textCoords[2][0], textCoords[2][1]),
                 },
                 new Point(0, 0, 1));
         face2 = new Face(
@@ -175,7 +175,7 @@ public class Poligon implements VerticleSet, DrawableShape {
     public void prepareAndDraw(Point a, Point b, Point c) {
         prepareData(a, b, c);
         bindData();
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
     public void prepareAndDraw(Point a, Point b, float texx, float texy, float teexa, float texb) {
