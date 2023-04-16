@@ -2,6 +2,7 @@ package com.manateam.glengine3.engine.main.frameBuffers;
 
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteFramebuffers;
@@ -115,12 +116,12 @@ public class FrameBuffer implements DrawableShape {
                 new Point[]{
                         new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
                         new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                        new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
                 },
                 new Point[]{
                         new Point(textCoords[0][0], textCoords[0][1]),
                         new Point(textCoords[1][0], textCoords[1][1]),
-                        new Point(textCoords[3][0], textCoords[3][1]),
+                        new Point(textCoords[2][0], textCoords[2][1]),
                 },
                 new Point(0, 0, 1));
         Face face2 = new Face(
@@ -138,7 +139,7 @@ public class FrameBuffer implements DrawableShape {
         Shader.getActiveShader().getAdaptor().bindData(new Face[]{face1, face2});
         // помещаем текстуру в target 2D юнита 0
         glBindTexture(GL_TEXTURE_2D, texture);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
     public int getFrameBuffer() {
