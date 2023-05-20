@@ -31,7 +31,7 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(norm, halfwayDir), 0.0), 32.0);
-    spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
+   // spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
     vec3 specular = vec3(0.3) * spec;// assuming bright white light color
     FragColor = vec4(ambient + diffuse + specular, 1.0);// vec4(norm,1.0);//textureColor*diff*vec4(lightColor, 1.0);
 }
