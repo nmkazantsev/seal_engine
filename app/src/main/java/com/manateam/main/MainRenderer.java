@@ -56,7 +56,7 @@ public class MainRenderer implements GamePageInterface {
             simplePoligon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePoligon.redrawNow();
         }
-        s = new Shape("donut.obj", "cube.png", this);
+        s = new Shape("cube.obj", "cube.png", this);
         frameBuffer=createFrameBuffer((int)x,(int)y,this);
     }
 
@@ -71,7 +71,7 @@ public class MainRenderer implements GamePageInterface {
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 30000, 0, 30000, 0, 360), 1, 0.5f, 0);
-        Matrix.scaleM(mMatrix,0,15,15,15);
+        //Matrix.scaleM(mMatrix,0,15,15,15);
         applyMatrix(mMatrix);
         connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
@@ -89,7 +89,7 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-        frameBuffer.drawTexture(new Point(100,100,1),new Point(500,100,1),new Point(100,500,1));
+        frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
     }
 
     @Override

@@ -3,9 +3,9 @@ package com.manateam.glengine3.engine.main.verticles;
 import com.manateam.glengine3.maths.Point;
 
 public class Face {
-    private final Point[] vertices;
-    private final Point[] textureCoordinates;
-    private final Point normal;
+    public final Point[] vertices;
+    public final Point[] textureCoordinates;
+    public final Point normal;
 
     public Face(Point[] vertices, Point[] textureCoordinates, Point normal) {
         this.vertices = vertices;
