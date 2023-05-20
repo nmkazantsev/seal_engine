@@ -27,7 +27,7 @@ public class LightShaderAdaptor extends Adaptor {
     private int viewMatrixLocation;
     private int modelMtrixLocation;
     private int normalLocation, normalMapLocation;
-    private int tangetntLocation, bitangentLocation;
+    private int tangetntLocation, bitangentLocation, cameraPosLocation;
 
     private final static int POSITION_COUNT = 3;
     private static final int TEXTURE_COUNT = 2;
@@ -88,12 +88,11 @@ public class LightShaderAdaptor extends Adaptor {
         tangetntLocation = glGetAttribLocation(programId, "aT");
         bitangentLocation = glGetAttribLocation(programId, "aB");
         uTextureUnitLocation = glGetUniformLocation(programId, "u_TextureUnit");
-        normalMapLocation= glGetUniformLocation(programId, "normalMap");
+        normalMapLocation = glGetUniformLocation(programId, "normalMap");
         projectionMatrixLoation = GLES30.glGetUniformLocation(programId, "projection");
         viewMatrixLocation = GLES30.glGetUniformLocation(programId, "view");
         modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
-
-
+        cameraPosLocation = GLES30.glGetUniformLocation(programId, "viewPos");
     }
 
     @Override
@@ -119,5 +118,10 @@ public class LightShaderAdaptor extends Adaptor {
     @Override
     public int getNormalTextureLocation() {
         return normalMapLocation;
+    }
+
+    @Override
+    public int getCameraPosLlocation() {
+        return cameraPosLocation;
     }
 }

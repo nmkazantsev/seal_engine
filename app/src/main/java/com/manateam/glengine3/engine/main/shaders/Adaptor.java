@@ -17,4 +17,5 @@ public abstract class Adaptor {
     public abstract int getProjectionLocation();
     public abstract int getTextureLocation();
     public abstract int getNormalTextureLocation();
+    public abstract int getCameraPosLlocation();
 }

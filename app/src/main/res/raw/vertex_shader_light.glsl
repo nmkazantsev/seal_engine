@@ -12,28 +12,29 @@ out mat4 model2;
 out vec3 FragPos;
 
 out vec3 TangentLightPos;
-//vec3 TangentViewPos;
+out vec3 TangentViewPos;
 out vec3 TangentFragPos;
 
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec3 viewPos;
 //mat4 buff;
 
-vec3 lightPos =  vec3(0.0, -2.0, 2.0);
+vec3 lightPos =  vec3(0.0, 3.0, 0.0);
 void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
     FragPos = (vec4(aPos, 1.0f)*transpose(model)).xyz;
     TexCoord = vec2(aTexCoord.x, aTexCoord.y);
-    normal=normalVec;
+    normal=normalize(normalVec);
     model2=model;
     vec3 T = normalize(vec3(model * vec4(aT, 0.0)));
     vec3 B = normalize(vec3(model * vec4(aB, 0.0)));
-    vec3 N = normalize(vec3(model * vec4(normalVec, 0.0)));
+    vec3 N = normalize(vec3(model * vec4(normal, 0.0)));
     mat3 TBN = transpose(mat3(T, B, N));
     TangentLightPos = TBN * lightPos;
-    // vs_out.TangentViewPos  = TBN * viewPos;
+    TangentViewPos  = TBN * viewPos;
     TangentFragPos  = TBN * vec3(model * vec4(aPos, 1.0));
 }

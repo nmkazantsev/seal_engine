@@ -99,4 +99,9 @@ public class MainShaderAdaptor extends Adaptor {
     public int getNormalTextureLocation() {
         return -1;
     }
+
+    @Override
+    public int getCameraPosLlocation() {
+        return -1;
+    }
 }
