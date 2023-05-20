@@ -35,36 +35,14 @@ public class LightShaderAdaptor extends Adaptor {
     private static final int TANGENT_VEC = 3;
     private static final int BITANGENT_VEC = 3;
     private static final int STRIDE = (POSITION_COUNT
-            + TEXTURE_COUNT + NORMAL_COUNT ) * 4; //+ TANGENT_VEC + BITANGENT_VEC
+            + TEXTURE_COUNT + NORMAL_COUNT + TANGENT_VEC + BITANGENT_VEC) * 4;
 
     @Override
     public int bindData(Face[] faces) {
-        float[] vertices = new float[faces.length * (faces[0].verticesNumber())];// + TANGENT_VEC + BITANGENT_VEC
+        float[] vertices = new float[faces.length * (faces[0].verticesNumberTangentSpace())];
         int vertexesNumber = 0;
         for (int i = 0; i < faces.length; i++) {
-            System.arraycopy(faces[i].getArrayRepresentation(), 0, vertices, i * (faces[i].verticesNumber()), faces[i].verticesNumber());// + TANGENT_VEC + BITANGENT_VEC
-
-            //calculate tangent space (https://learnopengl.com/Advanced-Lighting/Normal-Mapping)
-            Vec3 edge1 = (faces[i].vertices[1].toVec3().minus(faces[i].vertices[0].toVec3()));
-            Vec3 edge2 = (faces[i].vertices[2].toVec3().minus(faces[i].vertices[0].toVec3()));
-            Vec3 deltaUV1 = (faces[i].textureCoordinates[0].toVec3().minus(faces[i].textureCoordinates[1].toVec3()));
-            Vec3 deltaUV2 = (faces[i].textureCoordinates[2].toVec3().minus(faces[i].textureCoordinates[1].toVec3()));
-            float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-            Vec3 tangent = new Vec3(), bitangent = new Vec3();
-            tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-            tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-            tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-
-            bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-            bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-            bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-            //push this to list
-            /*System.arraycopy(new float[]{tangent.x, tangent.y, tangent.z, bitangent.x, bitangent.y,
-                            bitangent.z}, 0, vertices, i * (faces[i].verticesNumber() + TANGENT_VEC + BITANGENT_VEC) + faces[i].verticesNumber(),
-                    TANGENT_VEC + BITANGENT_VEC); //we skip i segments and place for main data in i+1 and then paste
-
-*/
+            System.arraycopy(faces[i].getArrayRepresentationTangentSpace(), 0, vertices, i * (faces[i].verticesNumberTangentSpace()), faces[i].verticesNumberTangentSpace());
             vertexesNumber++;
         }
         FloatBuffer vertexData = ByteBuffer
@@ -89,7 +67,7 @@ public class LightShaderAdaptor extends Adaptor {
                 false, STRIDE, vertexData);
         glEnableVertexAttribArray(normalLocation);
 
-        /*vertexData.position(POSITION_COUNT + TEXTURE_COUNT + NORMAL_COUNT);
+        vertexData.position(POSITION_COUNT + TEXTURE_COUNT + NORMAL_COUNT);
         glVertexAttribPointer(tangetntLocation, TANGENT_VEC, GL_FLOAT,
                 false, STRIDE, vertexData);
         glEnableVertexAttribArray(tangetntLocation);
@@ -97,7 +75,7 @@ public class LightShaderAdaptor extends Adaptor {
         vertexData.position(POSITION_COUNT + TEXTURE_COUNT + NORMAL_COUNT + TANGENT_VEC);
         glVertexAttribPointer(bitangentLocation, BITANGENT_VEC, GL_FLOAT,
                 false, STRIDE, vertexData);
-        glEnableVertexAttribArray(bitangentLocation);*/
+        glEnableVertexAttribArray(bitangentLocation);
 
         return vertexesNumber;
     }
