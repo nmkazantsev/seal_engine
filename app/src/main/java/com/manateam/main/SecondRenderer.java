@@ -48,7 +48,8 @@ public class SecondRenderer implements GamePageInterface {
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
-        s = new Shape("cube.obj", "cube.png", this);
+        s = new Shape("kletka.obj", "klet_color.png", this);
+        s.addNormalMap("Klet_normal.png");
     }
 
     @Override
@@ -65,7 +66,7 @@ public class SecondRenderer implements GamePageInterface {
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
-        //Matrix.scaleM(mMatrix,0,15,15,15);
+        Matrix.scaleM(mMatrix,0,15,15,15);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
 

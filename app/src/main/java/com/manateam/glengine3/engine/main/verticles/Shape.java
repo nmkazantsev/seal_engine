@@ -5,6 +5,7 @@ import static android.opengl.GLES10.glDisable;
 import static android.opengl.GLES20.GL_CULL_FACE;
 import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE1;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
@@ -15,6 +16,7 @@ import static com.manateam.glengine3.maths.Point.normal;
 import static com.manateam.glengine3.utils.Utils.countSubstrs;
 import static com.manateam.glengine3.utils.Utils.loadFile;
 import static com.manateam.glengine3.utils.Utils.loadImage;
+import static com.manateam.glengine3.utils.Utils.parseBoolean;
 import static com.manateam.glengine3.utils.Utils.split1;
 
 import android.opengl.GLES20;
@@ -44,24 +46,22 @@ public class Shape implements VerticleSet, DrawableShape {
     private boolean isLoaded = false;
 
     private final Texture texture;
-    private FloatBuffer vertexData;
+    private Texture normalTexture;
     private final String textureFileName;
+    private String normalMapFileName;
     private Obj object;
     private Face[] faces;
-
-    private final static int POSITION_COUNT = 3;
-    private static final int TEXTURE_COUNT = 2;
-    private static final int NORMAL_COUNT = 3;
-    private static final int STRIDE = (POSITION_COUNT + TEXTURE_COUNT + NORMAL_COUNT) * 4;//3 is noramls count
+    private GamePageInterface creator;
 
     private boolean postToGlNeeded = true;
     private boolean redrawNeeded = true;
-    private PImage image;
+    private PImage image, normalImage;
 
     private final Function<Void, PImage> redrawFunction;
     private String creatorClassName;
 
     public Shape(String fileName, String textureFileName, GamePageInterface page) {
+        creator=page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
         VectriesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
@@ -111,7 +111,17 @@ public class Shape implements VerticleSet, DrawableShape {
         redrawNow();
     }
 
+
+    public void addNormalMap(String normalMapFileName){
+        this.normalMapFileName = normalMapFileName;
+        normalImage=loadImage(normalMapFileName);
+        normalTexture = new Texture(creator);
+    }
+
     private PImage loadTexture(Void v) {
+        if(normalMapFileName!=null){
+            normalImage=loadImage(normalMapFileName);
+        }
         return loadImage(textureFileName);
     }
 
@@ -128,17 +138,34 @@ public class Shape implements VerticleSet, DrawableShape {
         if (postToGlNeeded) {
             postToGl();
         }
-
         // юнит текстуры
         glUniform1i(Shader.getActiveShader().getAdaptor().getTextureLocation(), 0);
+
+        // помещаем текстуру в target 2D юнита 0
+        glActiveTexture(GL_TEXTURE1);
+        if (!postToGlNeeded&&normalTexture!=null) {
+            glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
+        }
+        if (postToGlNeeded) {
+            postToGlNormals();
+        }
+        // юнит текстуры
+        glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
+        postToGlNeeded = false;
     }
 
     private void postToGl() {
-        postToGlNeeded = false;
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.getId());
-
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, GLES20.GL_UNSIGNED_BYTE, 0);
+    }
+
+    private void postToGlNormals() {
+        if (normalImage!=null&&normalImage.isLoaded()) {
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, normalImage.bitmap, 0);
+        }
     }
 
 
@@ -146,7 +173,7 @@ public class Shape implements VerticleSet, DrawableShape {
         if (isLoaded) {
             bindData();
             glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
-            glDrawArrays(GL_TRIANGLES, 0,object.getNumFaces()*3);
+            glDrawArrays(GL_TRIANGLES, 0, object.getNumFaces() * 3);
             glDisable(GL_CULL_FACE);
         }
     }

@@ -1,5 +1,7 @@
 package com.manateam.glengine3.engine.main.shaders;
 
+import android.widget.AbsSeekBar;
+
 import com.manateam.glengine3.engine.main.verticles.DrawableShape;
 import com.manateam.glengine3.engine.main.verticles.Face;
 
@@ -14,4 +16,5 @@ public abstract class Adaptor {
     public abstract int getCameraLocation();
     public abstract int getProjectionLocation();
     public abstract int getTextureLocation();
+    public abstract int getNormalTextureLocation();
 }

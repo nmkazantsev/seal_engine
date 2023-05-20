@@ -94,4 +94,9 @@ public class MainShaderAdaptor extends Adaptor {
     public int getTextureLocation() {
         return uTextureUnitLocation;
     }
+
+    @Override
+    public int getNormalTextureLocation() {
+        return -1;
+    }
 }
