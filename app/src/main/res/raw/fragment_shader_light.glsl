@@ -17,7 +17,7 @@ void main()
 {
     vec3 norm = texture(normalMap, TexCoord).rgb;
     norm = normalize(norm * 2.0 - 1.0);
-    vec3 color = texture(textureSamp, TexCoord).rgb;
+    vec3 color =texture(textureSamp, TexCoord).rgb;
     // ambient
     vec3 ambient = 0.15 * color;
     // diffuse

@@ -48,8 +48,8 @@ public class SecondRenderer implements GamePageInterface {
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
-        s = new Shape("cube.obj", "cube.png", this);
-        s.addNormalMap("vawe.jpg");
+        s = new Shape("donut_864.obj", "ponch.jpg", this);
+        s.addNormalMap("normal_map.png");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SecondRenderer implements GamePageInterface {
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
-        Matrix.scaleM(mMatrix,0,0.5f,0.5f,0.5f);
+        //Matrix.scaleM(mMatrix,0,0.5f,0.5f,0.5f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
 

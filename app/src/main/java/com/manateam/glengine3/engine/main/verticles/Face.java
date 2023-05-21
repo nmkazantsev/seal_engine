@@ -40,7 +40,7 @@ public class Face {
             out[i * SEGMENT_LENGTH + 1] = vertices[i].y;
             out[i * SEGMENT_LENGTH + 2] = vertices[i].z;
             out[i * SEGMENT_LENGTH + 3] = textureCoordinates[i].x;
-            out[i * SEGMENT_LENGTH + 4] = 1 - textureCoordinates[i].y;
+            out[i * SEGMENT_LENGTH + 4] = 1-textureCoordinates[i].y;
             out[i * SEGMENT_LENGTH + 5] = normal.x;
             out[i * SEGMENT_LENGTH + 6] = normal.y;
             out[i * SEGMENT_LENGTH + 7] = normal.z;
