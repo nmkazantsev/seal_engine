@@ -93,11 +93,11 @@ public class LightShaderAdaptor extends Adaptor {
         viewMatrixLocation = GLES30.glGetUniformLocation(programId, "view");
         modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
         cameraPosLocation = GLES30.glGetUniformLocation(programId, "viewPos");
-        GLES30.glUniform3f(glGetUniformLocation(programId,"dirLights[0].lightPos"),0,2,0);
-        GLES30.glUniform1f(glGetUniformLocation(programId,"dirLights[0].diffuse"),1);
-        GLES30.glUniform1f(glGetUniformLocation(programId,"dirLights[0].ambinient"),1);
-        GLES30.glUniform1f(glGetUniformLocation(programId,"dirLights[0].specular"),2);
-        GLES30.glUniform1i(glGetUniformLocation(programId,"dirLightNum"),1);
+        GLES30.glUniform3f(glGetUniformLocation(programId,"pLights[0].lightPos"),0,2,0);
+        GLES30.glUniform1f(glGetUniformLocation(programId,"pLights[0].diffuse"),1);
+        GLES30.glUniform1f(glGetUniformLocation(programId,"pLights[0].ambinient"),0.1f);
+        GLES30.glUniform1f(glGetUniformLocation(programId,"pLights[0].specular"),2);
+        GLES30.glUniform1i(glGetUniformLocation(programId,"pLightNum"),1);
     }
 
     @Override

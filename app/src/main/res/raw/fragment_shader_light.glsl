@@ -4,14 +4,14 @@ out vec4 FragColor;
 uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
 
-struct DirectionalLight{
+struct PointLight{
     vec3 lightPos;
     float specular;
     float diffuse;
     float ambinient;
 };
 
-uniform DirectionalLight dirLights [10];
+uniform PointLight pLights [10];
 
 in struct Data{
     mat4 model2;
@@ -20,9 +20,9 @@ in struct Data{
     vec2 TexCoord;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
-    int dirLightNum;
+    int pLightNum;
 } data;
-in vec3 lightPos[10];
+in vec3 pLightPos[10];
 
 
 void main()
@@ -31,11 +31,11 @@ void main()
     vec3 norm = texture(normalMap, data.TexCoord).rgb;
     norm = normalize(norm * 2.0 - 1.0);
     vec3 color = texture(textureSamp, data.TexCoord).rgb;
-    for (int i=0;i<data.dirLightNum;i++){
+    for (int i=0;i<data.pLightNum;i++){
         // ambient
-        vec3 ambient = dirLights[i].ambinient * color;
+        vec3 ambient = pLights[i].ambinient * color;
         // diffuse
-        vec3 lightDir = normalize(lightPos[i] - data.TangentFragPos);
+        vec3 lightDir = normalize(pLightPos[i] - data.TangentFragPos);
         float diff = max(dot(lightDir, norm), 0.0);
         vec3 diffuse = diff * color;
         // specular
