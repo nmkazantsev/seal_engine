@@ -12,30 +12,22 @@ import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glUniform1i;
-import static com.manateam.glengine3.maths.Point.normal;
-import static com.manateam.glengine3.utils.Utils.countSubstrs;
-import static com.manateam.glengine3.utils.Utils.loadFile;
+
 import static com.manateam.glengine3.utils.Utils.loadImage;
-import static com.manateam.glengine3.utils.Utils.parseBoolean;
-import static com.manateam.glengine3.utils.Utils.split1;
 
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.util.Log;
 
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.engine.main.images.PImage;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.textures.Texture;
 import com.manateam.glengine3.maths.Point;
-import com.manateam.glengine3.maths.Vec3;
 import com.manateam.glengine3.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.function.Function;
 
 import de.javagl.obj.Obj;
@@ -51,23 +43,19 @@ public class Shape implements VerticleSet, DrawableShape {
     private String normalMapFileName;
     private Obj object;
     private Face[] faces;
-    private GamePageInterface creator;
+    private final GamePageInterface creator;
 
     private boolean postToGlNeeded = true;
     private boolean redrawNeeded = true;
     private PImage image, normalImage;
 
     private final Function<Void, PImage> redrawFunction;
-    private String creatorClassName;
 
     public Shape(String fileName, String textureFileName, GamePageInterface page) {
         creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
         VectriesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
-        if (page != null) {
-            creatorClassName = page.getClass().getName();
-        }
         texture = new Texture(page);
         new Thread(() -> {
             InputStreamReader inputStream;
@@ -75,7 +63,6 @@ public class Shape implements VerticleSet, DrawableShape {
                 inputStream = new InputStreamReader(Utils.context.getAssets().open(fileName), StandardCharsets.UTF_8);
                 object = ObjUtils.convertToRenderable(
                         ObjReader.read(inputStream));
-                object.toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }
