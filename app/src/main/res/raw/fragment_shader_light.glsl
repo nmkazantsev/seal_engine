@@ -19,7 +19,7 @@ void main()
     norm = normalize(norm * 2.0 - 1.0);
     vec3 color =texture(textureSamp, TexCoord).rgb;
     // ambient
-    vec3 ambient = 0.15 * color;
+    vec3 ambient = 0.35 * color;
     // diffuse
     vec3 lightDir = normalize(TangentLightPos - TangentFragPos);
     float diff = max(dot(lightDir, norm), 0.0);

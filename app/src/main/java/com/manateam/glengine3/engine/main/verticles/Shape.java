@@ -61,7 +61,7 @@ public class Shape implements VerticleSet, DrawableShape {
     private String creatorClassName;
 
     public Shape(String fileName, String textureFileName, GamePageInterface page) {
-        creator=page;
+        creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
         VectriesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
@@ -112,15 +112,15 @@ public class Shape implements VerticleSet, DrawableShape {
     }
 
 
-    public void addNormalMap(String normalMapFileName){
+    public void addNormalMap(String normalMapFileName) {
         this.normalMapFileName = normalMapFileName;
-        normalImage=loadImage(normalMapFileName);
+        normalImage = loadImage(normalMapFileName);
         normalTexture = new Texture(creator);
     }
 
     private PImage loadTexture(Void v) {
-        if(normalMapFileName!=null){
-            normalImage=loadImage(normalMapFileName);
+        if (normalMapFileName != null) {
+            normalImage = loadImage(normalMapFileName);
         }
         return loadImage(textureFileName);
     }
@@ -143,7 +143,7 @@ public class Shape implements VerticleSet, DrawableShape {
 
         // помещаем текстуру в target 2D юнита 0
         glActiveTexture(GL_TEXTURE1);
-        if (!postToGlNeeded&&normalTexture!=null) {
+        if (!postToGlNeeded && normalTexture != null) {
             glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
         }
         if (postToGlNeeded) {
@@ -161,10 +161,11 @@ public class Shape implements VerticleSet, DrawableShape {
     }
 
     private void postToGlNormals() {
-        if (normalImage!=null&&normalImage.isLoaded()) {
+        if (normalImage != null && normalImage.isLoaded()) {
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, normalImage.bitmap, 0);
+            normalImage.delete();
         }
     }
 
