@@ -7,8 +7,6 @@ import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.ap
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
-import static com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;
-import static com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
 import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
@@ -17,7 +15,6 @@ import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.x;
 import static com.manateam.glengine3.utils.Utils.y;
 
-import android.graphics.ImageDecoder;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -30,8 +27,10 @@ import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
 import com.manateam.glengine3.engine.main.verticles.Shape;
 import com.manateam.glengine3.maths.Point;
+import com.manateam.glengine3.maths.Vec3;
 import com.manateam.main.adaptors.LightShaderAdaptor;
 import com.manateam.main.adaptors.MainShaderAdaptor;
+import com.manateam.main.adaptors.PointLight;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 
 public class SecondRenderer implements GamePageInterface {
@@ -40,6 +39,7 @@ public class SecondRenderer implements GamePageInterface {
     private final ProjectionMatrixSettings projectionMatrixSettings;
     private final CameraSettings cameraSettings;
     private final Shape s;
+    private PointLight pointLight, pointLight2;
 
     public SecondRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -50,18 +50,33 @@ public class SecondRenderer implements GamePageInterface {
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
         s = new Shape("donut_864.obj", "ponch.jpg", this);
         s.addNormalMap("normal_map.png");
+        pointLight = new PointLight(0);
+        pointLight.position = new Vec3(0, 0, 2);
+        pointLight.ambient = 0.2f;
+        pointLight.diffuse = 0.3f;
+        pointLight.specular = 0.3f;
+
+        pointLight2 = new PointLight(1);
+        pointLight2.position = new Vec3(2, 0, 0);
+        pointLight2.ambient = 0;
+        pointLight2.diffuse = 0.7f;
+        pointLight2.specular = 0.3f;
+
+        PointLight.count = 2;
     }
 
     @Override
     public void draw() {
         //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         applyShader(lightShader);
+        pointLight.forwardData();
+        pointLight2.forwardData();
         glClearColor(0f, 0, 0, 0);
 
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
         cameraSettings.eyeZ = 5;
-        cameraSettings.eyeY = 3;
+        cameraSettings.eyeY = 0;
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);

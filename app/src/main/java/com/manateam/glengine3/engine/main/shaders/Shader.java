@@ -86,8 +86,9 @@ public class Shader { //means shader program
         }
         ShaderUtils.applyShader(s.link);
         activeShader = s;
-        s.adaptor.programId=s.link;
+        s.adaptor.programId = s.link;
         s.adaptor.updateLocations();
+        Adaptor.updateLightLocations();
     }
 
 
