@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class Adaptor {
-    private static ArrayList<LightAdaptor> lightAdaptors = new ArrayList<>();
+    private static ArrayList<ShaderData> shaderData = new ArrayList<>();
     protected int programId;
 
-    protected void addLightAdaptor(LightAdaptor lightAdaptor) {
-        lightAdaptors.add(lightAdaptor);
+    protected void addLightAdaptor(ShaderData shaderData) {
+        Adaptor.shaderData.add(shaderData);
     }
 
     public static void updateLightLocations() {
-        Iterator<LightAdaptor> iterator = lightAdaptors.iterator();
+        Iterator<ShaderData> iterator = shaderData.iterator();
         while (iterator.hasNext()) {
-            LightAdaptor e = iterator.next();
+            ShaderData e = iterator.next();
             if (e == null) {
                 iterator.remove();
             } else {

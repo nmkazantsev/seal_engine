@@ -1,7 +1,7 @@
 package com.manateam.glengine3.engine.main.shaders;
 
-public abstract class LightAdaptor {
-    protected LightAdaptor() {
+public abstract class ShaderData {
+    protected ShaderData() {
         Shader.getActiveShader().getAdaptor().addLightAdaptor(this);
     }
 

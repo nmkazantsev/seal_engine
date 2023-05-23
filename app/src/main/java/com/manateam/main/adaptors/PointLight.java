@@ -4,10 +4,10 @@ import static android.opengl.GLES20.glGetUniformLocation;
 
 import android.opengl.GLES30;
 
-import com.manateam.glengine3.engine.main.shaders.LightAdaptor;
+import com.manateam.glengine3.engine.main.shaders.ShaderData;
 import com.manateam.glengine3.maths.Vec3;
 
-public class PointLight extends LightAdaptor {
+public class PointLight extends ShaderData {
     private int posLoc, diffuseLoc, ambLoc, specLoc, countLoc;
     private final int index;
     public Vec3 position;
