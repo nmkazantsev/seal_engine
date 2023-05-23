@@ -50,13 +50,13 @@ public class SecondRenderer implements GamePageInterface {
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
         s = new Shape("donut_864.obj", "ponch.jpg", this);
         s.addNormalMap("normal_map.png");
-        pointLight = new PointLight(0);
+        pointLight = new PointLight(0, this);
         pointLight.position = new Vec3(0, 0, 2);
         pointLight.ambient = 0.2f;
         pointLight.diffuse = 0.3f;
         pointLight.specular = 0.3f;
 
-        pointLight2 = new PointLight(1);
+        pointLight2 = new PointLight(1, this);
         pointLight2.position = new Vec3(2, 0, 0);
         pointLight2.ambient = 0;
         pointLight2.diffuse = 0.7f;

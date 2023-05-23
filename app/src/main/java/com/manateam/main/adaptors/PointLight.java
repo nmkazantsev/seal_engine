@@ -4,6 +4,7 @@ import static android.opengl.GLES20.glGetUniformLocation;
 
 import android.opengl.GLES30;
 
+import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.engine.main.shaders.ShaderData;
 import com.manateam.glengine3.maths.Vec3;
 
@@ -14,8 +15,8 @@ public class PointLight extends ShaderData {
     public float diffuse, ambient, specular;
     public static int count;
 
-    public PointLight(int index) {
-        super();
+    public PointLight(int index, GamePageInterface g) {
+        super(g);
         this.index = index;
     }
 

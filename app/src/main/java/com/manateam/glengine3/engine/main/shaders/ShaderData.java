@@ -1,11 +1,21 @@
 package com.manateam.glengine3.engine.main.shaders;
 
+import com.manateam.glengine3.GamePageInterface;
+
 public abstract class ShaderData {
-    protected ShaderData() {
+    private final GamePageInterface gamePageInterface;
+
+    protected ShaderData(GamePageInterface gamePageInterface) {
+        this.gamePageInterface = gamePageInterface;
         Shader.getActiveShader().getAdaptor().addLightAdaptor(this);
     }
 
-    protected int programId;
+    public String getCreatorClassName() {
+        if(gamePageInterface!=null) {
+            return gamePageInterface.getClass().getName();
+        }
+        return null;
+    }
 
     public abstract void getLocations(int programId);
 

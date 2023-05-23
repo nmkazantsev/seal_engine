@@ -1,6 +1,7 @@
 package com.manateam.glengine3.engine.main.shaders;
 
 
+import com.manateam.glengine3.OpenGLRenderer;
 import com.manateam.glengine3.engine.main.verticles.Face;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public abstract class Adaptor {
         Iterator<ShaderData> iterator = shaderData.iterator();
         while (iterator.hasNext()) {
             ShaderData e = iterator.next();
-            if (e == null) {
+            if (e == null || (e.getCreatorClassName() != null && !e.getCreatorClassName().equals(OpenGLRenderer.getPageClassName()))) {
                 iterator.remove();
             } else {
                 e.getLocations(Shader.getActiveShader().getAdaptor().getProgramId());
