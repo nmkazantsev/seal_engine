@@ -31,7 +31,7 @@ void main()
     vec3 norm = texture(normalMap, data.TexCoord).rgb;
     norm = normalize(norm * 2.0 - 1.0);
     vec3 color = texture(textureSamp, data.TexCoord).rgb;
-    for (int i=0;i<1;i++){//data.pLightNum
+    for (int i=0;i<data.pLightNum;i++){//data.pLightNum
         // ambient
         vec3 ambient = pLights[i].ambinient * color;
         // diffuse
