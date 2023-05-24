@@ -31,7 +31,7 @@ void main()
     vec3 norm = texture(normalMap, data.TexCoord).rgb;
     norm = normalize(norm * 2.0 - 1.0);
     vec3 color = texture(textureSamp, data.TexCoord).rgb;
-    for (int i=0;i<data.pLightNum;i++){
+    for (int i=0;i<1;i++){//data.pLightNum
         // ambient
         vec3 ambient = pLights[i].ambinient * color;
         // diffuse
@@ -41,9 +41,11 @@ void main()
         // specular
         vec3 reflectDir = reflect(-lightDir, norm);
         vec3 halfwayDir = normalize(lightDir + viewDir);
-        float spec = pow(max(dot(norm, halfwayDir), 0.0), 32.0);
+        float spec = pow(max(dot(norm, halfwayDir), 0.0), 2.0);
         // spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0); //phong
         vec3 specular = vec3(0.3) * spec;// assuming bright white light color
         FragColor += vec4(ambient + diffuse + specular, 1.0);// vec4(norm,1.0);//textureColor*diff*vec4(lightColor, 1.0);
+        //FragColor+=vec4(0.5*(lightDir+1.0),1.0);
     }
+
 }
