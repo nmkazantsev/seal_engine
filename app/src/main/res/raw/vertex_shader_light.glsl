@@ -41,9 +41,11 @@ void main()
     data.TexCoord = vec2(aTexCoord.x, aTexCoord.y);
     data.normal=normalize(normalVec);
     data.model2=model;
-    vec3 T = normalize(vec3(model * vec4(aT, 0.0)));
-    vec3 B = normalize(vec3(model * vec4(aB, 0.0)));
-    vec3 N = normalize(vec3(model * vec4(data.normal, 0.0)));
+    mat3 normalMatrix = transpose(inverse(mat3(model)));
+    vec3 T = normalize(normalMatrix * aT);
+    vec3 N = normalize(normalMatrix * data.normal);
+    T = normalize(T - dot(T, N) * N);
+    vec3 B = cross(N, T);
     mat3 TBN = transpose(mat3(T, B, N));
     for (int i=0;i<pLightNum;i++){
         pLightPos[i] = TBN * pLights[i].lightPos;

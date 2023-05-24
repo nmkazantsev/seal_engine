@@ -48,8 +48,8 @@ public class SecondRenderer implements GamePageInterface {
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
-        s = new Shape("donut_864.obj", "ponch.jpg", this);
-        s.addNormalMap("normal_map.png");
+        s = new Shape("ponchik.obj", "texture.png", this);
+        s.addNormalMap("noral_tex.png");
         pointLight = new PointLight(0, this);
         pointLight.position = new Vec3(0, 0, 2);
         pointLight.ambient = 0.2f;
