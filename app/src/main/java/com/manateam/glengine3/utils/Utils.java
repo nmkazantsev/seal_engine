@@ -84,7 +84,7 @@ public class Utils {
         return (float) Math.sqrt(a);
     }
 
-    public static float[] concatArray(float[] a, float[] b) {
+    public static float[] contactArray(float[] a, float[] b) {
         if (a == null)
             return b;
         if (b == null)
