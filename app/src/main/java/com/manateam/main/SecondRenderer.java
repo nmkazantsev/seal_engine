@@ -51,13 +51,13 @@ public class SecondRenderer implements GamePageInterface {
         s = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
         pointLight = new PointLight(0, this);
-        pointLight.position = new Vec3(0, 0, 2);
+        pointLight.position = new Vec3(0, 0, 4);
         pointLight.ambient = 0.2f;
         pointLight.diffuse = 0.3f;
         pointLight.specular = 0.3f;
 
         pointLight2 = new PointLight(1, this);
-        pointLight2.position = new Vec3(2, 0, 0);
+        pointLight2.position = new Vec3(4, 0, 0);
         pointLight2.ambient = 0;
         pointLight2.diffuse = 0.7f;
         pointLight2.specular = 0.3f;

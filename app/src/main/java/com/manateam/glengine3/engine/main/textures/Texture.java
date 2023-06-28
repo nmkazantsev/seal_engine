@@ -33,7 +33,7 @@ public class Texture {
         id = createTexture();
     }
 
-    private int createTexture() {
+    protected int createTexture() {
         final int[] textureIds = new int[1];
         //создаем пустой массив из одного элемента
         //в этот массив OpenGL ES запишет свободный номер текстуры,

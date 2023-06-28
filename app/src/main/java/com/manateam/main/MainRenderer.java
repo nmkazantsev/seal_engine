@@ -32,6 +32,7 @@ import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
 import com.manateam.glengine3.engine.main.verticles.Shape;
 import com.manateam.glengine3.engine.main.verticles.SimplePoligon;
+import com.manateam.glengine3.engine.main.verticles.SkyBox;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
@@ -44,6 +45,8 @@ public class MainRenderer implements GamePageInterface {
     private static SimplePoligon simplePoligon;
     private Shape s;
     private FrameBuffer frameBuffer;
+    private SkyBox skyBox;
+
     public MainRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
@@ -57,7 +60,8 @@ public class MainRenderer implements GamePageInterface {
             simplePoligon.redrawNow();
         }
         s = new Shape("cube.obj", "cube.png", this);
-        frameBuffer=createFrameBuffer((int)x,(int)y,this);
+        frameBuffer = createFrameBuffer((int) x, (int) y, this);
+        skyBox = new SkyBox("cube.obj", "box","jpg", this);
     }
 
     @Override
@@ -74,7 +78,8 @@ public class MainRenderer implements GamePageInterface {
         //Matrix.scaleM(mMatrix,0,15,15,15);
         applyMatrix(mMatrix);
         connectFrameBuffer(frameBuffer.getFrameBuffer());
-        s.prepareAndDraw();
+        //s.prepareAndDraw();
+        skyBox.prepareAndDraw();
         connectDefaultFrameBuffer();
 
         fpsPoligon.setRedrawNeeded(true);
@@ -89,7 +94,7 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-        frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
+        frameBuffer.drawTexture(new Point(x / 3, y / 2), new Point(2 * x / 3, y / 2), new Point(x / 3, y));
     }
 
     @Override
