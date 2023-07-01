@@ -44,7 +44,8 @@ public class MainRenderer implements GamePageInterface {
     private CameraSettings cameraSettings;
     private static SimplePoligon simplePoligon;
     private EnObject s;
-    private FrameBuffer frameBuffer;
+
+    //  private FrameBuffer frameBuffer;
     public MainRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
@@ -58,9 +59,9 @@ public class MainRenderer implements GamePageInterface {
             simplePoligon.redrawNow();
         }
         s = new EnObject(new Shape("cube.obj", "cube.png", this));
-        s.animMotion(new float[]{15.f, 15.f, 15.f}, 5000);
+        s.animMotion(new float[]{0f, 0f, 0f}, 5000);
 
-        frameBuffer=createFrameBuffer((int)x,(int)y,this);
+      //  frameBuffer=createFrameBuffer((int)x,(int)y,this);
     }
 
     @Override
@@ -72,13 +73,8 @@ public class MainRenderer implements GamePageInterface {
         cameraSettings.eyeZ = 5;
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
-        mMatrix = resetTranslateMatrix(mMatrix);
-        Matrix.rotateM(mMatrix, 0, map(millis() % 30000, 0, 30000, 0, 360), 1, 0.5f, 0);
-        //Matrix.scaleM(mMatrix,0,15,15,15);
-        applyMatrix(mMatrix);
-        connectFrameBuffer(frameBuffer.getFrameBuffer());
+       // connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-        connectDefaultFrameBuffer();
 
         fpsPoligon.setRedrawNeeded(true);
         cameraSettings.resetFor2d();
@@ -92,7 +88,7 @@ public class MainRenderer implements GamePageInterface {
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-        frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
+       // frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
     }
 
     @Override

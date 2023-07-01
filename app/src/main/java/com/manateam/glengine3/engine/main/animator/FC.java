@@ -6,7 +6,7 @@ import android.opengl.Matrix;
 
 // Function Collection
 public class FC {
-    private static float e = 2.718281828f;
+    private static final float e = 2.718281828f;
     public static float linear(float[] params) {
         return params[0];
     }
