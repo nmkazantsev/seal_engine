@@ -42,8 +42,9 @@ public class Animator {
         private long startTiming; // global start timing in millis
         private float buffer;
         private long id;
-        public Animation(Function tf, float[] args, Function vf, float duration, float vfa) {
+        public Animation(EnObject target, Function tf, float[] args, Function vf, float duration, float vfa) {
             startTiming = millis();
+            this.target = target;
             this.tf = tf;
             this.vf = vf;
             this.args = args;

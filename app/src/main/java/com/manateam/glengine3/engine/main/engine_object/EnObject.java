@@ -20,7 +20,7 @@ public class EnObject {
     }
 
     public void animMotion(float[] direction, float duration) {
-        new Animator.Animation(FC::shift, );
+        new Animator.Animation(this, FC::shift, direction, FC::linear, duration, 0);
     }
 
     public void render() {
