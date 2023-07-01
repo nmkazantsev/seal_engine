@@ -14,16 +14,21 @@ public class EnObject {
         return this.drawMatrix;
     }
 
-    EnObject(Shape shape) {
+    public EnObject(Shape shape) {
         this.shape = shape;
         drawMatrix = new float[16];
     }
 
     public void animMotion(float[] direction, float duration) {
-        new Animator.Animation(this, FC::shift, direction, FC::linear, duration, 0);
+        new Animator.Animation(this,
+                params -> FC.shift((float[]) params),
+                direction,
+                params1 -> FC.linear((float[]) params1),
+                duration,
+                0);
     }
 
-    public void render() {
+    public void prepareAndDraw() {
         applyMatrix(drawMatrix);
         shape.prepareAndDraw();
     }
