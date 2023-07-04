@@ -67,7 +67,7 @@ public class SecondRenderer implements GamePageInterface {
 
         PointLight.count = 2;
 
-        skyBox = new SkyBox("box", "jpg", this);
+        skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
     }
 
@@ -77,7 +77,7 @@ public class SecondRenderer implements GamePageInterface {
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
         cameraSettings.eyeZ = 5;
-        cameraSettings.eyeY = 0;
+        cameraSettings.eyeY = -5;
         applyShader(skyBoxShader);
         applyProjectionMatrix(projectionMatrixSettings);
         applyCameraSettings(cameraSettings);

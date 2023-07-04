@@ -55,6 +55,8 @@ public class SkyBox implements VerticleSet {
 
     private final Function<Void, PImage> redrawFunction;
 
+    private final String[] names = new String[]{"right", "left", "bottom", "top", "front", "back"};
+
     public SkyBox(String textureFileName, String res, GamePageInterface page) {
         creator = page;
         this.res = res;
@@ -111,7 +113,7 @@ public class SkyBox implements VerticleSet {
 
     private PImage loadTexture(Void v) {
         for (int i = 0; i < images.length; i++) {
-            images[i] = loadImage(textureFileName + i + "." + res);
+            images[i] = loadImage(textureFileName + names[i] + "." + res);
         }
         return null;
     }

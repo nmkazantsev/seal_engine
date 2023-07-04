@@ -25,10 +25,9 @@ public class SkyBoxShaderAdaptor extends Adaptor {
 
     private final static int POSITION_COUNT = 3;
     private static final int STRIDE = (POSITION_COUNT) * 4;
-
     @Override
     public int bindData(Face[] faces) {
-        float[] vertices = new float[12 * 3*3];
+        float[] vertices = new float[12 * 3 * 3];
         int vertexesNumber = 0;
         for (int i = 0; i < 12; i++) {
             System.arraycopy(faces[i].getArrayRepresentationVertexes(), 0, vertices, i * 9, 9);

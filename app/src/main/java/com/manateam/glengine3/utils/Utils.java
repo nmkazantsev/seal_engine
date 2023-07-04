@@ -214,7 +214,7 @@ public class Utils {
             img.setLoaded(true);
             return img;
         } catch (Exception e) {
-            Log.e("ERROR LOADING", name+String.valueOf(e.getMessage()));
+            Log.e("ERROR LOADING", name);
         }
         return null;
     }
