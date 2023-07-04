@@ -1,22 +1,14 @@
 package com.manateam.glengine3.engine.main.verticles;
 
 import static android.opengl.GLES10.GL_TRIANGLES;
-import static android.opengl.GLES10.glDisable;
-import static android.opengl.GLES20.GL_CULL_FACE;
-import static android.opengl.GLES20.GL_FALSE;
-import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE0;
-import static android.opengl.GLES20.GL_TEXTURE1;
-import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TEXTURE_CUBE_MAP;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDepthMask;
 import static android.opengl.GLES20.glDrawArrays;
-import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glUniform1i;
 import static com.manateam.glengine3.utils.Utils.loadImage;
-import static com.manateam.glengine3.utils.Utils.programStartTime;
 
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
@@ -25,30 +17,23 @@ import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.engine.main.images.PImage;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.textures.CubeMap;
-import com.manateam.glengine3.engine.main.textures.Texture;
-import com.manateam.glengine3.engine.main.verticles.Face;
-import com.manateam.glengine3.engine.main.verticles.VectriesShapesManager;
-import com.manateam.glengine3.engine.main.verticles.VerticleSet;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import java.util.function.Function;
 
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
-import kotlin.text.UStringsKt;
 
 public class SkyBox implements VerticleSet {
     private final CubeMap texture;
     private final String textureFileName, res;
     private Face[] faces;
-    private final GamePageInterface creator;
-    private PImage[] images = new PImage[6];
+    private final PImage[] images = new PImage[6];
 
     private boolean postToGlNeeded = true;
     private boolean redrawNeeded = true;
@@ -58,7 +43,6 @@ public class SkyBox implements VerticleSet {
     private final String[] names = new String[]{"right", "left", "bottom", "top", "front", "back"};
 
     public SkyBox(String textureFileName, String res, GamePageInterface page) {
-        creator = page;
         this.res = res;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
