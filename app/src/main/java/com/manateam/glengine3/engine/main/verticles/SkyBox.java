@@ -111,7 +111,7 @@ public class SkyBox implements VerticleSet {
 
     private PImage loadTexture(Void v) {
         for (int i = 0; i < images.length; i++) {
-            images[i] = loadImage(textureFileName + i + res);
+            images[i] = loadImage(textureFileName + i + "." + res);
         }
         return null;
     }

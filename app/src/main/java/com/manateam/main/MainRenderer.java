@@ -44,7 +44,6 @@ public class MainRenderer implements GamePageInterface {
     private static SimplePoligon simplePoligon;
     private Shape s;
     private FrameBuffer frameBuffer;
-    private SkyBox skyBox;
 
     public MainRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -60,7 +59,6 @@ public class MainRenderer implements GamePageInterface {
         }
         s = new Shape("cube.obj", "cube.png", this);
         frameBuffer = createFrameBuffer((int) x, (int) y, this);
-        skyBox = new SkyBox( "box","jpg", this);
     }
 
     @Override
@@ -77,8 +75,8 @@ public class MainRenderer implements GamePageInterface {
         //Matrix.scaleM(mMatrix,0,15,15,15);
         applyMatrix(mMatrix);
         connectFrameBuffer(frameBuffer.getFrameBuffer());
-        //s.prepareAndDraw();
-        skyBox.prepareAndDraw();
+        s.prepareAndDraw();
+        //skyBox.prepareAndDraw();
         connectDefaultFrameBuffer();
 
         fpsPoligon.setRedrawNeeded(true);

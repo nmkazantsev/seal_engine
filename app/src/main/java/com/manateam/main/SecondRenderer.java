@@ -26,8 +26,10 @@ import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
 import com.manateam.glengine3.engine.main.verticles.Shape;
+import com.manateam.glengine3.engine.main.verticles.SkyBox;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.maths.Vec3;
+import com.manateam.glengine3.utils.SkyBoxShaderAdaptor;
 import com.manateam.main.adaptors.LightShaderAdaptor;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.adaptors.PointLight;
@@ -35,10 +37,11 @@ import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 
 public class SecondRenderer implements GamePageInterface {
     private final Poligon fpsPoligon;
-    private final Shader shader, lightShader;
+    private final Shader shader, lightShader, skyBoxShader;
     private final ProjectionMatrixSettings projectionMatrixSettings;
     private final CameraSettings cameraSettings;
     private final Shape s;
+    private SkyBox skyBox;
     private PointLight pointLight, pointLight2;
 
     public SecondRenderer() {
@@ -63,6 +66,9 @@ public class SecondRenderer implements GamePageInterface {
         pointLight2.specular = 0.3f;
 
         PointLight.count = 2;
+
+        skyBox = new SkyBox("box", "jpg", this);
+        skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
     }
 
     @Override
@@ -71,7 +77,7 @@ public class SecondRenderer implements GamePageInterface {
         applyShader(lightShader);
         pointLight.forwardData();
         pointLight2.forwardData();
-        glClearColor(0f, 0, 0, 0);
+        glClearColor(1f, 1,1,1);
 
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
@@ -84,6 +90,11 @@ public class SecondRenderer implements GamePageInterface {
         //Matrix.scaleM(mMatrix,0,0.5f,0.5f,0.5f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
+
+        applyShader(skyBoxShader);
+        applyProjectionMatrix(projectionMatrixSettings);
+        applyCameraSettings(cameraSettings);
+        skyBox.prepareAndDraw();
 
         applyShader(shader);
         fpsPoligon.setRedrawNeeded(true);
@@ -102,7 +113,6 @@ public class SecondRenderer implements GamePageInterface {
     public void touchStarted() {
         Log.e("touch", "statred");
         OpenGLRenderer.startNewPage(new MainRenderer());
-        //startNewPage(new LightRender());
     }
 
     @Override

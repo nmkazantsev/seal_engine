@@ -28,10 +28,10 @@ public class SkyBoxShaderAdaptor extends Adaptor {
 
     @Override
     public int bindData(Face[] faces) {
-        float[] vertices = new float[12 * 3];
+        float[] vertices = new float[12 * 3*3];
         int vertexesNumber = 0;
         for (int i = 0; i < 12; i++) {
-            System.arraycopy(faces[i].getArrayRepresentation(), 0, vertices, i * 3, 3);
+            System.arraycopy(faces[i].getArrayRepresentationVertexes(), 0, vertices, i * 9, 9);
             vertexesNumber++;
         }
         FloatBuffer vertexData = ByteBuffer
@@ -43,6 +43,7 @@ public class SkyBoxShaderAdaptor extends Adaptor {
         vertexData.position(0);
         glVertexAttribPointer(aPositionLocation, POSITION_COUNT, GL_FLOAT,
                 false, STRIDE, vertexData);
+
         glEnableVertexAttribArray(aPositionLocation);
         return vertexesNumber;
     }
@@ -50,7 +51,7 @@ public class SkyBoxShaderAdaptor extends Adaptor {
     @Override
     public void updateLocations() {
         aPositionLocation = glGetAttribLocation(programId, "aPos");
-        uTextureUnitLocation = glGetUniformLocation(programId, "u_TextureUnit");
+        uTextureUnitLocation = glGetUniformLocation(programId, "skybox");
         projectionMatrixLoation = GLES30.glGetUniformLocation(programId, "projection");
         viewMatrixLocation = GLES30.glGetUniformLocation(programId, "view");
     }
