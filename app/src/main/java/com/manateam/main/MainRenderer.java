@@ -27,7 +27,6 @@ import com.manateam.glengine3.OpenGLRenderer;
 import com.manateam.glengine3.engine.main.camera.CameraSettings;
 import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.frameBuffers.FrameBuffer;
-import com.manateam.glengine3.engine.main.frameBuffers.FrameBufferUtils;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
 import com.manateam.glengine3.engine.main.verticles.Shape;
@@ -61,7 +60,7 @@ public class MainRenderer implements GamePageInterface {
         }
         s = new Shape("cube.obj", "cube.png", this);
         frameBuffer = createFrameBuffer((int) x, (int) y, this);
-        skyBox = new SkyBox("cube.obj", "box","jpg", this);
+        skyBox = new SkyBox( "box","jpg", this);
     }
 
     @Override

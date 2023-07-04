@@ -5,7 +5,7 @@ package com.manateam.glengine3.engine.main.verticles;
 Это может быть полигон, фигура или многоугольник - без разницы
 Требование - это наличие вершин и привязанных к ним координат текстур (по формату glShape)
  */
-interface VerticleSet {
+public interface VerticleSet {
      void onRedrawSetup();
 
      void setRedrawNeeded(boolean redrawNeeded);
