@@ -18,11 +18,11 @@ public class ProjectionMatrixSettings {
 
     public void resetFor3d() {
         float ratio = 1;
-        left = -1;
-        right = 1;
-        bottom = -1;
-        top = 1;
-        near = 2;
+        left = -0.1f;
+        right = 0.1f;
+        bottom = -0.1f;
+        top = 0.1f;
+        near = 0.1f;
         far = 12;
         if (x > y) {
             ratio = (float) x / y;

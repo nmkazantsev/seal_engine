@@ -74,15 +74,20 @@ public class SecondRenderer implements GamePageInterface {
     @Override
     public void draw() {
         //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
+        cameraSettings.resetFor3d();
+        projectionMatrixSettings.resetFor3d();
+        cameraSettings.eyeZ = 5;
+        cameraSettings.eyeY = 0;
+        applyShader(skyBoxShader);
+        applyProjectionMatrix(projectionMatrixSettings);
+        applyCameraSettings(cameraSettings);
+        skyBox.prepareAndDraw();
+
         applyShader(lightShader);
         pointLight.forwardData();
         pointLight2.forwardData();
         glClearColor(1f, 1,1,1);
 
-        cameraSettings.resetFor3d();
-        projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ = 5;
-        cameraSettings.eyeY = 0;
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
@@ -91,10 +96,6 @@ public class SecondRenderer implements GamePageInterface {
         applyMatrix(mMatrix);
         s.prepareAndDraw();
 
-        applyShader(skyBoxShader);
-        applyProjectionMatrix(projectionMatrixSettings);
-        applyCameraSettings(cameraSettings);
-        skyBox.prepareAndDraw();
 
         applyShader(shader);
         fpsPoligon.setRedrawNeeded(true);
