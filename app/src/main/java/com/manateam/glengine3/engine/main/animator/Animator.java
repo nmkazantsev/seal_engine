@@ -11,23 +11,33 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 public class Animator {
-    private static HashMap<Long, Animation> animQueue;
-    private static long idCounter = 0;
+    private static HashMap<EnObject, Animation[]> animQueue;
 
-    private static long listAnimation(Animation animation) {
+    private static void listAnimation(Animation animation) {
         if (animQueue == null) {
-            animQueue = new HashMap<Long, Animation>();
-            animQueue.put(idCounter, animation);
+            animQueue = new HashMap<EnObject, Animation[]>();
+            animQueue.put(animation.target, new Animation[]{animation});
+            return;
         }
-        animQueue.put(idCounter, animation);
-        idCounter++;
-        return idCounter - 1;
+        if (!animQueue.containsKey(animation.target)) {
+            animQueue.put(animation.target, new Animation[]{animation});
+            return;
+        }
+        Animation[] a = animQueue.get(animation.target);
+        if (a == null) animQueue.replace(animation.target, new Animation[]{animation});
+        else animQueue.replace(animation.target, (Animation[]) contactArray(a, new Animation[]{animation}));
     }
-
-    private static void deleteAnimation(long id) {
-        animQueue.remove(id);
+    private static void deleteAnimation(EnObject target) {
+        animQueue.remove(target);
     }
-    public static void animate(EnObject target) {}
+    public static void animate(EnObject target) {
+        float[] m = target.getDrawMatrix();
+        if (!animQueue.containsKey(target)) return;
+        for (Animation a: animQueue.get(target)) {
+            m = a.getAnimMatrix(m);
+        }
+        target.setDrawMatrix(m);
+    }
 
     public static class Animation {
 
@@ -41,7 +51,6 @@ public class Animator {
         private float vfa; // velocity function argument
         private long startTiming; // global start timing in millis
         private float buffer;
-        private long id;
         public Animation(EnObject target, Function tf, float[] args, Function vf, float duration, float vfa) {
             startTiming = millis();
             this.target = target;
@@ -51,12 +60,12 @@ public class Animator {
             this.duration = duration;
             this.vfa = vfa;
             this.buffer = 0;
-            this.id = listAnimation(this);
+            listAnimation(this);
         }
 
         @Override
         public void finalize() {
-            deleteAnimation(id);
+            deleteAnimation(target);
         }
 
         // todo find out is it possible to make functions take more than one argument

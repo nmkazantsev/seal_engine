@@ -95,6 +95,17 @@ public class Utils {
         return r;
     }
 
+    public static Object[] contactArray(Object[] a, Object[] b) {
+        if (a == null)
+            return b;
+        if (b == null)
+            return a;
+        Object[] r = new Object[a.length + b.length];
+        System.arraycopy(a, 0, r, 0, a.length);
+        System.arraycopy(b, 0, r, a.length, b.length);
+        return r;
+    }
+
     public static void delay(long t) {
         if (t > 0) {
             try {
