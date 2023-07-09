@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.manateam.glengine3.MainActivity;
+import com.manateam.glengine3.engine.main.animator.Animator;
 import com.manateam.glengine3.engine.main.images.PImage;
 
 import java.io.BufferedReader;
@@ -95,15 +96,27 @@ public class Utils {
         return r;
     }
 
-    public static Object[] contactArray(Object[] a, Object[] b) {
+    public static Animator.Animation[] contactArray(Animator.Animation[] a, Animator.Animation[] b) {
         if (a == null)
             return b;
         if (b == null)
             return a;
-        Object[] r = new Object[a.length + b.length];
+        Animator.Animation[] r = new Animator.Animation[a.length + b.length];
         System.arraycopy(a, 0, r, 0, a.length);
         System.arraycopy(b, 0, r, a.length, b.length);
         return r;
+    }
+
+    public static Animator.Animation[] popFromArray(Animator.Animation[] a, Animator.Animation anim) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == anim) {
+                Animator.Animation[] buffer = new Animator.Animation[a.length - 1];
+                for (int j = 0; j < i; j++) buffer[j] = a[j];
+                for (int j = a.length - 1; j > i; j--) buffer[j] = a[j];
+                return buffer;
+            }
+        }
+        return a;
     }
 
     public static void delay(long t) {

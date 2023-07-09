@@ -51,7 +51,8 @@ public class MainRenderer implements GamePageInterface {
             simplePolygon.redrawNow();
         }
         s = new EnObject(new Shape("cube.obj", "cube.png", this));
-        s.animMotion(new float[]{15.f, 0f, 0f}, 5000);
+        s.animMotion(new float[]{1.f, 0f, -5f}, 5000);
+        s.animMotion(new float[]{0.f, 2f, 0f}, 1000);
 
       //  frameBuffer=createFrameBuffer((int)x,(int)y,this);
     }

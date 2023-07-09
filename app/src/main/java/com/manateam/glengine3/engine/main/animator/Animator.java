@@ -2,8 +2,9 @@ package com.manateam.glengine3.engine.main.animator;
 
 import static com.manateam.glengine3.utils.Utils.contactArray;
 import static com.manateam.glengine3.utils.Utils.millis;
+import static com.manateam.glengine3.utils.Utils.popFromArray;
 
-import android.graphics.drawable.AnimatedImageDrawable;
+import android.util.Log;
 
 import com.manateam.glengine3.engine.main.engine_object.EnObject;
 
@@ -27,8 +28,10 @@ public class Animator {
         if (a == null) animQueue.replace(animation.target, new Animation[]{animation});
         else animQueue.replace(animation.target, (Animation[]) contactArray(a, new Animation[]{animation}));
     }
-    private static void deleteAnimation(EnObject target) {
-        animQueue.remove(target);
+    private static void deleteAnimation(Animation anim) {
+        Log.e("Aboba", "Aboba");
+        Animation[] a = animQueue.get(anim.target);
+        animQueue.replace(anim.target, popFromArray(a, anim));
     }
     public static void animate(EnObject target) {
         float[] m = target.getDrawMatrix();
@@ -65,7 +68,7 @@ public class Animator {
 
         @Override
         public void finalize() {
-            deleteAnimation(target);
+            deleteAnimation(this);
         }
 
         // todo find out is it possible to make functions take more than one argument
