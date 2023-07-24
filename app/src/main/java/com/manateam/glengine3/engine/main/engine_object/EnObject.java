@@ -3,6 +3,8 @@ package com.manateam.glengine3.engine.main.engine_object;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 
+import android.opengl.Matrix;
+
 import com.manateam.glengine3.engine.main.animator.Animator;
 import com.manateam.glengine3.engine.main.animator.FC;
 import com.manateam.glengine3.engine.main.verticles.Shape;
@@ -10,33 +12,54 @@ import com.manateam.glengine3.engine.main.verticles.Shape;
 // todo make it work
 public class EnObject {
     private Shape shape;
-    private float[] drawMatrix;
-    public float[] getDrawMatrix() {
-        return this.drawMatrix;
+    private float[] posMatrix;
+    private float[] rotMatrix;
+    public float[] getPosMatrix() {
+        return this.posMatrix;
     }
 
-    public void setDrawMatrix(float[] m) {
-        this.drawMatrix = m;
+    public float[] getRotMatrix() {
+        return this.rotMatrix;
+    }
+
+    public void setPosMatrix(float[] m) {
+        this.posMatrix = m;
+    }
+    public void setRotMatrix(float[] m) {
+        this.rotMatrix = m;
     }
 
     public EnObject(Shape shape) {
         this.shape = shape;
-        drawMatrix = new float[16];
-        drawMatrix = resetTranslateMatrix(drawMatrix);
+        posMatrix = new float[3];
+        rotMatrix = new float[3];
     }
 
-    public void animMotion(float[] direction, float duration) {
+    public void animMotion(float x, float y, float z, float duration) {
         new Animator.Animation(this,
-                params -> FC.shift((float[]) params),
-                direction,
-                params1 -> FC.linear((float[]) params1),
+                Animator.SHIFT,
+                new float[]{x, y, z},
+                Animator.LINEAR,
+                duration,
+                0);
+    }
+
+    public void animRotation(float x, float y, float z, float duration) {
+        new Animator.Animation(this,
+                Animator.ROTATION,
+                new float[]{x, y, z},
+                Animator.LINEAR,
                 duration,
                 0);
     }
 
     public void prepareAndDraw() {
         Animator.animate(this);
-        applyMatrix(drawMatrix);
+        float[] b = new float[16];
+        resetTranslateMatrix(b);
+        Matrix.setRotateEulerM(b, 0, rotMatrix[0], rotMatrix[1], rotMatrix[2]);
+        Matrix.translateM(b, 0, posMatrix[0], posMatrix[1], posMatrix[2]);
+        applyMatrix(b);
         shape.prepareAndDraw();
     }
 }

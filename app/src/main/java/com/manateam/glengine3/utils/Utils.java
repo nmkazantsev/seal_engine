@@ -111,8 +111,8 @@ public class Utils {
         for (int i = 0; i < a.length; i++) {
             if (a[i] == anim) {
                 Animator.Animation[] buffer = new Animator.Animation[a.length - 1];
-                for (int j = 0; j < i; j++) buffer[j] = a[j];
-                for (int j = a.length - 1; j > i; j--) buffer[j] = a[j];
+                System.arraycopy(a, 0, buffer, 0, i);
+                System.arraycopy(a, i + 1, buffer, i, a.length - i - 1);
                 return buffer;
             }
         }

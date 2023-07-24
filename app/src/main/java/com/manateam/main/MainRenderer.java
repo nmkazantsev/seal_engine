@@ -10,6 +10,7 @@ import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.re
 import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
+import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.x;
 import static com.manateam.glengine3.utils.Utils.y;
 
@@ -51,10 +52,9 @@ public class MainRenderer implements GamePageInterface {
             simplePolygon.redrawNow();
         }
         s = new EnObject(new Shape("cube.obj", "cube.png", this));
-        s.animMotion(new float[]{1.f, 0f, -5f}, 5000);
-        s.animMotion(new float[]{0.f, 2f, 0f}, 1000);
-
-      //  frameBuffer=createFrameBuffer((int)x,(int)y,this);
+        s.animMotion(1.f, 0f, -1f, 2000);
+        s.animMotion(0.f, 2f, 0f, 1000);
+        s.animRotation(0f, 0f, 90f, 3000);
     }
 
     @Override
