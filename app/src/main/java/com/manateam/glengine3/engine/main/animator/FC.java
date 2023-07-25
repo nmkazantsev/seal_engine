@@ -10,11 +10,6 @@ public class FC {
     public static float linear(float[] params) {
         return params[0];
     }
-    public static float power(float[] params) {
-        float t = params[0];
-        float p = params[0];
-        return pow(t, p);
-    }
 
     // k is steepness
     // todo make it work, make animation take one more parameter
