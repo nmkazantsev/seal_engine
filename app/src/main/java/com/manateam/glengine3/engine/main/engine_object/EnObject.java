@@ -42,7 +42,9 @@ public class EnObject {
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming);
+                startTiming,
+                null,
+                null);
     }
 
     public void animRotation(float x, float y, float z, float duration, long startTiming) {
@@ -52,7 +54,9 @@ public class EnObject {
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming);
+                startTiming,
+                null,
+                null);
     }
 
     public void prepareAndDraw() {

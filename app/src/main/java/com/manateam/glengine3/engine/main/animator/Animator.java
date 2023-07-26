@@ -23,8 +23,32 @@ public class Animator {
         animQueue = new HashMap<>();
     }
 
-    public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
-        new Animation(target, tfType, args, vfType, duration, vfa, st);
+    public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st, Function<float[], float[]> customTF, Function<float[], Float> customVF) {
+        Function<float[], float[]> tf = customTF;
+        Function<float[], Float> vf = customVF;
+
+        // tfType - defines witch attribute of EnObject is affected by animation (posMatrix = 0; rotMatrix = 1, combined = 2)
+        if (customTF == null)
+            switch (tfType) {
+                case 0:
+                    tf = FC::shift;
+                    break;
+                case 1:
+                    tf = FC::rotate;
+                    break;
+            }
+
+        if (customVF == null)
+            switch (vfType) {
+                case 0:
+                    vf = FC::linear;
+                    break;
+                case 1:
+                    vf = FC::sigmoid;
+                    break;
+            }
+
+        new Animation(target, tfType, tf, args, vf, duration, vfa, st);
     }
 
     private static void listAnimation(Animation animation) {
@@ -52,6 +76,10 @@ public class Animator {
                 case 1:
                     r = a.getAnimMatrix(r);
                     break;
+                case 2:
+                    float[] b = a.getAnimMatrix(contactArray(p, r));
+                    System.arraycopy(b, 0, p, 0, 3);
+                    System.arraycopy(b, 3, r, 0, 3);
             }
         }
         target.setPosMatrix(p);
@@ -62,8 +90,8 @@ public class Animator {
         private boolean isActive;
         private final int tfType;
         private final EnObject target;
-        private Function<float[], float[]> tf; // transmission function
-        private Function<float[], Float> vf; // velocity function
+        private final Function<float[], float[]> tf; // transmission function
+        private final Function<float[], Float> vf; // velocity function
         private final float[] args; // additional arguments
         private final float duration; // total duration
         // velocity function argument
@@ -71,12 +99,8 @@ public class Animator {
         private final long startTiming; // global start timing in millis
         private float buffer;
 
-        private Animation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
+        private Animation(EnObject target, int tfType, Function<float[], float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
             this.tfType = tfType;
-            /*
-        tf - defines witch attribute of EnObject is affected by animation (posMatrix = 0; rotMatrix = 1)
-        vf - defines witch velocity function will be used
-        */
             long c = millis();
             if (st <= c) {
                 startTiming = c;
@@ -86,22 +110,8 @@ public class Animator {
                 isActive = false;
             }
             this.target = target;
-            switch (tfType) {
-                case 0:
-                    this.tf = FC::shift;
-                    break;
-                case 1:
-                    this.tf = FC::rotate;
-                    break;
-            }
-            switch (vfType) {
-                case 0:
-                    this.vf = FC::linear;
-                    break;
-                case 1:
-                    this.vf = FC::sigmoid;
-                    break;
-            }
+            this.tf = tf;
+            this.vf = vf;
             this.args = args;
             this.duration = duration;
             this.vfa = vfa;

@@ -15,10 +15,10 @@ public class Face {
         this.textureCoordinates = textureCoordinates;
         this.normal = normal;
         //calculate tangent space (https://learnopengl.com/Advanced-Lighting/Normal-Mapping)
-        Vec3 edge1 = (vertices[1].toVec3().minus(vertices[0].toVec3()));
-        Vec3 edge2 = (vertices[2].toVec3().minus(vertices[0].toVec3()));
-        Vec3 deltaUV1 = (textureCoordinates[1].toVec3().minus(textureCoordinates[0].toVec3()));
-        Vec3 deltaUV2 = (textureCoordinates[2].toVec3().minus(textureCoordinates[0].toVec3()));
+        Vec3 edge1 = (vertices[1].toVec3().sub(vertices[0].toVec3()));
+        Vec3 edge2 = (vertices[2].toVec3().sub(vertices[0].toVec3()));
+        Vec3 deltaUV1 = (textureCoordinates[1].toVec3().sub(textureCoordinates[0].toVec3()));
+        Vec3 deltaUV2 = (textureCoordinates[2].toVec3().sub(textureCoordinates[0].toVec3()));
         float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
 
         tangent = new Vec3();

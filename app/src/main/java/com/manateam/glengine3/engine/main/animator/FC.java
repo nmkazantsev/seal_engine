@@ -1,6 +1,10 @@
 package com.manateam.glengine3.engine.main.animator;
 
 import static com.manateam.glengine3.utils.Utils.pow;
+import static com.manateam.glengine3.utils.Utils.sq;
+import static com.manateam.glengine3.utils.Utils.sqrt;
+
+import com.manateam.glengine3.maths.Vec3;
 
 // Function Collection
 public class FC {
@@ -30,5 +34,16 @@ public class FC {
         System.arraycopy(params, 0, matrix, 0, 3);
         for(int i = 0; i < 3; i++) matrix[i] += params[3 + i] * params[6];
         return matrix;
+    }
+
+    public static float[] pivotRotation(float[] params) {
+
+        Vec3 pos = new Vec3(params[0], params[1], params[2]);
+        Vec3 rot = new Vec3(params[3], params[4], params[5]);
+        Vec3 pivPos = new Vec3(params[6], params[7], params[8]);
+        Vec3 rotVec = new Vec3(params[9], params[10], params[11]);
+        float dt = params[12];
+        Vec3 dir = Vec3.sub(pos, pivPos);
+        Vec3 result = Vec3.rotateToVec()
     }
 }
