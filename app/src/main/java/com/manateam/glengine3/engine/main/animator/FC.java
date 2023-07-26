@@ -10,7 +10,6 @@ public class FC {
     }
 
     // k is steepness
-    // todo make it work, make animation take one more parameter
     public static float sigmoid(float[] params) {
         float k = params[0];
         float t = params[1];

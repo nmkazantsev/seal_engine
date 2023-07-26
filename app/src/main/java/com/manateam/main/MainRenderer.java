@@ -12,11 +12,10 @@ import static com.manateam.glengine3.utils.Utils.ky;
 import static com.manateam.glengine3.utils.Utils.x;
 import static com.manateam.glengine3.utils.Utils.y;
 
-import android.util.Log;
-
 import com.example.gl_engine_3_1.R;
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.OpenGLRenderer;
+import com.manateam.glengine3.engine.main.animator.Animator;
 import com.manateam.glengine3.engine.main.camera.CameraSettings;
 import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.engine_object.EnObject;
@@ -39,6 +38,8 @@ public class MainRenderer implements GamePageInterface {
 
     //  private FrameBuffer frameBuffer;
     public MainRenderer() {
+        Animator.initialize();
+
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPolygon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
@@ -85,7 +86,6 @@ public class MainRenderer implements GamePageInterface {
 
     @Override
     public void touchStarted() {
-        Log.e("touch", "statred");
         OpenGLRenderer.startNewPage(new SecondRenderer());
     }
 

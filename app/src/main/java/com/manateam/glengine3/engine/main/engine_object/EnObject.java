@@ -2,6 +2,7 @@ package com.manateam.glengine3.engine.main.engine_object;
 
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
+import static com.manateam.glengine3.engine.main.animator.Animator.addAnimation;
 
 
 import android.opengl.Matrix;
@@ -35,7 +36,7 @@ public class EnObject {
     }
 
     public void animMotion(float x, float y, float z, float duration, long startTiming) {
-        new Animator.Animation(this,
+        addAnimation(this,
                 Animator.SHIFT,
                 new float[]{x, y, z},
                 Animator.LINEAR,
@@ -45,7 +46,7 @@ public class EnObject {
     }
 
     public void animRotation(float x, float y, float z, float duration, long startTiming) {
-        new Animator.Animation(this,
+        addAnimation(this,
                 Animator.ROTATION,
                 new float[]{x, y, z},
                 Animator.LINEAR,

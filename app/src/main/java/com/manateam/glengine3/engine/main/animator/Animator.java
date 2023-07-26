@@ -19,12 +19,15 @@ public class Animator {
             SIGMOID = 1;
     private static HashMap<EnObject, Animation[]> animQueue;
 
+    public static void initialize() {
+        animQueue = new HashMap<>();
+    }
+
+    public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
+        new Animation(target, tfType, args, vfType, duration, vfa, st);
+    }
+
     private static void listAnimation(Animation animation) {
-        if (animQueue == null) {
-            animQueue = new HashMap<>();
-            animQueue.put(animation.target, new Animation[]{animation});
-            return;
-        }
         if (!animQueue.containsKey(animation.target)) {
             animQueue.put(animation.target, new Animation[]{animation});
             return;
@@ -68,7 +71,7 @@ public class Animator {
         private final long startTiming; // global start timing in millis
         private float buffer;
 
-        public Animation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
+        private Animation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
             this.tfType = tfType;
             /*
         tf - defines witch attribute of EnObject is affected by animation (posMatrix = 0; rotMatrix = 1)
@@ -106,11 +109,6 @@ public class Animator {
             listAnimation(this);
         }
 
-        @Override
-        protected void finalize() {
-            deleteAnimation(this);
-        }
-
         public float[] getAnimMatrix(float[] matrix) {
             if (!isActive) {
                 if (startTiming <= millis()) {
@@ -123,7 +121,7 @@ public class Animator {
             float t = vf.apply(new float[]{gt, vfa}); // velocity function output for gt
             float dt = t - buffer; // difference in current and previous vf output (shift delta)
             buffer = t;
-            if (gt >= 1) finalize(); // completion
+            if (gt >= 1) deleteAnimation(this); // completion
             float[] a = contactArray(args, new float[]{dt});
             return tf.apply(contactArray(matrix, a));
         }
