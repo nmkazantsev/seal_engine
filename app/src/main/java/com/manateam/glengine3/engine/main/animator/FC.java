@@ -1,8 +1,8 @@
 package com.manateam.glengine3.engine.main.animator;
 
+import static com.manateam.glengine3.maths.Vec3.normalize;
+import static com.manateam.glengine3.utils.Utils.contactArray;
 import static com.manateam.glengine3.utils.Utils.pow;
-import static com.manateam.glengine3.utils.Utils.sq;
-import static com.manateam.glengine3.utils.Utils.sqrt;
 
 import com.manateam.glengine3.maths.Vec3;
 
@@ -37,13 +37,13 @@ public class FC {
     }
 
     public static float[] pivotRotation(float[] params) {
-
         Vec3 pos = new Vec3(params[0], params[1], params[2]);
         Vec3 rot = new Vec3(params[3], params[4], params[5]);
         Vec3 pivPos = new Vec3(params[6], params[7], params[8]);
         Vec3 rotVec = new Vec3(params[9], params[10], params[11]);
         float dt = params[12];
         Vec3 dir = Vec3.sub(pos, pivPos);
-        Vec3 result = Vec3.rotateToVec()
+        Vec3 rotated = Vec3.rotateToVec(dir, rotVec, Vec3.getAngle(dir, rotVec) * dt);
+        return contactArray((normalize(rotated)).mul(dir.length()).add(pivPos).getVector(), rot.getVector());
     }
 }

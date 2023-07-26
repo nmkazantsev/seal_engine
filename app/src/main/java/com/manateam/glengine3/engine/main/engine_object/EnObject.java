@@ -59,6 +59,18 @@ public class EnObject {
                 null);
     }
 
+    public void animPivotRotation(float x, float y, float z, float vx, float vy, float vz, float duration, long startTiming) {
+        addAnimation(this,
+                Animator.PIVOT_ROTATION,
+                new float[]{x, y, z, vx, vy, vz},
+                Animator.LINEAR,
+                duration,
+                0,
+                startTiming,
+                null,
+                null);
+    }
+
     public void prepareAndDraw() {
         Animator.animate(this);
         float[] b = new float[16];

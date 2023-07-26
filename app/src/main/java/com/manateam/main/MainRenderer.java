@@ -55,7 +55,8 @@ public class MainRenderer implements GamePageInterface {
         s.animMotion(1.f, 0f, -1f, 2000, 0);
         s.animMotion(0.f, 2f, 0f, 1000, 0);
         s.animRotation(0f, 0f, 90f, 3000, 0);
-        s.animRotation(90f, 0, 0, 1000, 4000);
+        s.animRotation(90f, 0, 0, 1000, 3000);
+        s.animPivotRotation(0, 0, 0, 1, 1, 1, 1000, 5000);
     }
 
     @Override

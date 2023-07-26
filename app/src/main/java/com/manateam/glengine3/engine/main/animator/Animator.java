@@ -15,6 +15,7 @@ public class Animator {
     public static final int
             SHIFT = 0,
             ROTATION = 1,
+            PIVOT_ROTATION = 2,
             LINEAR = 0,
             SIGMOID = 1;
     private static HashMap<EnObject, Animation[]> animQueue;
@@ -35,6 +36,9 @@ public class Animator {
                     break;
                 case 1:
                     tf = FC::rotate;
+                    break;
+                case 2:
+                    tf = FC::pivotRotation;
                     break;
             }
 
