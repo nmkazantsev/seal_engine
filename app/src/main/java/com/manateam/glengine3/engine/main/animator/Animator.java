@@ -31,7 +31,7 @@ public class Animator {
         }
         Animation[] a = animQueue.get(animation.target);
         if (a == null) animQueue.replace(animation.target, new Animation[]{animation});
-        else animQueue.replace(animation.target, (Animation[]) contactArray(a, new Animation[]{animation}));
+        else animQueue.replace(animation.target, contactArray(a, new Animation[]{animation}));
     }
     private static void deleteAnimation(Animation anim) {
         Animation[] a = animQueue.get(anim.target);
@@ -56,6 +56,7 @@ public class Animator {
     }
 
     public static class Animation {
+        private boolean isActive;
         private final int tfType;
         private final EnObject target;
         private Function<float[], float[]> tf; // transmission function
@@ -67,28 +68,35 @@ public class Animator {
         private final long startTiming; // global start timing in millis
         private float buffer;
 
-        public Animation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa) {
+        public Animation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
             this.tfType = tfType;
             /*
         tf - defines witch attribute of EnObject is affected by animation (posMatrix = 0; rotMatrix = 1)
         vf - defines witch velocity function will be used
         */
-            startTiming = millis();
+            long c = millis();
+            if (st <= c) {
+                startTiming = c;
+                isActive = true;
+            } else {
+                startTiming = st;
+                isActive = false;
+            }
             this.target = target;
             switch (tfType) {
                 case 0:
-                    this.tf = params -> FC.shift((float[]) params);
+                    this.tf = FC::shift;
                     break;
                 case 1:
-                    this.tf = params -> FC.rotate((float[]) params);
+                    this.tf = FC::rotate;
                     break;
             }
             switch (vfType) {
                 case 0:
-                    this.vf = params -> FC.linear((float[]) params);
+                    this.vf = FC::linear;
                     break;
                 case 1:
-                    this.vf = params -> FC.sigmoid((float[]) params);
+                    this.vf = FC::sigmoid;
                     break;
             }
             this.args = args;
@@ -104,6 +112,13 @@ public class Animator {
         }
 
         public float[] getAnimMatrix(float[] matrix) {
+            if (!isActive) {
+                if (startTiming <= millis()) {
+                    isActive = true;
+                    return this.getAnimMatrix(matrix);
+                }
+                return matrix;
+            }
             float gt = (millis() - startTiming) / duration; // global timing (linear from 0 to 1)
             float t = (float) vf.apply(new float[]{gt, vfa}); // velocity function output for gt
             float dt = t - buffer; // difference in current and previous vf output (shift delta)

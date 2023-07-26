@@ -36,22 +36,24 @@ public class EnObject {
         rotMatrix = new float[3];
     }
 
-    public void animMotion(float x, float y, float z, float duration) {
+    public void animMotion(float x, float y, float z, float duration, long startTiming) {
         new Animator.Animation(this,
                 Animator.SHIFT,
                 new float[]{x, y, z},
                 Animator.LINEAR,
                 duration,
-                0);
+                0,
+                startTiming);
     }
 
-    public void animRotation(float x, float y, float z, float duration) {
+    public void animRotation(float x, float y, float z, float duration, long startTiming) {
         new Animator.Animation(this,
                 Animator.ROTATION,
                 new float[]{x, y, z},
                 Animator.LINEAR,
                 duration,
-                0);
+                0,
+                startTiming);
     }
 
     public void prepareAndDraw() {
@@ -59,7 +61,6 @@ public class EnObject {
         float[] b = new float[16];
         resetTranslateMatrix(b);
         Matrix.translateM(b, 0, posMatrix[0], posMatrix[1], posMatrix[2]);
-        // Matrix.setRotateEulerM(b, 0, rotMatrix[0], rotMatrix[1], rotMatrix[2]);
         Matrix.rotateM(b,0,rotMatrix[0],1,0,0);
         Matrix.rotateM(b,0,rotMatrix[1],0,1,0);
         Matrix.rotateM(b,0,rotMatrix[2],0,0,1);
