@@ -2,8 +2,6 @@ package com.manateam.glengine3.engine.main.animator;
 
 import static com.manateam.glengine3.utils.Utils.pow;
 
-import android.opengl.Matrix;
-
 // Function Collection
 public class FC {
     private static final float e = 2.718281828f;

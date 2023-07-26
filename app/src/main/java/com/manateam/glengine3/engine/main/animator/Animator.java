@@ -120,7 +120,7 @@ public class Animator {
                 return matrix;
             }
             float gt = (millis() - startTiming) / duration; // global timing (linear from 0 to 1)
-            float t = (float) vf.apply(new float[]{gt, vfa}); // velocity function output for gt
+            float t = vf.apply(new float[]{gt, vfa}); // velocity function output for gt
             float dt = t - buffer; // difference in current and previous vf output (shift delta)
             buffer = t;
             if (gt >= 1) finalize(); // completion

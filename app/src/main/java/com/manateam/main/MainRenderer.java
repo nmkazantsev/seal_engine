@@ -6,11 +6,9 @@ import static com.manateam.glengine3.OpenGLRenderer.mMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyCameraSettings;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
-import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.x;
 import static com.manateam.glengine3.utils.Utils.y;
 
@@ -31,12 +29,13 @@ import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 
 public class MainRenderer implements GamePageInterface {
-    private Poligon fpsPolygon, polygon;
-    private Shader shader;
-    private ProjectionMatrixSettings projectionMatrixSettings;
-    private CameraSettings cameraSettings;
+    private final Poligon fpsPolygon;
+    private final Poligon polygon;
+    private final Shader shader;
+    private final ProjectionMatrixSettings projectionMatrixSettings;
+    private final CameraSettings cameraSettings;
     private static SimplePoligon simplePolygon;
-    private EnObject s;
+    private final EnObject s;
 
     //  private FrameBuffer frameBuffer;
     public MainRenderer() {
@@ -75,7 +74,6 @@ public class MainRenderer implements GamePageInterface {
         projectionMatrixSettings.resetFor2d();
         applyProjectionMatrix(projectionMatrixSettings, false);
         applyCameraSettings(cameraSettings);
-        mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         fpsPolygon.redrawParams.set(0, String.valueOf(fps));
         fpsPolygon.redrawNow();

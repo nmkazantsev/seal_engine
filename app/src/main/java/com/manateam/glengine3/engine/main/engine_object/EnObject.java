@@ -7,12 +7,10 @@ import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.re
 import android.opengl.Matrix;
 
 import com.manateam.glengine3.engine.main.animator.Animator;
-import com.manateam.glengine3.engine.main.animator.FC;
 import com.manateam.glengine3.engine.main.verticles.Shape;
 
-// todo make it work
 public class EnObject {
-    private Shape shape;
+    private final Shape shape;
     private float[] posMatrix;
     private float[] rotMatrix;
     public float[] getPosMatrix() {
