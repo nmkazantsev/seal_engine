@@ -20,13 +20,20 @@ public class Vec3 {
         this.z = 0;
     }
 
+    // Creates vector with values taken from give array. Reads 3 values, starting from i index.
+    public Vec3(float[] arr, int i) {
+        x = arr[i];
+        y = arr[i + 1];
+        z = arr[i + 2];
+    }
+
     public Vec3(Vec3 v) {
         this.x = v.x;
         this.y = v.y;
         this.z = v.z;
     }
 
-    public float[] getVector() {
+    public float[] getArray() {
         return new float[]{x, y, z};
     }
 

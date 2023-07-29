@@ -52,8 +52,8 @@ public class MainRenderer implements GamePageInterface {
             simplePolygon.redrawNow();
         }
         s = new EnObject(new Shape("cube.obj", "cube.png", this));
-        s.animMotion(1.f, 0f, -1f, 2000, 0);
-        s.animMotion(0.f, 2f, 0f, 1000, 0);
+        s.animMotion(1f, 0f, -1f, 1000, 0);
+        s.animMotion(0.f, 3f, 0f, 1000, 0);
         s.animRotation(0f, 0f, 90f, 3000, 0);
         s.animRotation(90f, 0, 0, 1000, 3000);
         s.animPivotRotation(0, 0, 0, 1, 1, 1, 1000, 5000);
@@ -68,7 +68,7 @@ public class MainRenderer implements GamePageInterface {
         cameraSettings.eyeZ = 5;
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
-       // connectFrameBuffer(frameBuffer.getFrameBuffer());
+        // connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
 
         fpsPolygon.setRedrawNeeded(true);
@@ -82,7 +82,7 @@ public class MainRenderer implements GamePageInterface {
         fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePolygon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-       // frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
+        // frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
     }
 
     @Override
