@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 public class Animator {
 
+    // indexes for constructing animation via template constructor
     public static final int
             SHIFT = 0,
             ROTATION = 1,
@@ -24,39 +25,39 @@ public class Animator {
         animQueue = new HashMap<>();
     }
 
-    public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st, Function<Animation, float[]> customTF, Function<float[], Float> customVF) {
-        Function<Animation, float[]> tf = customTF;
-        Function<float[], Float> vf = customVF;
+    // template constructor itself, uses predefined indexes instead of manual function specifying
+    public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
+        Function<Animation, float[]> tf = null;
+        Function<float[], Float> vf = null;
 
         // tfType - defines witch attribute of EnObject is affected by animation (posMatrix = 0; rotMatrix = 1, combined = 2)
-        if (customTF == null)
-            switch (tfType) {
-                case 0:
-                    tf = FC::shift;
-                    break;
-                case 1:
-                    tf = FC::rotate;
-                    break;
-                case 2:
-                    tf = FC::pivotRotation;
-                    break;
-            }
+        switch (tfType) {
+            case 0:
+                tf = FC::shift;
+                break;
+            case 1:
+                tf = FC::rotate;
+                break;
+            case 2:
+                tf = FC::pivotRotation;
+                break;
+        }
 
-        if (customVF == null)
-            switch (vfType) {
-                case 0:
-                    vf = FC::linear;
-                    break;
-                case 1:
-                    vf = FC::sigmoid;
-                    break;
-            }
+        switch (vfType) {
+            case 0:
+                vf = FC::linear;
+                break;
+            case 1:
+                vf = FC::sigmoid;
+                break;
+        }
 
-        new Animation(target, tfType, tf, args, vf, duration, vfa, st);
+        new Animation(target, tf, args, vf, duration, vfa, st);
     }
 
     // adds animation without templates, every function has to be specified by hand
-    public static void addAnimation() {
+    public static void addAnimation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
+        new Animation(target, tf, args, vf, duration, vfa, st);
     }
 
     private static void listAnimation(Animation animation, EnObject target) {
@@ -70,21 +71,26 @@ public class Animator {
     }
 
     public static void animate(EnObject target) {
+        // getting targets space attributes
         float[] b = target.getSpaceAttrs();
+        // getting array related to the object and going though it
         for (Animation animation : Objects.requireNonNull(animQueue.get(target))) {
             if (!animation.isDead) {
+                // giving attributes to the animator and getting computation result
                 animation.setAttrs(b);
                 b = animation.getAnimMatrix();
             } else {
+                // deleting "dead" animation
                 animQueue.replace(target, popFromArray(animQueue.get(target), animation));
             }
         }
+        // writing affected attributes back
         target.setSpaceAttrs(b);
     }
 
     public static class Animation {
-        private boolean isActive;
-        private boolean isDead;
+        private boolean isActive; // false only in case animation has not achieved start timing yet
+        private boolean isDead; // become true if animation worked out and ready to be deleted
         private final Function<Animation, float[]> tf; // transmission function
         private final Function<float[], Float> vf; // velocity function
         private final float[] args; // additional arguments
@@ -92,10 +98,10 @@ public class Animator {
         // velocity function argument
         private final float vfa; // velocity function argument
         private final long startTiming; // global start timing in millis
-        private float dtBuffer, dt;
-        private float[] attrs;
+        private float dtBuffer, dt; // buffer for proper dt computing and dt itself (can't be local)
+        private float[] attrs; // attributes like position and rotation
 
-        private Animation(EnObject target, int tfType, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
+        private Animation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
             long c = millis();
             if (st <= c) {
                 startTiming = c;
@@ -130,6 +136,7 @@ public class Animator {
             return dt;
         }
 
+        // function that returns changes in attributes according to current time and arguments
         public float[] getAnimMatrix() {
             if (!isActive) {
                 if (startTiming <= millis()) {

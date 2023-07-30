@@ -40,9 +40,7 @@ public class EnObject {
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming,
-                null,
-                null);
+                startTiming);
     }
 
     public void animRotation(float x, float y, float z, float duration, long startTiming) {
@@ -52,9 +50,7 @@ public class EnObject {
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming,
-                null,
-                null);
+                startTiming);
     }
 
     public void animPivotRotation(float x, float y, float z, float vx, float vy, float vz, float duration, long startTiming) {
@@ -64,9 +60,7 @@ public class EnObject {
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming,
-                null,
-                null);
+                startTiming);
     }
 
     public void prepareAndDraw() {
