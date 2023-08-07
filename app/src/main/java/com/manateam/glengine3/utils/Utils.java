@@ -29,10 +29,12 @@ import java.util.Random;
 public class Utils {
     public static Context context;
     public static long programStartTime;
-    public static float kx,ky,x,y;
+    public static float kx, ky, x, y;
 
-    public static void background(int r,int b,int g){
-        GLES20.glClearColor(r/255.0f,g/255.0f,b/255.0f,1);
+    private static long stopTime;
+
+    public static void background(int r, int b, int g) {
+        GLES20.glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1);
     }
 
     public static void showToast(final String text) {
@@ -117,6 +119,15 @@ public class Utils {
             }
         }
         return a;
+    }
+
+    public static void onPause() {
+        stopTime = millis();
+    }
+
+    public static void onResume() {
+        long dt=millis() - stopTime;
+        programStartTime += dt;
     }
 
     public static void delay(long t) {
@@ -229,7 +240,7 @@ public class Utils {
 
     public static PImage loadImage(String name) {
         try {
-            PImage img = new PImage( getBitmapFromAssets(name, MainActivity.context));
+            PImage img = new PImage(getBitmapFromAssets(name, MainActivity.context));
             img.width = img.bitmap.getWidth();
             img.height = img.bitmap.getHeight();
             if (img == null) {
@@ -238,7 +249,7 @@ public class Utils {
             img.setLoaded(true);
             return img;
         } catch (Exception e) {
-            Log.e("ERROR LOADING", name+String.valueOf(e.getMessage()));
+            Log.e("ERROR LOADING", name + String.valueOf(e.getMessage()));
         }
         return null;
     }
@@ -405,7 +416,7 @@ public class Utils {
             // do reading, usually loop until end of file reading
             String mLine;
             while ((mLine = reader.readLine()) != null) {
-                content += mLine+'\n';
+                content += mLine + '\n';
             }
         } catch (IOException e) {
             //log the exception

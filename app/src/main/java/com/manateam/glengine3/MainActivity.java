@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.manateam.glengine3.utils.Utils;
+
 public class MainActivity extends Activity implements View.OnTouchListener {
     static float[][] touchEvents = new float[100][22];//[x ,y,length]*10+ type(0 - started , 1 - moved , 2 - eneded)
     public static int pointsNumber;
@@ -23,7 +25,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     private GLSurfaceView glSurfaceView;
     public static Context context;
-    // Get a handler that can be used to post to the main thread
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         Log.e("version", String.valueOf(Double.parseDouble(configurationInfo.getGlEsVersion())));
         Log.e("version", String.valueOf(configurationInfo.reqGlEsVersion >= 0x30000));
-        Log.e("version",String.format("%X", configurationInfo.reqGlEsVersion));
+        Log.e("version", String.format("%X", configurationInfo.reqGlEsVersion));
         context = getApplicationContext();
         touches = new MainActivity.touch[10];
         for (int i = 0; i < touches.length; i++) {
@@ -58,12 +59,14 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     protected void onPause() {
         super.onPause();
         glSurfaceView.onPause();
+        Utils.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         glSurfaceView.onResume();
+        Utils.onResume();
     }
 
     private boolean supportES2() {
