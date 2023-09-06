@@ -87,12 +87,6 @@ public class MainRenderer implements GamePageInterface {
         polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePolygon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
         // frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
-        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
-        fpsPoligon.redrawNow();
-        fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
-        poligon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
-        simplePoligon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
-        frameBuffer.drawTexture(new Point(x / 3, y / 2), new Point(2 * x / 3, y / 2), new Point(x / 3, y));
     }
 
     @Override
