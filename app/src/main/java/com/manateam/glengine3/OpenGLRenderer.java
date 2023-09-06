@@ -49,6 +49,7 @@ public class OpenGLRenderer implements Renderer {
     public static float[] mMatrix = new float[16];
     private static GamePageInterface gamePage;
     private boolean firstStart = true;
+    private static long prevPageChangeTime = 0;
 
     private Context context;
     private final String TAG = "opengl renderer"; // for logging
@@ -74,10 +75,11 @@ public class OpenGLRenderer implements Renderer {
             setup();
             firstStart = false;
         }
-         Log.e("gl_error_in_setup", String.valueOf(GLES20.glGetError()));
+        Log.e("gl_error_in_setup", String.valueOf(GLES20.glGetError()));
         if (millis() > 1 * 60 * 60 * 1000) {
             //smth went wrong...
             programStartTime = System.currentTimeMillis();
+            prevPageChangeTime = millis();
         }
         VectriesShapesManager.redrawAllSetup();
     }
@@ -85,7 +87,7 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceChanged(GL10 arg0, int width, int height) {
         glViewport(0, 0, width, height);
-        Log.e("surface changed",String.valueOf(x));
+        Log.e("surface changed", String.valueOf(x));
     }
 
     private void gaphicsSetup() {
@@ -97,6 +99,7 @@ public class OpenGLRenderer implements Renderer {
 
     private void setup() {
         gamePage = new MainRenderer();
+        prevPageChangeTime = millis();
     }
 
     @Override
@@ -144,12 +147,17 @@ public class OpenGLRenderer implements Renderer {
     }
 
     public static void startNewPage(GamePageInterface newPage) {
+        prevPageChangeTime = millis();
         gamePage = null;
         System.gc();
         gamePage = newPage;
         Texture.onPageChanged();
         FrameBufferUtils.onPageChanged();
         Shader.onPageChange();
+    }
+
+    public static long pageMillis() {
+        return millis() - prevPageChangeTime;
     }
 
     public static String getPageClassName() {

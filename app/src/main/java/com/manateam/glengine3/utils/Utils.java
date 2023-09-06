@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.manateam.glengine3.MainActivity;
+import com.manateam.glengine3.engine.main.animator.Animator;
 import com.manateam.glengine3.engine.main.images.PImage;
 
 import java.io.BufferedReader;
@@ -28,10 +29,12 @@ import java.util.Random;
 public class Utils {
     public static Context context;
     public static long programStartTime;
-    public static float kx,ky,x,y;
+    public static float kx, ky, x, y;
 
-    public static void background(int r,int b,int g){
-        GLES20.glClearColor(r/255.0f,g/255.0f,b/255.0f,1);
+    private static long stopTime;
+
+    public static void background(int r, int b, int g) {
+        GLES20.glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1);
     }
 
     public static void showToast(final String text) {
@@ -93,6 +96,38 @@ public class Utils {
         System.arraycopy(a, 0, r, 0, a.length);
         System.arraycopy(b, 0, r, a.length, b.length);
         return r;
+    }
+
+    public static Animator.Animation[] contactArray(Animator.Animation[] a, Animator.Animation[] b) {
+        if (a == null)
+            return b;
+        if (b == null)
+            return a;
+        Animator.Animation[] r = new Animator.Animation[a.length + b.length];
+        System.arraycopy(a, 0, r, 0, a.length);
+        System.arraycopy(b, 0, r, a.length, b.length);
+        return r;
+    }
+
+    public static Animator.Animation[] popFromArray(Animator.Animation[] a, Animator.Animation anim) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == anim) {
+                Animator.Animation[] buffer = new Animator.Animation[a.length - 1];
+                System.arraycopy(a, 0, buffer, 0, i);
+                System.arraycopy(a, i + 1, buffer, i, a.length - i - 1);
+                return buffer;
+            }
+        }
+        return a;
+    }
+
+    public static void onPause() {
+        stopTime = millis();
+    }
+
+    public static void onResume() {
+        long dt=millis() - stopTime;
+        programStartTime += dt;
     }
 
     public static void delay(long t) {
@@ -205,7 +240,7 @@ public class Utils {
 
     public static PImage loadImage(String name) {
         try {
-            PImage img = new PImage( getBitmapFromAssets(name, MainActivity.context));
+            PImage img = new PImage(getBitmapFromAssets(name, MainActivity.context));
             img.width = img.bitmap.getWidth();
             img.height = img.bitmap.getHeight();
             if (img == null) {
@@ -214,7 +249,7 @@ public class Utils {
             img.setLoaded(true);
             return img;
         } catch (Exception e) {
-            Log.e("ERROR LOADING", name);
+            Log.e("ERROR LOADING", name + String.valueOf(e.getMessage()));
         }
         return null;
     }
@@ -381,7 +416,7 @@ public class Utils {
             // do reading, usually loop until end of file reading
             String mLine;
             while ((mLine = reader.readLine()) != null) {
-                content += mLine+'\n';
+                content += mLine + '\n';
             }
         } catch (IOException e) {
             //log the exception

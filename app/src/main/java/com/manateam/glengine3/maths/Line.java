@@ -8,7 +8,7 @@ public class Line {
         a = -A.x;
         b = -A.y;
         c = -A.z;
-        float[] f = v.getVector();
+        float[] f = v.getArray();
         p1 = f[0];
         p2 = f[1];
         p3 = f[2];
@@ -18,7 +18,7 @@ public class Line {
         a = -A.x;
         b = -A.y;
         c = -A.z;
-        float[] f = v.getVector();
+        float[] f = v.getArray();
         p1 = f[0];
         p2 = f[1];
         p3 = f[2];

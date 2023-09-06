@@ -3,6 +3,7 @@ package com.manateam.main;
 import static android.opengl.GLES20.glClearColor;
 import static com.manateam.glengine3.OpenGLRenderer.fps;
 import static com.manateam.glengine3.OpenGLRenderer.mMatrix;
+import static com.manateam.glengine3.OpenGLRenderer.pageMillis;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyCameraSettings;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
@@ -105,7 +106,7 @@ public class SecondRenderer implements GamePageInterface {
         applyCameraSettings(cameraSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
+        fpsPoligon.redrawParams.set(0, String.valueOf(millis()));
         fpsPoligon.redrawNow();
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
     }
