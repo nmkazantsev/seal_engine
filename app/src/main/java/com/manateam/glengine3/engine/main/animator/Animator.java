@@ -1,5 +1,6 @@
 package com.manateam.glengine3.engine.main.animator;
 
+import static com.manateam.glengine3.OpenGLRenderer.pageMillis;
 import static com.manateam.glengine3.utils.Utils.contactArray;
 import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.popFromArray;
@@ -102,7 +103,7 @@ public class Animator {
         private float[] attrs; // attributes like position and rotation
 
         private Animation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
-            long c = millis();
+            long c = pageMillis();
             if (st <= c) {
                 startTiming = c;
                 isActive = true;
@@ -139,13 +140,13 @@ public class Animator {
         // function that returns changes in attributes according to current time and arguments
         public float[] getAnimMatrix() {
             if (!isActive) {
-                if (startTiming <= millis()) {
+                if (startTiming <= pageMillis()) {
                     isActive = true;
                     return getAnimMatrix();
                 }
                 return attrs;
             }
-            float gt = (millis() - startTiming) / duration; // global timing (linear from 0 to 1)
+            float gt = (pageMillis() - startTiming) / duration; // global timing (linear from 0 to 1)
             float t = vf.apply(new float[]{gt, vfa}); // velocity function output for gt
             dt = t - dtBuffer; // difference in current and previous vf output (shift delta)
             dtBuffer = t;

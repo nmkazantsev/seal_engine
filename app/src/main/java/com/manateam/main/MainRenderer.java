@@ -3,12 +3,14 @@ package com.manateam.main;
 import static android.opengl.GLES20.glClearColor;
 import static com.manateam.glengine3.OpenGLRenderer.fps;
 import static com.manateam.glengine3.OpenGLRenderer.mMatrix;
+import static com.manateam.glengine3.OpenGLRenderer.pageMillis;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyCameraSettings;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
 import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
+import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.x;
 import static com.manateam.glengine3.utils.Utils.y;
 
@@ -77,7 +79,7 @@ public class MainRenderer implements GamePageInterface {
         applyProjectionMatrix(projectionMatrixSettings, false);
         applyCameraSettings(cameraSettings);
         applyMatrix(mMatrix);
-        fpsPolygon.redrawParams.set(0, String.valueOf(fps));
+        fpsPolygon.redrawParams.set(0, String.valueOf(pageMillis()));
         fpsPolygon.redrawNow();
         fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
