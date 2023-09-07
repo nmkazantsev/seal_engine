@@ -2,7 +2,6 @@ package com.manateam.glengine3.engine.main.animator;
 
 import static com.manateam.glengine3.OpenGLRenderer.pageMillis;
 import static com.manateam.glengine3.utils.Utils.contactArray;
-import static com.manateam.glengine3.utils.Utils.millis;
 import static com.manateam.glengine3.utils.Utils.popFromArray;
 
 import com.manateam.glengine3.engine.main.engine_object.EnObject;
@@ -57,6 +56,36 @@ public class Animator {
     }
 
     // adds animation without templates, every function has to be specified by hand
+    /*
+    Example of using specific functions.
+    First argument is an EnObject instance that is being target of the animation.
+    Second argument is a function that takes an instance of Animation and returns an array of 6 floats,
+    first 3 are position, second 3 defines rotation
+    (mention this are is not deltas, this are changed attribute).
+    Third argument is a function that defines rate of affect on attributes, it takes array
+    containing value from 0 to 1 (0 is the beginning of the animation, 1 is the very last moment)
+    and some argument, the function must return value from 0 to 1 as well, as was mentioned before
+    0 is fist position of the animation, 1 is the very last.
+    Then goes duration, single velocity function attribute and start timing.
+    Example of full function call from EnObject class:
+    addAnimation(
+        this,
+        (Animator.Animation animation) -> {
+            float[] attrs = animation.getAttrs();
+            float[] args = animation.getArgs();
+            return attrs;
+        },
+        new float[3],
+        (float[] f) -> {
+            float k = f[0];
+            float a = f[1];
+            return f[0];
+        },
+        1000,
+        1.0f,
+        5000
+    );
+     */
     public static void addAnimation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
         new Animation(target, tf, args, vf, duration, vfa, st);
     }
