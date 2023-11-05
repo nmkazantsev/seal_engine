@@ -1,19 +1,28 @@
 package com.manateam.main;
 
 import static android.opengl.GLES20.glClearColor;
-import static com.manateam.glengine3.OpenGLRenderer.fps;
-import static com.manateam.glengine3.OpenGLRenderer.mMatrix;
-import static com.manateam.glengine3.OpenGLRenderer.pageMillis;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyCameraSettings;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
-import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
-import static com.manateam.glengine3.engine.main.shaders.Shader.applyShader;
-import static com.manateam.glengine3.utils.Utils.kx;
-import static com.manateam.glengine3.utils.Utils.ky;
-import static com.manateam.glengine3.utils.Utils.millis;
-import static com.manateam.glengine3.utils.Utils.x;
-import static com.manateam.glengine3.utils.Utils.y;
+import static com.example.engine.glengine3.OpenGLRenderer.fps;
+import static com.example.engine.glengine3.OpenGLRenderer.mMatrix;
+import static com.example.engine.glengine3.OpenGLRenderer.pageMillis;
+import static com.example.engine.glengine3.engine.config.MainConfigurationFunctions.applyCameraSettings;
+import static com.example.engine.glengine3.engine.config.MainConfigurationFunctions.applyMatrix;
+import static com.example.engine.glengine3.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
+import static com.example.engine.glengine3.engine.main.shaders.Shader.applyShader;
+import static com.example.engine.glengine3.utils.Utils.kx;
+import static com.example.engine.glengine3.utils.Utils.ky;
+import static com.example.engine.glengine3.utils.Utils.millis;
+import static com.example.engine.glengine3.utils.Utils.x;
+import static com.example.engine.glengine3.utils.Utils.y;
 
+import android.util.Log;
+
+import com.example.engine.glengine3.GamePageInterface;
+
+import com.example.engine.glengine3.OpenGLRenderer;
+import com.example.engine.glengine3.engine.main.camera.ProjectionMatrixSettings;
+import com.example.engine.glengine3.engine.main.shaders.Shader;
+import com.example.engine.glengine3.engine.main.verticles.Shape;
+import com.example.engine.glengine3.maths.Point;
 import com.example.gl_engine_3_1.R;
 import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.OpenGLRenderer;
@@ -31,6 +40,11 @@ import com.manateam.glengine3.engine.main.verticles.SkyBox;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
+import com.example.engine.glengine3.engine.main.verticles.Poligon;
+import com.example.engine.glengine3.engine.main.verticles.SimplePoligon;
+import com.example.engine.glengine3.engine.main.engine_object.EnObject;
+import com.example.engine.glengine3.engine.main.animator.Animator;
+import com.example.engine.glengine3.engine.main.camera.CameraSettings;
 
 public class MainRenderer implements GamePageInterface {
     private final Poligon fpsPolygon;
