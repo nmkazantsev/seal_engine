@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.manateam.glengine3.Engine;
+import com.example.engine.glengine3.Engine;
+import com.example.engine.glengine3.GamePageInterface;
+
 
 public class MainActivity extends Activity implements View.OnTouchListener {
     Engine engine = new Engine(); //we are unable to make it static because it is impossible to use
@@ -17,10 +19,11 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GLSurfaceView v = engine.onCreate(getApplicationContext());
+        GLSurfaceView v = engine.onCreate(this);
         setContentView(v);
         assert v != null;
         v.setOnTouchListener(this);
+        engine.startPage(new MainRenderer());
     }
 
     @Override

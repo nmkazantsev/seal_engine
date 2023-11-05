@@ -1,4 +1,4 @@
-package com.manateam.main.adaptors;
+package com.example.engine.glengine3.utils;
 
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
@@ -9,35 +9,28 @@ import static android.opengl.GLES20.glVertexAttribPointer;
 import android.opengl.GLES30;
 
 import com.example.engine.glengine3.engine.main.shaders.Adaptor;
-import com.example.engine.glengine3.engine.main.verticles.DrawableShape;
 import com.example.engine.glengine3.engine.main.verticles.Face;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class MainShaderAdaptor extends Adaptor {
+
+public class SkyBoxShaderAdaptor extends Adaptor {
 
     private int aPositionLocation;
-    private int aTextureLocation;
     private int uTextureUnitLocation;
     private int projectionMatrixLoation;
     private int viewMatrixLocation;
-    private int modelMtrixLocation;
-    private int normalLocation;
 
     private final static int POSITION_COUNT = 3;
-    private static final int TEXTURE_COUNT = 2;
-    private static final int NORMAL_COUNT = 3;
-    private static final int STRIDE = (POSITION_COUNT
-            + TEXTURE_COUNT+NORMAL_COUNT) * 4;
-
+    private static final int STRIDE = (POSITION_COUNT) * 4;
     @Override
     public int bindData(Face[] faces) {
-        float[] vertices = new float[faces.length * faces[0].verticesNumber()];
+        float[] vertices = new float[12 * 3 * 3];
         int vertexesNumber = 0;
-        for (int i = 0; i < faces.length; i++) {
-            System.arraycopy(faces[i].getArrayRepresentation(), 0, vertices, i * faces[i].verticesNumber(), faces[i].verticesNumber());
+        for (int i = 0; i < 12; i++) {
+            System.arraycopy(faces[i].getArrayRepresentationVertexes(), 0, vertices, i * 9, 9);
             vertexesNumber++;
         }
         FloatBuffer vertexData = ByteBuffer
@@ -49,35 +42,22 @@ public class MainShaderAdaptor extends Adaptor {
         vertexData.position(0);
         glVertexAttribPointer(aPositionLocation, POSITION_COUNT, GL_FLOAT,
                 false, STRIDE, vertexData);
+
         glEnableVertexAttribArray(aPositionLocation);
-
-        // координаты текстур
-        vertexData.position(POSITION_COUNT);
-        glVertexAttribPointer(aTextureLocation, TEXTURE_COUNT, GL_FLOAT,
-                false, STRIDE, vertexData);
-        glEnableVertexAttribArray(aTextureLocation);
-
-        vertexData.position(POSITION_COUNT + TEXTURE_COUNT);
-        glVertexAttribPointer(normalLocation, NORMAL_COUNT, GL_FLOAT,
-                false, STRIDE, vertexData);
-        glEnableVertexAttribArray(normalLocation);
         return vertexesNumber;
     }
 
     @Override
     public void updateLocations() {
         aPositionLocation = glGetAttribLocation(programId, "aPos");
-        aTextureLocation = glGetAttribLocation(programId, "aTexCoord");
-        normalLocation = glGetAttribLocation(programId, "normal");
-        uTextureUnitLocation = glGetUniformLocation(programId, "u_TextureUnit");
+        uTextureUnitLocation = glGetUniformLocation(programId, "skybox");
         projectionMatrixLoation = GLES30.glGetUniformLocation(programId, "projection");
         viewMatrixLocation = GLES30.glGetUniformLocation(programId, "view");
-        modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
     }
 
     @Override
     public int getTransformMatrixLocation() {
-        return modelMtrixLocation;
+        return -1;
     }
 
     @Override
@@ -102,6 +82,8 @@ public class MainShaderAdaptor extends Adaptor {
 
     @Override
     public int getCameraPosLlocation() {
-        return -1;
+        return viewMatrixLocation;
     }
 }
+
+

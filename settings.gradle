@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "gl_engine_3_1"
 include ':app'
+include ':engine'

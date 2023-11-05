@@ -1,8 +1,8 @@
 package com.manateam.main.redrawFunctions;
 
-import static com.manateam.glengine3.utils.Utils.loadImage;
+import static com.example.engine.glengine3.utils.Utils.loadImage;
 
-import com.manateam.glengine3.engine.main.images.PImage;
+import com.example.engine.glengine3.engine.main.images.PImage;
 
 import java.util.List;
 
