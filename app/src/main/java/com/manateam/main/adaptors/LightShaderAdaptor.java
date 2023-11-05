@@ -116,11 +116,11 @@ public class LightShaderAdaptor extends Adaptor {
         vertices = new float[faces.length * faces[0].textureCoordinates.length * 3];//3 because 3angle
         for (int i = 0; i < faces.length; i++) {
             vertices[i * 6] = faces[i].textureCoordinates[0].x;
-            vertices[i * 6 + 1] = faces[i].textureCoordinates[0].y;
+            vertices[i * 6 + 1] = 1 - faces[i].textureCoordinates[0].y;
             vertices[i * 6 + 2] = faces[i].textureCoordinates[1].x;
-            vertices[i * 6 + 3] = faces[i].textureCoordinates[1].y;
+            vertices[i * 6 + 3] = 1 - faces[i].textureCoordinates[1].y;
             vertices[i * 6 + 4] = faces[i].textureCoordinates[2].x;
-            vertices[i * 6 + 5] = faces[i].textureCoordinates[2].y;
+            vertices[i * 6 + 5] = 1 - faces[i].textureCoordinates[2].y;
         }
         loadDataToBuffer(vertices, 1, vertexBuffer);
 
