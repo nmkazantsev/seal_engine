@@ -22,6 +22,7 @@ import com.manateam.glengine3.GamePageInterface;
 import com.manateam.glengine3.engine.main.images.PImage;
 import com.manateam.glengine3.engine.main.shaders.Shader;
 import com.manateam.glengine3.engine.main.textures.Texture;
+import com.manateam.glengine3.engine.main.vertex_bueffer.VertexBuffer;
 import com.manateam.glengine3.maths.Point;
 import com.manateam.glengine3.utils.Utils;
 
@@ -51,7 +52,10 @@ public class Shape implements VerticleSet, DrawableShape {
 
     private final Function<Void, PImage> redrawFunction;
 
+    private final VertexBuffer vertexBuffer;
+
     public Shape(String fileName, String textureFileName, GamePageInterface page) {
+        vertexBuffer = new VertexBuffer(3);
         creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
@@ -114,8 +118,7 @@ public class Shape implements VerticleSet, DrawableShape {
 
 
     public void bindData() {
-
-        Shader.getActiveShader().getAdaptor().bindData(faces);
+        Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
 
         // помещаем текстуру в target 2D юнита 0
         glActiveTexture(GL_TEXTURE0);

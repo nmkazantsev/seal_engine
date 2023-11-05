@@ -2,6 +2,7 @@ package com.manateam.glengine3.engine.main.shaders;
 
 
 import com.manateam.glengine3.OpenGLRenderer;
+import com.manateam.glengine3.engine.main.vertex_bueffer.VertexBuffer;
 import com.manateam.glengine3.engine.main.verticles.Face;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public abstract class Adaptor {
     }
 
     public abstract int bindData(Face faces[]);
+
+    public abstract int bindData(Face faces[], VertexBuffer vertexBuffer);
 
     public abstract void updateLocations();
 

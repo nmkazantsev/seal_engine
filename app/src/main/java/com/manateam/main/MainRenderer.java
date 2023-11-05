@@ -23,6 +23,7 @@ import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.engine_object.EnObject;
 import com.manateam.glengine3.engine.main.frameBuffers.FrameBuffer;
 import com.manateam.glengine3.engine.main.shaders.Shader;
+import com.manateam.glengine3.engine.main.vertex_bueffer.VertexBuffer;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
 import com.manateam.glengine3.engine.main.verticles.Shape;
 import com.manateam.glengine3.engine.main.verticles.SimplePoligon;
@@ -43,7 +44,6 @@ public class MainRenderer implements GamePageInterface {
     //  private FrameBuffer frameBuffer;
     public MainRenderer() {
         Animator.initialize();
-
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPolygon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
