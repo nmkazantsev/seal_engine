@@ -52,10 +52,11 @@ public class Shape implements VerticleSet, DrawableShape {
 
     private final Function<Void, PImage> redrawFunction;
 
-    private final VertexBuffer vertexBuffer;
+    private VertexBuffer vertexBuffer;
+
+    private boolean vboLoaded = false;
 
     public Shape(String fileName, String textureFileName, GamePageInterface page) {
-        vertexBuffer = new VertexBuffer(3);
         creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
@@ -118,7 +119,14 @@ public class Shape implements VerticleSet, DrawableShape {
 
 
     public void bindData() {
-        Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
+        if (!vboLoaded) {
+            if (vertexBuffer != null) {
+                vertexBuffer.delete();
+            }
+            vertexBuffer = new VertexBuffer(3);
+            Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
+            vboLoaded = true;
+        }
 
         // помещаем текстуру в target 2D юнита 0
         glActiveTexture(GL_TEXTURE0);
@@ -163,15 +171,18 @@ public class Shape implements VerticleSet, DrawableShape {
     public void prepareAndDraw() {
         if (isLoaded) {
             bindData();
+            vertexBuffer.bindVao();
             glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
             glDrawArrays(GL_TRIANGLES, 0, object.getNumFaces() * 3);
             glDisable(GL_CULL_FACE);
+            vertexBuffer.bindDefaultVao();
         }
     }
 
     @Override
     public void onRedrawSetup() {
         setRedrawNeeded(true);
+        vboLoaded = false;
     }
 
     @Override
@@ -181,6 +192,7 @@ public class Shape implements VerticleSet, DrawableShape {
         if (redrawNeeded) {
             VectriesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
         }
+        vboLoaded = false;
     }
 
     @Override
@@ -191,6 +203,7 @@ public class Shape implements VerticleSet, DrawableShape {
 
     @Override
     public void onRedraw() {
+        vboLoaded = false;
         if (image != null) {
             image.delete();
         }

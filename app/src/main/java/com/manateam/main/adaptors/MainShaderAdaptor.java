@@ -1,8 +1,10 @@
 package com.manateam.main.adaptors;
 
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
+import static android.opengl.GLES20.GL_FALSE;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_STATIC_DRAW;
+import static android.opengl.GLES20.glBindBuffer;
 import static android.opengl.GLES20.glBufferData;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGetAttribLocation;
@@ -68,15 +70,7 @@ public class MainShaderAdaptor extends Adaptor {
         return vertexesNumber;
     }
 
-    private void loadDataToBuffer(Face[] faces, VertexBuffer vertexBuffer, int bufferIndex,
-                                  int startPosInArrayRepr, int lenInArrRepr) {
-
-        float[] vertices = new float[faces.length * 3];//3 numbers in 1 vectrie
-        for (int i = 0; i < faces.length; i++) {
-            System.arraycopy(faces[i].getArrayRepresentation(), startPosInArrayRepr, vertices,
-                    i * lenInArrRepr, lenInArrRepr);
-            //vertexesNumber++;
-        }
+    private void loadDataToBuffer(float[] vertices, int bufferIndex, VertexBuffer vertexBuffer) {
         FloatBuffer vertexData = ByteBuffer
                 .allocateDirect(vertices.length * 4)
                 .order(ByteOrder.nativeOrder())
@@ -90,11 +84,52 @@ public class MainShaderAdaptor extends Adaptor {
     @Override
     public int bindData(Face[] faces, VertexBuffer vertexBuffer) {
         //set up positions
-        loadDataToBuffer(faces, vertexBuffer, 0, 0, 3);
+        float[] vertices = new float[faces.length * faces[0].vertices.length * 3];//3 because 3angle
+        for (int i = 0; i < faces.length; i++) {
+            vertices[i * 9] = faces[i].vertices[0].x;
+            vertices[i * 9 + 1] = faces[i].vertices[0].y;
+            vertices[i * 9 + 2] = faces[i].vertices[0].z;
+            vertices[i * 9 + 3] = faces[i].vertices[1].x;
+            vertices[i * 9 + 4] = faces[i].vertices[1].y;
+            vertices[i * 9 + 5] = faces[i].vertices[1].z;
+            vertices[i * 9 + 6] = faces[i].vertices[2].x;
+            vertices[i * 9 + 7] = faces[i].vertices[2].y;
+            vertices[i * 9 + 8] = faces[i].vertices[2].z;
+        }
+        loadDataToBuffer(vertices, 0, vertexBuffer);
+
         //set up uv
-        loadDataToBuffer(faces, vertexBuffer, 1, 3, 2);
+        vertices = new float[faces.length * faces[0].textureCoordinates.length * 3];//3 because 3angle
+        for (int i = 0; i < faces.length; i++) {
+            vertices[i * 6] = faces[i].textureCoordinates[0].x;
+            vertices[i * 6 + 1] = faces[i].textureCoordinates[0].y;
+            vertices[i * 6 + 2] = faces[i].textureCoordinates[1].x;
+            vertices[i * 6 + 3] = faces[i].textureCoordinates[1].y;
+            vertices[i * 6 + 4] = faces[i].textureCoordinates[2].x;
+            vertices[i * 6 + 5] = faces[i].textureCoordinates[2].y;
+        }
+        loadDataToBuffer(vertices, 1, vertexBuffer);
+
         //set up normals
-        loadDataToBuffer(faces, vertexBuffer, 2, 5, 3);
+        vertices = new float[faces.length * 3];//3 because 3 coords in normal
+        for (int i = 0; i < faces.length; i++) {
+            vertices[i * faces[i].vertices.length] = faces[i].normal.x;
+            vertices[i * faces[i].vertices.length + 1] = faces[i].normal.y;
+            vertices[i * faces[i].vertices.length + 2] = faces[i].normal.z;
+
+        }
+        loadDataToBuffer(vertices, 2, vertexBuffer);
+
+        vertexBuffer.bindVao();
+        glEnableVertexAttribArray(aPositionLocation);
+        glEnableVertexAttribArray(aTextureLocation);
+        glEnableVertexAttribArray(normalLocation);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(0));
+        glVertexAttribPointer(aPositionLocation, 3, GL_FLOAT, false, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(1));
+        glVertexAttribPointer(aTextureLocation, 2, GL_FLOAT, false, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(2));
+        glVertexAttribPointer(normalLocation, 3, GL_FLOAT, false, 0, 0);
 
         /*float[] vertices = new float[faces.length * faces[0].verticesNumber()];
 
@@ -122,7 +157,7 @@ public class MainShaderAdaptor extends Adaptor {
         */
         vertexBuffer.bindDefaultVbo();//vertex coords
         vertexBuffer.bindDefaultVao();
-        return vertexesNumber;
+        return 0;
     }
 
     @Override
