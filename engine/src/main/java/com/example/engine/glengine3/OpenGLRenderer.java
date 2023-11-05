@@ -12,6 +12,7 @@ import static com.example.engine.glengine3.Engine.touchEvents;
 import static com.example.engine.glengine3.Engine.touchEventsNumb;
 import static com.example.engine.glengine3.Engine.touches;
 import static com.example.engine.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
+import static com.example.engine.glengine3.utils.Utils.context;
 import static com.example.engine.glengine3.utils.Utils.kx;
 import static com.example.engine.glengine3.utils.Utils.ky;
 import static com.example.engine.glengine3.utils.Utils.millis;
@@ -21,9 +22,11 @@ import static com.example.engine.glengine3.utils.Utils.programStartTime;
 import static com.example.engine.glengine3.utils.Utils.x;
 import static com.example.engine.glengine3.utils.Utils.y;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
+import android.speech.tts.Voice;
 import android.util.Log;
 
 import com.example.engine.glengine3.engine.main.frameBuffers.FrameBuffer;
@@ -47,10 +50,8 @@ public class OpenGLRenderer implements Renderer {
     private boolean firstStart = true;
     private static long prevPageChangeTime = 0;
 
-    private final Context context;
 
     public OpenGLRenderer(Context context, float width, float height) {
-        this.context = context;
         x = width;
         y = height;
         ky = y / 1280.0f;
@@ -110,6 +111,9 @@ public class OpenGLRenderer implements Renderer {
     }
 
     private void draw() {
+        if(gamePage==null){
+            startNewPage(Engine.getStartPage.apply(null));
+        }
         gamePage.draw();
     }
 

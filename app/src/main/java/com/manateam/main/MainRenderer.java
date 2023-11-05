@@ -14,6 +14,8 @@ import static com.example.engine.glengine3.utils.Utils.millis;
 import static com.example.engine.glengine3.utils.Utils.x;
 import static com.example.engine.glengine3.utils.Utils.y;
 
+import android.util.Log;
+
 import com.example.engine.glengine3.GamePageInterface;
 
 import com.example.engine.glengine3.OpenGLRenderer;

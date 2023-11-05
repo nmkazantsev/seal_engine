@@ -1,5 +1,6 @@
 package com.example.engine.glengine3;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.engine.glengine3.engine.config.MainConfigurationFunctions;
 import com.example.engine.glengine3.utils.Utils;
+
+import java.util.function.Function;
 
 public class Engine {
     public static class touch {
@@ -30,8 +33,10 @@ public class Engine {
 
     private GLSurfaceView glSurfaceView;
     public Context context;
+    protected static Function<Void, GamePageInterface> getStartPage;
 
-    public GLSurfaceView onCreate(Context c) {
+    public GLSurfaceView onCreate(Context c, Function<Void, GamePageInterface> getStartPage) {
+        Engine.getStartPage = getStartPage;
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
 
