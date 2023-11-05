@@ -9,6 +9,7 @@ import static android.opengl.GLES20.glVertexAttribPointer;
 import android.opengl.GLES30;
 
 import com.manateam.glengine3.engine.main.shaders.Adaptor;
+import com.manateam.glengine3.engine.main.vertex_bueffer.VertexBuffer;
 import com.manateam.glengine3.engine.main.verticles.Face;
 
 import java.nio.ByteBuffer;
@@ -25,6 +26,7 @@ public class SkyBoxShaderAdaptor extends Adaptor {
 
     private final static int POSITION_COUNT = 3;
     private static final int STRIDE = (POSITION_COUNT) * 4;
+
     @Override
     public int bindData(Face[] faces) {
         float[] vertices = new float[12 * 3 * 3];
@@ -45,6 +47,12 @@ public class SkyBoxShaderAdaptor extends Adaptor {
 
         glEnableVertexAttribArray(aPositionLocation);
         return vertexesNumber;
+    }
+
+    @Override
+    public int bindData(Face[] faces, VertexBuffer vertexBuffer) {
+        //todo here
+        return 0;
     }
 
     @Override
