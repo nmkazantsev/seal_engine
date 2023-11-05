@@ -1,4 +1,4 @@
-package com.manateam.glengine3.engine.main.vertex_bueffer;
+package com.example.engine.glengine3.engine.main.vertex_bueffer;
 
 import static android.opengl.GLES20.GL_ARRAY_BUFFER;
 import static android.opengl.GLES20.glBindBuffer;

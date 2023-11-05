@@ -1,7 +1,6 @@
 package com.manateam.main;
 
 import static android.opengl.GLES20.glClearColor;
-import static com.example.engine.glengine3.OpenGLRenderer.fps;
 import static com.example.engine.glengine3.OpenGLRenderer.mMatrix;
 import static com.example.engine.glengine3.OpenGLRenderer.pageMillis;
 import static com.example.engine.glengine3.engine.config.MainConfigurationFunctions.applyCameraSettings;
@@ -10,11 +9,8 @@ import static com.example.engine.glengine3.engine.config.MainConfigurationFuncti
 import static com.example.engine.glengine3.engine.main.shaders.Shader.applyShader;
 import static com.example.engine.glengine3.utils.Utils.kx;
 import static com.example.engine.glengine3.utils.Utils.ky;
-import static com.example.engine.glengine3.utils.Utils.millis;
 import static com.example.engine.glengine3.utils.Utils.x;
 import static com.example.engine.glengine3.utils.Utils.y;
-
-import android.util.Log;
 
 import com.example.engine.glengine3.GamePageInterface;
 
@@ -32,7 +28,6 @@ import com.manateam.glengine3.engine.main.camera.ProjectionMatrixSettings;
 import com.manateam.glengine3.engine.main.engine_object.EnObject;
 import com.manateam.glengine3.engine.main.frameBuffers.FrameBuffer;
 import com.manateam.glengine3.engine.main.shaders.Shader;
-import com.manateam.glengine3.engine.main.vertex_bueffer.VertexBuffer;
 import com.manateam.glengine3.engine.main.verticles.Poligon;
 import com.manateam.glengine3.engine.main.verticles.Shape;
 import com.manateam.glengine3.engine.main.verticles.SimplePoligon;
