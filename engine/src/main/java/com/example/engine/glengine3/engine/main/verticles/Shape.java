@@ -121,7 +121,7 @@ public class Shape implements VerticleSet, DrawableShape {
             if (vertexBuffer != null) {
                 vertexBuffer.delete();
             }
-            vertexBuffer = new VertexBuffer(3);
+            vertexBuffer = new VertexBuffer(5);
             Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
             vboLoaded = true;
         }
@@ -218,6 +218,8 @@ public class Shape implements VerticleSet, DrawableShape {
     @Override
     public void delete() {
         image.delete();
+        normalImage.delete();
+        vertexBuffer.delete();
     }
 
     public void redrawNow() {

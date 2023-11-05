@@ -9,10 +9,10 @@ import static android.opengl.GLES30.glGenBuffers;
 import static android.opengl.GLES30.glGenVertexArrays;
 
 public class VertexBuffer {
-    private int vao;
-    private int[] vbo;
+    private final int vao;
+    private final int[] vbo;
 
-    private int vboNum;
+    private final int vboNum;
 
     public VertexBuffer(int vboNum) {
         vbo = new int[vboNum];
@@ -23,8 +23,8 @@ public class VertexBuffer {
         vao = x[0];
     }
 
-    public void bindVbo(int vboNum) {
-        glBindBuffer(GL_ARRAY_BUFFER, vbo[vboNum]);
+    public void bindVbo(int vboInd) {
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[vboInd]);
     }
 
     public void bindDefaultVbo() {

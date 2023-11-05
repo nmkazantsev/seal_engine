@@ -13,33 +13,19 @@ import static com.example.engine.glengine3.utils.Utils.x;
 import static com.example.engine.glengine3.utils.Utils.y;
 
 import com.example.engine.glengine3.GamePageInterface;
-
 import com.example.engine.glengine3.OpenGLRenderer;
+import com.example.engine.glengine3.engine.main.animator.Animator;
+import com.example.engine.glengine3.engine.main.camera.CameraSettings;
 import com.example.engine.glengine3.engine.main.camera.ProjectionMatrixSettings;
+import com.example.engine.glengine3.engine.main.engine_object.EnObject;
 import com.example.engine.glengine3.engine.main.shaders.Shader;
+import com.example.engine.glengine3.engine.main.verticles.Poligon;
 import com.example.engine.glengine3.engine.main.verticles.Shape;
+import com.example.engine.glengine3.engine.main.verticles.SimplePoligon;
 import com.example.engine.glengine3.maths.Point;
 import com.example.gl_engine_3_1.R;
-import com.example.engine.glengine3.GamePageInterface;
-import com.example.engine.glengine3.OpenGLRenderer;
-import com.example.engine.glengine3.engine.main.animator.Animator;
-import com.example.engine.glengine3.engine.main.camera.CameraSettings;
-import com.example.engine.glengine3.engine.main.camera.ProjectionMatrixSettings;
-import com.example.engine.glengine3.engine.main.engine_object.EnObject;
-import com.example.engine.glengine3.engine.main.frameBuffers.FrameBuffer;
-import com.example.engine.glengine3.engine.main.shaders.Shader;
-import com.example.engine.glengine3.engine.main.verticles.Poligon;
-import com.example.engine.glengine3.engine.main.verticles.Shape;
-import com.example.engine.glengine3.engine.main.verticles.SimplePoligon;
-import com.example.engine.glengine3.engine.main.verticles.SkyBox;
-import com.example.engine.glengine3.maths.Point;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
-import com.example.engine.glengine3.engine.main.verticles.Poligon;
-import com.example.engine.glengine3.engine.main.verticles.SimplePoligon;
-import com.example.engine.glengine3.engine.main.engine_object.EnObject;
-import com.example.engine.glengine3.engine.main.animator.Animator;
-import com.example.engine.glengine3.engine.main.camera.CameraSettings;
 
 public class MainRenderer implements GamePageInterface {
     private final Poligon fpsPolygon;

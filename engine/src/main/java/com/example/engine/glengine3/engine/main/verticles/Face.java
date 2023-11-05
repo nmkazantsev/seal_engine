@@ -7,7 +7,7 @@ public class Face {
     public final Point[] vertices;
     public final Point[] textureCoordinates;
     public final Point normal;
-    private Vec3 tangent, bitangent;//tangent, bitangent
+    public Vec3 tangent, bitangent;//tangent, bitangent
     private final int SEGMENT_LENGTH = 14, SEGMENT_LENGTH_NO_TS = 14 - 6;
 
     public Face(Point[] vertices, Point[] textureCoordinates, Point normal) {

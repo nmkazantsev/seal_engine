@@ -84,7 +84,7 @@ public class SecondRenderer implements GamePageInterface {
         applyCameraSettings(cameraSettings);
         skyBox.prepareAndDraw();
 
-        applyShader(lightShader);
+        applyShader(shader);
         pointLight.forwardData();
         pointLight2.forwardData();
         glClearColor(1f, 1,1,1);
@@ -93,7 +93,7 @@ public class SecondRenderer implements GamePageInterface {
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
-        //Matrix.scaleM(mMatrix,0,0.5f,0.5f,0.5f);
+        Matrix.scaleM(mMatrix,0,2f,2f,2f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
 

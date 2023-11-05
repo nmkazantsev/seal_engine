@@ -123,38 +123,13 @@ public class MainShaderAdaptor extends Adaptor {
         vertexBuffer.bindVao();
         glEnableVertexAttribArray(aPositionLocation);
         glEnableVertexAttribArray(aTextureLocation);
-        glEnableVertexAttribArray(normalLocation);
+       // glEnableVertexAttribArray(normalLocation);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(0));
         glVertexAttribPointer(aPositionLocation, 3, GL_FLOAT, false, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(1));
         glVertexAttribPointer(aTextureLocation, 2, GL_FLOAT, false, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(2));
-        glVertexAttribPointer(normalLocation, 3, GL_FLOAT, false, 0, 0);
-
-        /*float[] vertices = new float[faces.length * faces[0].verticesNumber()];
-
-        FloatBuffer vertexData = ByteBuffer
-                .allocateDirect(vertices.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        vertexData.put(vertices);//4 байта на флоат
-        // координаты вершин
-        vertexData.position(0);
-        glVertexAttribPointer(aPositionLocation, POSITION_COUNT, GL_FLOAT,
-                false, STRIDE, vertexData);
-        glEnableVertexAttribArray(aPositionLocation);
-
-        // координаты текстур
-        vertexData.position(POSITION_COUNT);
-        glVertexAttribPointer(aTextureLocation, TEXTURE_COUNT, GL_FLOAT,
-                false, STRIDE, vertexData);
-        glEnableVertexAttribArray(aTextureLocation);
-
-        vertexData.position(POSITION_COUNT + TEXTURE_COUNT);
-        glVertexAttribPointer(normalLocation, NORMAL_COUNT, GL_FLOAT,
-                false, STRIDE, vertexData);
-        glEnableVertexAttribArray(normalLocation);
-        */
+       // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(2));
+        //glVertexAttribPointer(normalLocation, 3, GL_FLOAT, false, 0, 0);
         vertexBuffer.bindDefaultVbo();//vertex coords
         vertexBuffer.bindDefaultVao();
         return 0;
