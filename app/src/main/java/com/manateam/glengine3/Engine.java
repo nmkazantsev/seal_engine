@@ -1,8 +1,6 @@
 package com.manateam.glengine3;
 
-import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
@@ -28,10 +26,10 @@ public class Engine {
     static String touchEvent = "";
     static float[][] tch = new float[10][2];//float touches
 
-    private static GLSurfaceView glSurfaceView;
-    public static Context context;
+    private GLSurfaceView glSurfaceView;
+    public Context context;
 
-    public static GLSurfaceView onCreate(Context c) {
+    public  GLSurfaceView onCreate(Context c) {
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
 
@@ -56,7 +54,7 @@ public class Engine {
         return glSurfaceView;
     }
 
-    private static boolean supportES2() {
+    private  boolean supportES2() {
         ActivityManager activityManager =
                 (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -109,12 +107,12 @@ public class Engine {
         //  return false;
     }
 
-    public static void onPause() {
+    public  void onPause() {
         glSurfaceView.onPause();
         Utils.onPause();
     }
 
-    public static void onResume() {
+    public  void onResume() {
         glSurfaceView.onResume();
         Utils.onResume();
     }

@@ -12,7 +12,6 @@ import static com.manateam.glengine3.Engine.touchEvents;
 import static com.manateam.glengine3.Engine.touchEventsNumb;
 import static com.manateam.glengine3.Engine.touches;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
-import static com.manateam.glengine3.utils.Utils.delay;
 import static com.manateam.glengine3.utils.Utils.kx;
 import static com.manateam.glengine3.utils.Utils.ky;
 import static com.manateam.glengine3.utils.Utils.millis;
@@ -36,8 +35,6 @@ import com.manateam.glengine3.engine.main.verticles.VectriesShapesManager;
 import com.manateam.glengine3.utils.Utils;
 import com.manateam.main.MainRenderer;
 
-import org.w3c.dom.Text;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -51,8 +48,7 @@ public class OpenGLRenderer implements Renderer {
     private boolean firstStart = true;
     private static long prevPageChangeTime = 0;
 
-    private Context context;
-    private final String TAG = "opengl renderer"; // for logging
+    private final Context context;
 
     public OpenGLRenderer(Context context, float width, float height) {
         this.context = context;
@@ -76,7 +72,7 @@ public class OpenGLRenderer implements Renderer {
             firstStart = false;
         }
         Log.e("gl_error_in_setup", String.valueOf(GLES20.glGetError()));
-        if (millis() > 1 * 60 * 60 * 1000) {
+        if (millis() > 60 * 60 * 1000) {
             //smth went wrong...
             programStartTime = System.currentTimeMillis();
             prevPageChangeTime = millis();
