@@ -99,14 +99,14 @@ public class MainShaderAdaptor extends Adaptor {
         loadDataToBuffer(vertices, 0, vertexBuffer);
 
         //set up uv
-        vertices = new float[faces.length * faces[0].textureCoordinates.length * 3];//3 because 3angle
+        vertices = new float[faces.length * 2 * 3];//3 because 3angle
         for (int i = 0; i < faces.length; i++) {
             vertices[i * 6] = faces[i].textureCoordinates[0].x;
-            vertices[i * 6 + 1] = faces[i].textureCoordinates[0].y;
+            vertices[i * 6 + 1] = 1 - faces[i].textureCoordinates[0].y;
             vertices[i * 6 + 2] = faces[i].textureCoordinates[1].x;
-            vertices[i * 6 + 3] = faces[i].textureCoordinates[1].y;
+            vertices[i * 6 + 3] = 1 - faces[i].textureCoordinates[1].y;
             vertices[i * 6 + 4] = faces[i].textureCoordinates[2].x;
-            vertices[i * 6 + 5] = faces[i].textureCoordinates[2].y;
+            vertices[i * 6 + 5] = 1 - faces[i].textureCoordinates[2].y;
         }
         loadDataToBuffer(vertices, 1, vertexBuffer);
 
@@ -123,12 +123,12 @@ public class MainShaderAdaptor extends Adaptor {
         vertexBuffer.bindVao();
         glEnableVertexAttribArray(aPositionLocation);
         glEnableVertexAttribArray(aTextureLocation);
-       // glEnableVertexAttribArray(normalLocation);
+        // glEnableVertexAttribArray(normalLocation);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(0));
         glVertexAttribPointer(aPositionLocation, 3, GL_FLOAT, false, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(1));
         glVertexAttribPointer(aTextureLocation, 2, GL_FLOAT, false, 0, 0);
-       // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(2));
+        // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.getVboAdress(2));
         //glVertexAttribPointer(normalLocation, 3, GL_FLOAT, false, 0, 0);
         vertexBuffer.bindDefaultVbo();//vertex coords
         vertexBuffer.bindDefaultVao();
