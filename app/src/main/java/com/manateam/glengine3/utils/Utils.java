@@ -2,6 +2,7 @@ package com.manateam.glengine3.utils;
 
 
 import static java.lang.Float.parseFloat;
+import static java.lang.Thread.enumerate;
 import static java.lang.Thread.sleep;
 
 import android.content.Context;
@@ -15,7 +16,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.manateam.glengine3.MainActivity;
+import com.manateam.glengine3.Engine;
 import com.manateam.glengine3.engine.main.animator.Animator;
 import com.manateam.glengine3.engine.main.images.PImage;
 
@@ -126,7 +127,7 @@ public class Utils {
     }
 
     public static void onResume() {
-        long dt=millis() - stopTime;
+        long dt = millis() - stopTime;
         programStartTime += dt;
     }
 
@@ -240,7 +241,7 @@ public class Utils {
 
     public static PImage loadImage(String name) {
         try {
-            PImage img = new PImage(getBitmapFromAssets(name, MainActivity.context));
+            PImage img = new PImage(getBitmapFromAssets(name, context));
             img.width = img.bitmap.getWidth();
             img.height = img.bitmap.getHeight();
             if (img == null) {
