@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.example.gl_engine_3_1'
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.gl_engine_3_1"
