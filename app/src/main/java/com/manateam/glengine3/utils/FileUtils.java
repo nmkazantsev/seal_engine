@@ -4,10 +4,6 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import com.manateam.glengine3.MainActivity;
-import com.manateam.glengine3.engine.main.images.PImage;
 
 import java.io.BufferedReader;
 import java.io.IOException;

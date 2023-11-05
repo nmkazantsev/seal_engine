@@ -2,10 +2,10 @@ package com.manateam.glengine3;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,69 +15,55 @@ import android.widget.Toast;
 
 import com.manateam.glengine3.utils.Utils;
 
-public class MainActivity extends Activity implements View.OnTouchListener {
+public class Engine {
+    public static class touch {
+        public float x;
+        public float y;
+    }
+
     static float[][] touchEvents = new float[100][22];//[x ,y,length]*10+ type(0 - started , 1 - moved , 2 - eneded)
     public static int pointsNumber;
     static int touchEventsNumb = 0;
     public static touch[] touches;
     static String touchEvent = "";
-    float[][] tch = new float[10][2];//float touches
+    static float[][] tch = new float[10][2];//float touches
 
-    private GLSurfaceView glSurfaceView;
+    private static GLSurfaceView glSurfaceView;
     public static Context context;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+    public static GLSurfaceView onCreate(Context c) {
+        ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
 
         Log.e("version", String.valueOf(Double.parseDouble(configurationInfo.getGlEsVersion())));
         Log.e("version", String.valueOf(configurationInfo.reqGlEsVersion >= 0x30000));
         Log.e("version", String.format("%X", configurationInfo.reqGlEsVersion));
-        context = getApplicationContext();
-        touches = new MainActivity.touch[10];
+        context = c;
+        touches = new touch[10];
         for (int i = 0; i < touches.length; i++) {
-            touches[i] = new MainActivity.touch();
+            touches[i] = new touch();
         }
-        super.onCreate(savedInstanceState);
         if (!supportES2()) {
-            Toast.makeText(this, "OpenGL ES 2.0 is not supported", Toast.LENGTH_LONG).show();
-            finish();
-            return;
+            Toast.makeText(context, "OpenGL ES 2.0 is not supported", Toast.LENGTH_LONG).show();
+            return null;
         }
-        glSurfaceView = new GLSurfaceView(this);
+        glSurfaceView = new GLSurfaceView(context);
         glSurfaceView.setEGLContextClientVersion(3);
-        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(displayMetrics);
-        glSurfaceView.setRenderer(new OpenGLRenderer(this, displayMetrics.widthPixels, displayMetrics.heightPixels));
-        setContentView(glSurfaceView);
-        glSurfaceView.setOnTouchListener(this);
+        glSurfaceView.setRenderer(new OpenGLRenderer(context, displayMetrics.widthPixels, displayMetrics.heightPixels));
+        return glSurfaceView;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        glSurfaceView.onPause();
-        Utils.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        glSurfaceView.onResume();
-        Utils.onResume();
-    }
-
-    private boolean supportES2() {
+    private static boolean supportES2() {
         ActivityManager activityManager =
-                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
         return (configurationInfo.reqGlEsVersion >= 0x20000);
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public static boolean onTouch(View v, MotionEvent event) {
         int actionMask = event.getActionMasked();
         pointsNumber = event.getPointerCount();
         // touches = new touch[pointsNumber];
@@ -123,13 +109,13 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         //  return false;
     }
 
-    public static class touch {
-        public float x;
-        public float y;
+    public static void onPause() {
+        glSurfaceView.onPause();
+        Utils.onPause();
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
+    public static void onResume() {
+        glSurfaceView.onResume();
+        Utils.onResume();
     }
 }

@@ -15,7 +15,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.manateam.glengine3.MainActivity;
+import com.manateam.glengine3.Engine;
 import com.manateam.glengine3.engine.main.animator.Animator;
 import com.manateam.glengine3.engine.main.images.PImage;
 
@@ -240,7 +240,7 @@ public class Utils {
 
     public static PImage loadImage(String name) {
         try {
-            PImage img = new PImage(getBitmapFromAssets(name, MainActivity.context));
+            PImage img = new PImage(getBitmapFromAssets(name, Engine.context));
             img.width = img.bitmap.getWidth();
             img.height = img.bitmap.getHeight();
             if (img == null) {

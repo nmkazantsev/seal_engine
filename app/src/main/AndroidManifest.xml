@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Gl_engine_3_1"
         tools:targetApi="31">
         <activity
-            android:name="com.manateam.glengine3.MainActivity"
+            android:name="com.manateam.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Gl_engine_3_1.NoActionBar">

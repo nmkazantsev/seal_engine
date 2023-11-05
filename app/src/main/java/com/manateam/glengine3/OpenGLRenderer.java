@@ -7,10 +7,10 @@ import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
-import static com.manateam.glengine3.MainActivity.pointsNumber;
-import static com.manateam.glengine3.MainActivity.touchEvents;
-import static com.manateam.glengine3.MainActivity.touchEventsNumb;
-import static com.manateam.glengine3.MainActivity.touches;
+import static com.manateam.glengine3.Engine.pointsNumber;
+import static com.manateam.glengine3.Engine.touchEvents;
+import static com.manateam.glengine3.Engine.touchEventsNumb;
+import static com.manateam.glengine3.Engine.touches;
 import static com.manateam.glengine3.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.manateam.glengine3.utils.Utils.delay;
 import static com.manateam.glengine3.utils.Utils.kx;
@@ -131,15 +131,15 @@ public class OpenGLRenderer implements Renderer {
             pointsNumber = parseInt(touchEvents[i][21]);
             if (y == 0) {
                 touchStarted();
-                MainActivity.touchEvent = "";
+                Engine.touchEvent = "";
             }
             if (y == 1) {
                 touchMoved();
-                MainActivity.touchEvent = "";
+                Engine.touchEvent = "";
             }
             if (y == 2) {
                 touchEnded();
-                MainActivity.touchEvent = "";
+                Engine.touchEvent = "";
             }
         }
         touchEvents = new float[100][22];
