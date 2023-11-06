@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.engine.glengine3.Engine;
-import com.example.engine.glengine3.GamePageInterface;
+import com.seal.seal_engine.Engine;
+import com.seal.seal_engine.GamePageInterface;
 
 import java.util.function.Function;
 

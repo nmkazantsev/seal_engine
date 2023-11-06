@@ -4,9 +4,9 @@ import static android.opengl.GLES20.glGetUniformLocation;
 
 import android.opengl.GLES30;
 
-import com.example.engine.glengine3.GamePageInterface;
-import com.example.engine.glengine3.engine.main.shaders.ShaderData;
-import com.example.engine.glengine3.maths.Vec3;
+import com.seal.seal_engine.GamePageInterface;
+import com.seal.seal_engine.engine.main.shaders.ShaderData;
+import com.seal.seal_engine.maths.Vec3;
 
 public class PointLight extends ShaderData {
     private int posLoc, diffuseLoc, ambLoc, specLoc, countLoc;
