@@ -2,15 +2,14 @@ package com.manateam.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-
+import android.view.Window;
+import android.view.WindowManager;
 import com.seal.seal_engine.Engine;
-import com.seal.seal_engine.GamePageInterface;
-
-import java.util.function.Function;
 
 
 public class MainActivity extends Activity implements View.OnTouchListener {
@@ -21,12 +20,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GLSurfaceView v = engine.onCreate(this, new Function<Void, GamePageInterface>() {
-            @Override
-            public GamePageInterface apply(Void unused) {
-                return new MainRenderer();
-            }
-        });
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);
         setContentView(v);
         assert v != null;
         v.setOnTouchListener(this);

@@ -1,10 +1,8 @@
 package com.seal.seal_engine;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
-import android.graphics.EmbossMaskFilter;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -35,7 +33,7 @@ public class Engine {
     public Context context;
     protected static Function<Void, GamePageInterface> getStartPage;
 
-    public GLSurfaceView onCreate(Context c, Function<Void, GamePageInterface> getStartPage) {
+    public GLSurfaceView onCreate(Context c, Function<Void, GamePageInterface> getStartPage, boolean landscape) {
         Engine.getStartPage = getStartPage;
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -60,7 +58,16 @@ public class Engine {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(displayMetrics);
-        glSurfaceView.setRenderer(new OpenGLRenderer(context, displayMetrics.widthPixels, displayMetrics.heightPixels));
+        float widthPixels = displayMetrics.widthPixels;
+        float heightPixels = displayMetrics.heightPixels;
+        if (landscape && widthPixels < heightPixels) {
+            glSurfaceView.setRenderer(new OpenGLRenderer(context, heightPixels, widthPixels));
+        } else if (!landscape && widthPixels > heightPixels) {
+            glSurfaceView.setRenderer(new OpenGLRenderer(context, heightPixels, widthPixels));
+        } else {
+            glSurfaceView.setRenderer(new OpenGLRenderer(context, widthPixels, heightPixels));
+        }
+
         return glSurfaceView;
     }
 
