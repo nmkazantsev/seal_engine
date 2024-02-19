@@ -20,3 +20,5 @@ local.properties
 /.idea/vcs.xml
 /.idea/misc.xml
 /gradle/wrapper/gradle-wrapper.properties
+/.idea/deploymentTargetDropDown.xml
+/.idea/migrations.xml
