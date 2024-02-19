@@ -12,11 +12,9 @@ import static android.opengl.GLES20.glVertexAttribPointer;
 
 import android.opengl.GLES30;
 
-import com.seal.seal_engine.engine.main.shaders.Adaptor;
-import com.seal.seal_engine.engine.main.vertex_bueffer.VertexBuffer;
-import com.seal.seal_engine.engine.main.verticles.DrawableShape;
-import com.seal.seal_engine.engine.main.verticles.Face;
-import com.seal.seal_engine.maths.Vec3;
+import com.seal.gl_engine.engine.main.shaders.Adaptor;
+import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
+import com.seal.gl_engine.engine.main.verticles.Face;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

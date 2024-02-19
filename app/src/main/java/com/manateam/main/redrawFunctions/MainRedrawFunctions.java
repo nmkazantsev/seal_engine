@@ -1,8 +1,8 @@
 package com.manateam.main.redrawFunctions;
 
-import static com.seal.seal_engine.utils.Utils.loadImage;
+import static com.seal.gl_engine.utils.Utils.loadImage;
 
-import com.seal.seal_engine.engine.main.images.PImage;
+import com.seal.gl_engine.engine.main.images.PImage;
 
 import java.util.List;
 
