@@ -8,7 +8,7 @@ public class ProjectionMatrixSettings {
     public float near;
     public float far;
 
-    private final float x, y;
+    protected final float x, y;
 
     public ProjectionMatrixSettings(float x, float y) {
         this.x = x;

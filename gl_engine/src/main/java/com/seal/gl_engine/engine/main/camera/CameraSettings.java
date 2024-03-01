@@ -13,7 +13,7 @@ public class CameraSettings {
     public float upY;
     public float upZ;
 
-    private float x, y;
+    protected float x, y;
 
     public CameraSettings(float screenx, float screeny) {
         this.x = screenx;
