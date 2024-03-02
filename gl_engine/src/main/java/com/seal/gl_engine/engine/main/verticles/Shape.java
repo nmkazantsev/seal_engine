@@ -119,9 +119,9 @@ public class Shape implements VerticleSet, DrawableShape {
     public void bindData() {
         if (!vboLoaded) {
             if (vertexBuffer != null) {
-                vertexBuffer.delete();
+                //vertexBuffer.delete(); //ACHUTNG! MAY CAUSE MEMORY PROBLEMS WITH BUFFERS!
             }
-            vertexBuffer = new VertexBuffer(5);
+            vertexBuffer = new VertexBuffer(5); //5 because 5 types of coordinates so we need 5 buffers
             Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
             vboLoaded = true;
         }

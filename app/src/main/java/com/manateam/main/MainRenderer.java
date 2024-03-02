@@ -35,6 +35,7 @@ public class MainRenderer implements GamePageInterface {
     private final CameraSettings cameraSettings;
     private static SimplePoligon simplePolygon;
     private final EnObject s;
+    private Shape s2;
 
     //  private FrameBuffer frameBuffer;
     public MainRenderer() {
@@ -50,12 +51,13 @@ public class MainRenderer implements GamePageInterface {
             simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePolygon.redrawNow();
         }
-        s = new EnObject(new Shape("building_big.obj", "cube.png", this));
+        s = new EnObject(new Shape("tank.obj", "cube.png", this));
         s.animMotion(1f, 0f, -1f, 1000, 0);
         s.animMotion(0.f, 3f, 0f, 1000, 0);
         s.animRotation(0f, 0f, 90f, 3000, 0);
         s.animRotation(90f, 0, 0, 1000, 3000);
         s.animPivotRotation(0, 0, 0, 1, 1, 1, 1000, 5000);
+        s2 =  new Shape("building_big.obj","box.jpg",this);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class MainRenderer implements GamePageInterface {
         applyProjectionMatrix(projectionMatrixSettings);
         // connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-
+        s2.prepareAndDraw();
         fpsPolygon.setRedrawNeeded(true);
         cameraSettings.resetFor2d();
         projectionMatrixSettings.resetFor2d();
