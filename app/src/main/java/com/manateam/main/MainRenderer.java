@@ -53,11 +53,13 @@ public class MainRenderer implements GamePageInterface {
             simplePolygon.redrawNow();
         }
         s = new EnObject(new Shape("tank.obj", "cube.png", this));
-        s.animMotion(1f, 0f, -1f, 1000, 0);
-        s.animMotion(0.f, 3f, 0f, 1000, 0);
-        s.animRotation(0f, 0f, 90f, 3000, 0);
-        s.animRotation(90f, 0, 0, 1000, 3000);
-        s.animPivotRotation(0, 0, 0, 1, 1, 1, 1000, 5000);
+        s.animMotion(1f, 0f, -1f, 1000, 0, false);
+        s.animMotion(0.f, 3f, 0f, 1000, 0, false);
+        s.animRotation(0f, 0f, 90f, 3000, 0, false);
+        s.animRotation(90f, 0, 0, 1000, 3000, false);
+        s.animPivotRotation(0, 0, 0, 1, 1, 1, 1000, 5000, false);
+        s.animMotion(1f, 0, 0, 500, 6000, true);
+        s.animMotion(0, 0, -6, 3000, 6000, false);
         s2 =  new Shape("building_big.obj","box.jpg",this);
     }
 

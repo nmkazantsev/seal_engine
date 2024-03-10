@@ -32,34 +32,37 @@ public class EnObject {
         rotMatrix = new float[3];
     }
 
-    public void animMotion(float x, float y, float z, float duration, long startTiming) {
+    public void animMotion(float x, float y, float z, float duration, long startTiming, boolean recurring) {
         Animator.addAnimation(this,
                 Animator.SHIFT,
                 new float[]{x, y, z},
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming);
+                startTiming,
+                recurring);
     }
 
-    public void animRotation(float x, float y, float z, float duration, long startTiming) {
+    public void animRotation(float x, float y, float z, float duration, long startTiming, boolean recurring) {
         Animator.addAnimation(this,
                 Animator.ROTATION,
                 new float[]{x, y, z},
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming);
+                startTiming,
+                recurring);
     }
 
-    public void animPivotRotation(float x, float y, float z, float vx, float vy, float vz, float duration, long startTiming) {
+    public void animPivotRotation(float x, float y, float z, float vx, float vy, float vz, float duration, long startTiming, boolean recurring) {
         Animator.addAnimation(this,
                 Animator.PIVOT_ROTATION,
                 new float[]{x, y, z, vx, vy, vz},
                 Animator.LINEAR,
                 duration,
                 0,
-                startTiming);
+                startTiming,
+                recurring);
     }
 
     public void stopAnimations() {

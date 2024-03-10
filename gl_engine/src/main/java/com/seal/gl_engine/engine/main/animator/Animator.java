@@ -41,7 +41,7 @@ public class Animator {
     }
 
     // template constructor itself, uses predefined indexes instead of manual function specifying
-    public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
+    public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st, boolean recurring) {
         Function<Animation, float[]> tf = null;
         Function<float[], Float> vf = null;
 
@@ -67,7 +67,7 @@ public class Animator {
                 break;
         }
 
-        new Animation(target, tf, args, vf, duration, vfa, st);
+        new Animation(target, tf, args, vf, duration, vfa, st, recurring);
     }
 
     // adds animation without templates, every function has to be specified by hand
@@ -101,8 +101,8 @@ public class Animator {
         5000
     );
      */
-    public static void addAnimation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
-        new Animation(target, tf, args, vf, duration, vfa, st);
+    public static void addAnimation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st, boolean recurring) {
+        new Animation(target, tf, args, vf, duration, vfa, st, recurring);
     }
 
     private static void listAnimation(Animation animation, EnObject target) {
@@ -142,14 +142,16 @@ public class Animator {
         private final float duration; // total duration
         // velocity function argument
         private final float vfa; // velocity function argument
-        private final long startTiming; // global start timing in millis
+        private long startTiming; // global start timing in millis
         private float dtBuffer, dt; // buffer for proper dt computing and dt itself (can't be local)
         private float[] attrs; // attributes like position and rotation
         private boolean waiting; // allows to freeze animation
         private long freezeTiming, elapsedTime; // needed to process freezes properly
         private boolean frozen; // technical nuance
+        private final boolean recurring;
+        private int loopCounter;
 
-        private Animation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
+        private Animation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st, boolean recurring) {
             long c = OpenGLRenderer.pageMillis();
             if (st <= c) {
                 startTiming = c;
@@ -167,6 +169,7 @@ public class Animator {
             listAnimation(this, target);
             isDead = false;
             waiting = false;
+            this.recurring = recurring;
         }
 
         public float[] getAttrs() {
@@ -205,7 +208,11 @@ public class Animator {
             float t = vf.apply(new float[]{gt, vfa}); // velocity function output for gt
             dt = t - dtBuffer; // difference in current and previous vf output (shift delta)
             dtBuffer = t;
-            if (gt >= 1) isDead = true; // completion
+            if (gt >= 1) {
+                if (recurring) {
+                    startTiming = OpenGLRenderer.pageMillis();
+                } else isDead = true; // completion
+            }
             return tf.apply(this);
         }
     }
