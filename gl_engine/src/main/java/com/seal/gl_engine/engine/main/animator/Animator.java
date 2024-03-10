@@ -25,6 +25,21 @@ public class Animator {
         animQueue = new HashMap<>();
     }
 
+    public static void freezeAnimations(EnObject target) {
+        for (Animation a: animQueue.get(target)) {
+            if (a.waiting) continue;
+            a.waiting = true;
+            a.frozen = false;
+        }
+    }
+    public static void unfreezeAnimations(EnObject target) {
+        for (Animation a: animQueue.get(target)) {
+            if (!a.waiting) continue;
+            a.waiting = false;
+            a.elapsedTime = OpenGLRenderer.pageMillis() - a.freezeTiming;
+        }
+    }
+
     // template constructor itself, uses predefined indexes instead of manual function specifying
     public static void addAnimation(EnObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st) {
         Function<Animation, float[]> tf = null;
@@ -120,7 +135,7 @@ public class Animator {
 
     public static class Animation {
         private boolean isActive; // false only in case animation has not achieved start timing yet
-        private boolean isDead; // become true if animation worked out and ready to be deleted
+        private boolean isDead; // becomes true if animation has worked out and ready to be deleted
         private final Function<Animation, float[]> tf; // transmission function
         private final Function<float[], Float> vf; // velocity function
         private final float[] args; // additional arguments
@@ -130,6 +145,9 @@ public class Animator {
         private final long startTiming; // global start timing in millis
         private float dtBuffer, dt; // buffer for proper dt computing and dt itself (can't be local)
         private float[] attrs; // attributes like position and rotation
+        private boolean waiting; // allows to freeze animation
+        private long freezeTiming, elapsedTime; // needed to process freezes properly
+        private boolean frozen; // technical nuance
 
         private Animation(EnObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st) {
             long c = OpenGLRenderer.pageMillis();
@@ -148,6 +166,7 @@ public class Animator {
             this.dtBuffer = 0;
             listAnimation(this, target);
             isDead = false;
+            waiting = false;
         }
 
         public float[] getAttrs() {
@@ -168,14 +187,21 @@ public class Animator {
 
         // function that returns changes in attributes according to current time and arguments
         public float[] getAnimMatrix() {
+            if (waiting) {
+                if (!frozen) {
+                    frozen = true;
+                    freezeTiming = OpenGLRenderer.pageMillis();
+                }
+                return attrs;
+            }
             if (!isActive) {
-                if (startTiming <= OpenGLRenderer.pageMillis()) {
+                if (startTiming + elapsedTime <= OpenGLRenderer.pageMillis()) {
                     isActive = true;
                     return getAnimMatrix();
                 }
                 return attrs;
             }
-            float gt = (OpenGLRenderer.pageMillis() - startTiming) / duration; // global timing (linear from 0 to 1)
+            float gt = (OpenGLRenderer.pageMillis() - (startTiming + elapsedTime)) / duration; // global timing (linear from 0 to 1)
             float t = vf.apply(new float[]{gt, vfa}); // velocity function output for gt
             dt = t - dtBuffer; // difference in current and previous vf output (shift delta)
             dtBuffer = t;

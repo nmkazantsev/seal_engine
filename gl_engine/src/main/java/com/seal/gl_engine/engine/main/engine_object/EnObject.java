@@ -2,8 +2,6 @@ package com.seal.gl_engine.engine.main.engine_object;
 
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
-import static com.seal.gl_engine.engine.main.animator.Animator.addAnimation;
-import static com.seal.gl_engine.utils.Utils.contactArray;
 
 
 import android.opengl.Matrix;
@@ -62,6 +60,14 @@ public class EnObject {
                 duration,
                 0,
                 startTiming);
+    }
+
+    public void stopAnimations() {
+        Animator.freezeAnimations(this);
+    }
+
+    public void continueAnimations() {
+        Animator.unfreezeAnimations(this);
     }
 
     public void prepareAndDraw() {

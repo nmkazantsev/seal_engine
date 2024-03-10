@@ -36,6 +36,7 @@ public class MainRenderer implements GamePageInterface {
     private static SimplePoligon simplePolygon;
     private final EnObject s;
     private Shape s2;
+    boolean f = true;
 
     //  private FrameBuffer frameBuffer;
     public MainRenderer() {
@@ -62,6 +63,11 @@ public class MainRenderer implements GamePageInterface {
 
     @Override
     public void draw() {
+        if (f && pageMillis() >= 500) {
+            s.stopAnimations();
+            f = false;
+        }
+        if (pageMillis() >= 1500) s.continueAnimations();
         applyShader(shader);
         glClearColor(1f, 1f, 1f, 1);
         cameraSettings.resetFor3d();
