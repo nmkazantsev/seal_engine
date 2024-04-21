@@ -21,7 +21,7 @@ out struct Data{
     vec2 TexCoord;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
-    int pLightNum;
+   flat int pLightNum;
 } data;
 out vec3 pLightPos[10];
 

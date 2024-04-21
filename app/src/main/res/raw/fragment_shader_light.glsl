@@ -20,7 +20,7 @@ in struct Data{
     vec2 TexCoord;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
-    int pLightNum;
+   flat int pLightNum;
 } data;
 in vec3 pLightPos[10];
 
