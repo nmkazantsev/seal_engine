@@ -19,7 +19,6 @@ import static android.opengl.GLES30.glShaderSource;
 import static android.opengl.GLES32.GL_GEOMETRY_SHADER;
 
 import android.content.Context;
-import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.util.Log;
 
