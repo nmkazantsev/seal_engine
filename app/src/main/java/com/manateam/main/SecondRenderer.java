@@ -75,12 +75,12 @@ public class SecondRenderer implements GamePageInterface {
         //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ = 5;
-        cameraSettings.eyeY = -5;
-        applyShader(skyBoxShader);
+        cameraSettings.eyeZ = 5.5f;
+        cameraSettings.eyeY = -3.3f;
+      //  applyShader(skyBoxShader);
         applyProjectionMatrix(projectionMatrixSettings);
         applyCameraSettings(cameraSettings);
-        skyBox.prepareAndDraw();
+       // skyBox.prepareAndDraw();
 
         applyShader(lightShader);
         pointLight.forwardData();
