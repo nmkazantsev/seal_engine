@@ -1,5 +1,6 @@
 #version 320 es
 precision mediump float;
+precision mediump int;
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
 layout (location = 2) in vec3 normalVec;
@@ -21,7 +22,7 @@ out struct Data{
     vec2 TexCoord;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
-   flat int pLightNum;
+ //  flat int pLightNum;
 } data;
 out vec3 pLightPos[10];
 
@@ -35,7 +36,7 @@ uniform vec3 viewPos;
 
 void main()
 {
-    data.pLightNum=pLightNum;
+    //data.pLightNum=pLightNum;
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
     data.FragPos = (vec4(aPos, 1.0f)*transpose(model)).xyz;
     data.TexCoord = vec2(aTexCoord.x, aTexCoord.y);

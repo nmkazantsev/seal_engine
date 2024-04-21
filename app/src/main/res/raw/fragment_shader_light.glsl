@@ -1,5 +1,6 @@
 #version 320 es
 precision mediump float;
+precision mediump int;
 out vec4 FragColor;
 uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
@@ -20,9 +21,10 @@ in struct Data{
     vec2 TexCoord;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
-   flat int pLightNum;
+   //flat int pLightNum;
 } data;
 in vec3 pLightPos[10];
+uniform int pLightNum;
 
 
 void main()
@@ -31,7 +33,7 @@ void main()
     vec3 norm = texture(normalMap, data.TexCoord).rgb;
     norm = normalize(norm * 2.0 - 1.0);
     vec3 color = texture(textureSamp, data.TexCoord).rgb;
-    for (int i=0;i<data.pLightNum;i++){//data.pLightNum
+    for (int i=0;i<pLightNum;i++){//data.pLightNum
         // ambient
         vec3 ambient = pLights[i].ambinient * color;
         // diffuse
