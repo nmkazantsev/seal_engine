@@ -4,14 +4,17 @@ precision mediump int;
 out vec4 FragColor;
 uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
-/*
-struct PointLight2 {
-    vec3 lightPos;
-    vec3 color;
-    vec3 ambinient;
+struct PointLight {
+    vec3 position;
+
+    float constant;
+    float linear;
+    float quadratic;
+
+    float diffuse;
+    float specular;
 };
-*/
-//uniform PointLight2 pLights2[10];
+
 uniform struct AmibentLight {
     vec3 color;
 };
@@ -31,6 +34,7 @@ struct LightSource {
     float angle;
 };
 uniform LightSource sLights[10];
+uniform PointLight pLights [10];
 uniform DirectedLight dLights[10];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
@@ -71,17 +75,37 @@ vec3 applyDirectedLight(vec3 color, vec3 normal, vec3 viewDir, int index) {
 
 vec3 applySourceLight(vec3 color, int index) { return vec3(0.0); }
 
-vec3 applyPointLight(vec3 color, int index) { return vec3(0.0); }
+vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 viewDir) {
+    vec3 lightDir = normalize(pLightPos[index] - fragPos);
+    // diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    // attenuation
+    float distance = length(pLightPos[index] - fragPos);
+    float attenuation = 1.0 / (pLights[index].constant + pLights[index].linear * distance +
+    pLights[index].quadratic * (distance * distance));
+    // combine results
+    vec3 diffuse  = pLights[index].diffuse  * diff * material.diffuse;
+    vec3 specular = pLights[index].specular * spec * material.specular;
+    diffuse  *= attenuation;
+    specular *= attenuation;
+    return color*(diffuse + specular);
+}
 
 void main()
 {
     vec3 color = texture(textureSamp, data.TexCoord).rgb;
     vec3 viewDir = normalize(data.TangentViewPos - data.TangentFragPos);
-    vec3 norm = normalize(texture(normalMap, data.TexCoord).rgb * 2.0 - 1.0);// god bless, everything is norm
+    vec3 norm = normalize(texture(normalMap, data.TexCoord).rgb * 2.0 - 1.0);// god bless, everything is NORM
     vec3 result = applyAmbient(color);
 
     for (int i = 0; i < dLightNum; i++) {
         result += applyDirectedLight(color, norm, viewDir, i);
+    }
+    for (int i=0;i<pLightNumber;i++){
+        result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
     }
 
     FragColor=vec4(result, 1.0);

@@ -7,13 +7,17 @@ layout (location = 2) in vec3 normalVec;
 layout (location = 3) in vec3 aT;//abs tangent
 layout (location = 4) in vec3 aB;//absolute bitangent
 
-struct PointLight{
-    vec3 lightPos;
-    float specular;
-    float diffuse;
-    float ambinient;
-};
 
+struct PointLight {
+    vec3 position;
+
+    float constant;
+    float linear;
+    float quadratic;
+
+    float diffuse;
+    float specular;
+};
 
 out struct Data{
     mat4 model2;
@@ -56,7 +60,6 @@ uniform struct Material {
     vec3 specular;
     float shininess;
 } material;
-
 uniform int pLightNum;
 uniform PointLight pLights [10];
 uniform mat4 model;
@@ -78,7 +81,7 @@ void main()
     vec3 B = cross(N, T);
     mat3 TBN = transpose(mat3(T, B, N));
     for (int i=0;i<pLightNum;i++){
-        pLightPos[i] = TBN * pLights[i].lightPos;
+        pLightPos[i] = TBN * pLights[i].position;
     }
     for (int i=0;i<dLightNum;i++){
         dLightDir[i] = TBN * dLights[i].direction;
