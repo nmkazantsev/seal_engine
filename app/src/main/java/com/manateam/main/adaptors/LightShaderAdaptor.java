@@ -191,6 +191,20 @@ public class LightShaderAdaptor extends Adaptor {
         viewMatrixLocation = GLES30.glGetUniformLocation(programId, "view");
         modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
         cameraPosLocation = GLES30.glGetUniformLocation(programId, "viewPos");
+
+
+        GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 0 + "].direction"), 1, 1, 0);
+        GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 0 + "].color"), 0.5f, 0.5f, 0.5f);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].diffuse"), 1);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].specular"), 0.3f);
+        GLES30.glUniform1i(glGetUniformLocation(programId, "dLightNum"), 1);
+
+        GLES30.glUniform3f(glGetUniformLocation(programId, "material.ambient"), 1, 1, 1);
+        GLES30.glUniform3f(glGetUniformLocation(programId, "material.diffuse"), 1, 1, 1);
+        GLES30.glUniform3f(glGetUniformLocation(programId, "material.specular"), 1, 1, 1);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "material.shininess"), 1.1f);
+
+        GLES30.glUniform3f(glGetUniformLocation(programId, "aLight.color"), 0.1f,0.1f,0.1f);
     }
 
     @Override

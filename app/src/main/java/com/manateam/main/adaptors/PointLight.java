@@ -19,7 +19,6 @@ public class PointLight extends ShaderData {
         super(g);
         this.index = index;
     }
-
     @Override
     public void getLocations(int programId) {
         posLoc = glGetUniformLocation(programId, "pLights[" + index + "].lightPos");
