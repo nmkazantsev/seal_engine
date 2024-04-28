@@ -12,6 +12,7 @@ import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.millis;
+import static com.seal.gl_engine.utils.Utils.sin;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
@@ -76,23 +77,27 @@ public class SecondRenderer implements GamePageInterface {
         //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ = 5.5f;
-        cameraSettings.eyeY = -3.3f;
-      //  applyShader(skyBoxShader);
+        cameraSettings.eyeZ = 3f;
+        cameraSettings.eyeX = 3f;
+        cameraSettings.centerX=0.5f*sin(millis()/1000.0f);
+        cameraSettings.centerY=0;
+        cameraSettings.centerZ=0;
+        applyShader(skyBoxShader);
         applyProjectionMatrix(projectionMatrixSettings);
         applyCameraSettings(cameraSettings);
-       // skyBox.prepareAndDraw();
+
+        skyBox.prepareAndDraw();
 
         applyShader(lightShader);
         pointLight.forwardData();
         pointLight2.forwardData();
-        glClearColor(1f, 1,1,1);
+        glClearColor(1f, 1, 1, 1);
 
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
-        Matrix.scaleM(mMatrix,0,2f,2f,2f);
+       // Matrix.scaleM(mMatrix, 0, 2f, 2f, 2f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
 
