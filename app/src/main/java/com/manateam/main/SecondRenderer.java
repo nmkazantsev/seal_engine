@@ -88,7 +88,7 @@ public class SecondRenderer implements GamePageInterface {
 
         skyBox.prepareAndDraw();
 
-      //  applyShader(lightShader);
+        applyShader(lightShader);
         pointLight.forwardData();
         pointLight2.forwardData();
         glClearColor(1f, 1, 1, 1);
