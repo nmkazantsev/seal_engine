@@ -1,9 +1,9 @@
 package com.seal.gl_engine.engine.main.shaders;
 
 
-import com.seal.gl_engine.engine.main.verticles.Face;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
+import com.seal.gl_engine.engine.main.verticles.Face;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,6 +52,8 @@ public abstract class Adaptor {
     public abstract int getTextureLocation();
 
     public abstract int getNormalTextureLocation();
+
+    public abstract int getNormalMapEnableLocation();
 
     public abstract int getCameraPosLlocation();
 }

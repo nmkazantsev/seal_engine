@@ -93,12 +93,17 @@ vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 view
     specular *= attenuation;
     return color*(diffuse + specular);
 }
-
+uniform int normalMapEnable;
 void main()
 {
     vec3 color = texture(textureSamp, data.TexCoord).rgb;
     vec3 viewDir = normalize(data.TangentViewPos - data.TangentFragPos);
-    vec3 norm = normalize(texture(normalMap, data.TexCoord).rgb * 2.0 - 1.0);// god bless, everything is NORM
+    vec3 norm;
+    if (normalMapEnable==1){
+        norm = normalize(texture(normalMap, data.TexCoord).rgb * 2.0 - 1.0);// god bless, everything is NORM
+    } else {
+        norm = normalize(vec3(0.0, 0.0, 1.0).rgb * 2.0 - 1.0);
+    }
     vec3 result = applyAmbient(color);
 
     for (int i = 0; i < dLightNum; i++) {

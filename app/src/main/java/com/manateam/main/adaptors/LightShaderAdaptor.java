@@ -22,6 +22,7 @@ import java.nio.FloatBuffer;
 
 public class LightShaderAdaptor extends Adaptor {
 
+    private int normalMapEnableLocation;
     private int aPositionLocation;
     private int aTextureLocation;
     private int uTextureUnitLocation;
@@ -191,6 +192,7 @@ public class LightShaderAdaptor extends Adaptor {
         viewMatrixLocation = GLES30.glGetUniformLocation(programId, "view");
         modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
         cameraPosLocation = GLES30.glGetUniformLocation(programId, "viewPos");
+        normalMapEnableLocation = GLES30.glGetUniformLocation(programId, "normalMapEnable");
 
 
         GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 0 + "].direction"), 1, -1, -3);
@@ -198,7 +200,6 @@ public class LightShaderAdaptor extends Adaptor {
         GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].diffuse"), 0.7f);
         GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].specular"), 0.1f);
         GLES30.glUniform1i(glGetUniformLocation(programId, "dLightNum"), 1);
-
 
 
         GLES30.glUniform3f(glGetUniformLocation(programId, "pLights[" + 0 + "].position"), -1, 1, 3);
@@ -243,6 +244,11 @@ public class LightShaderAdaptor extends Adaptor {
     @Override
     public int getNormalTextureLocation() {
         return normalMapLocation;
+    }
+
+    @Override
+    public int getNormalMapEnableLocation() {
+        return normalMapEnableLocation;
     }
 
     @Override
