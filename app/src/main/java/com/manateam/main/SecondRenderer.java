@@ -77,8 +77,8 @@ public class SecondRenderer implements GamePageInterface {
         //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ = 3f;
-        cameraSettings.eyeX = 3f;
+        cameraSettings.eyeZ = 0f;
+        cameraSettings.eyeX = 5f;
         cameraSettings.centerX=0.5f*sin(millis()/1000.0f);
         cameraSettings.centerY=0;
         cameraSettings.centerZ=0;

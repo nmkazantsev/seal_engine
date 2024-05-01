@@ -99,7 +99,7 @@ void main()
         dLightDir[i] = TBN * dLights[i].direction;
     }
     for (int i = 0;i < sLightNum; i++) {
-        sLightDir[i] = TBN * sLights[i].direction;
+        sLightDir[i] = TBN * (-sLights[i].direction);//else , without -1, it is inversed
         sLightPos[i] = TBN * sLights[i].position;
     }
     data.TangentViewPos = TBN * viewPos;
