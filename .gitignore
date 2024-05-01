@@ -215,3 +215,5 @@ local.properties
 /seal_engine/build/intermediates/runtime_library_classes_dir/debug/com/seal/seal_engine/engine/main/verticles/VerticleSet.class
 /seal_engine/build/.transforms/939fb1cf1943e12c31f60572e7a14dc9/transformed/debug/com/seal/seal_engine/engine/main/verticles/VerticleSet.dex
 /seal_engine/build/.transforms/3711a77ed402fff68fe8bb46bd30606f/transformed/debug/debug_dex/com/seal/seal_engine/engine/main/verticles/VerticleSet.dex
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_05_2024__22_12__Changes_.xml
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_01_05_2024,_22_12_[Changes]/shelved.patch
