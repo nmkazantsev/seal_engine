@@ -53,9 +53,9 @@ struct SpotLight {
     float linear;
     float quadratic;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    float ambient;
+    float diffuse;
+    float specular;
 };
 uniform SpotLight sLights [10];
 uniform DirectedLight dLights[10];
