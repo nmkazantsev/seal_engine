@@ -28,12 +28,21 @@ struct DirectedLight {
 };
 
 // flashlight
-struct LightSource {
-    vec3 color;
+struct SpotLight {
+    vec3 position;
     vec3 direction;
-    float angle;
+    float cutOff;
+    float outerCutOff;
+
+    float constant;
+    float linear;
+    float quadratic;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
 };
-uniform LightSource sLights[10];
+
 uniform PointLight pLights [10];
 uniform DirectedLight dLights[10];
 uniform AmibentLight aLight;
