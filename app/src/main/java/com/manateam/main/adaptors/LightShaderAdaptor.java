@@ -224,8 +224,8 @@ public class LightShaderAdaptor extends Adaptor {
         GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].constant"), 0.1f);
         GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].linear"), 0.1f);
         GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].quadratic"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].outerCutOff"), 45f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].cutOff"), 43f);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].outerCutOff"), 0.1f);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].cutOff"), 0.1f);
 
 
         GLES30.glUniform1i(glGetUniformLocation(programId, "sLightNum"), 1);

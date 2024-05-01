@@ -107,7 +107,7 @@ vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 view
     return color * (diffuse + specular);
 }
 // calculates the color when using a spot light.
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int i)
+vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int i)
 {
     vec3 lightDir = normalize(sLightPos[i] - fragPos);
     // diffuse shading
@@ -129,7 +129,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
-    return (ambient + diffuse + specular);
+    return (ambient + diffuse + specular)*color;
 }
 
 uniform int normalMapEnable;
@@ -152,7 +152,7 @@ void main()
         result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
     }
     for (int i = 0;i < sLightNum; i++) {
-        result += CalcSpotLight(sLights[i], norm, data.TangentFragPos, viewDir, i);
+        result += CalcSpotLight(color, sLights[i], norm, data.TangentFragPos, viewDir, i);
     }
 
     FragColor = vec4(result, 1.0);
