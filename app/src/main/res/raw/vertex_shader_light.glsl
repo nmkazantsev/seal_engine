@@ -66,7 +66,6 @@ uniform DirectedLight dLights[number];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
 uniform int sLightNum;
-uniform int sLightNumber;
 uniform int dLightNum;
 uniform struct Material {
     vec3 ambient;

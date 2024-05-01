@@ -220,22 +220,22 @@ public class LightShaderAdaptor extends Adaptor {
         GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].ambient"), 0.1f);
 
 
-        GLES30.glUniform3f(glGetUniformLocation(programId, "pLights[" + 0 + "].position"), -1, 1, 3);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].constant"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].linear"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].quadratic"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].outerCutOff"), 45f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].cutOff"), 43f);
+        GLES30.glUniform3f(glGetUniformLocation(programId, "sLights[" + 0 + "].position"), 1, 1, 3);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].constant"), 0.1f);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].linear"), 0.1f);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].quadratic"), 0.1f);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].outerCutOff"), 45f);
+        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].cutOff"), 43f);
 
 
-        GLES30.glUniform1i(glGetUniformLocation(programId, "sLightNumber"), 1);
+        GLES30.glUniform1i(glGetUniformLocation(programId, "sLightNum"), 1);
 
         GLES30.glUniform3f(glGetUniformLocation(programId, "material.ambient"), 1, 1, 1);
         GLES30.glUniform3f(glGetUniformLocation(programId, "material.diffuse"), 1, 1, 1);
         GLES30.glUniform3f(glGetUniformLocation(programId, "material.specular"), 1, 1, 1);
         GLES30.glUniform1f(glGetUniformLocation(programId, "material.shininess"), 1.1f);
 
-        GLES30.glUniform3f(glGetUniformLocation(programId, "aLight.color"), 0.3f, 0.3f, 0.3f);
+       // GLES30.glUniform3f(glGetUniformLocation(programId, "aLight.color"), 0.3f, 0.3f, 0.3f);
     }
 
     @Override

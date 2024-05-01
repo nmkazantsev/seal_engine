@@ -49,7 +49,6 @@ uniform PointLight pLights[number];
 uniform DirectedLight dLights[number];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
-uniform int sLightNumber;
 uniform int sLightNum;
 uniform int dLightNum;
 uniform struct Material {
@@ -131,7 +130,6 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
     return (ambient + diffuse + specular);
-    //return lightDir;
 }
 
 uniform int normalMapEnable;
@@ -153,7 +151,7 @@ void main()
     for (int i = 0;i < pLightNumber; i++) {
         result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
     }
-    for (int i = 0;i < sLightNumber; i++) {
+    for (int i = 0;i < sLightNum; i++) {
         result += CalcSpotLight(sLights[i], norm, data.TangentFragPos, viewDir, i);
     }
 
