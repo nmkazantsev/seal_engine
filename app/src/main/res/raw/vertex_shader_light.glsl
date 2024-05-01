@@ -7,6 +7,7 @@ layout (location = 2) in vec3 normalVec;
 layout (location = 3) in vec3 aT;//abs tangent
 layout (location = 4) in vec3 aB;//absolute bitangent
 
+#define number 7
 
 struct PointLight {
     vec3 position;
@@ -27,11 +28,11 @@ out struct Data {
     vec3 TangentViewPos;
     vec3 TangentFragPos;
 } data;
-out vec3 pLightPos[10];
-out vec3 dLightDir[10];
+out vec3 pLightPos[number];
+out vec3 dLightDir[number];
 
-out vec3 sLightDir[10];
-out vec3 sLightPos[10];
+out vec3 sLightDir[number];
+out vec3 sLightPos[number];
 
 struct AmibentLight {
     vec3 color;
@@ -60,8 +61,8 @@ struct SpotLight {
     float diffuse;
     float specular;
 };
-uniform SpotLight sLights[10];
-uniform DirectedLight dLights[10];
+uniform SpotLight sLights[number];
+uniform DirectedLight dLights[number];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
 uniform int sLightNum;
@@ -74,7 +75,7 @@ uniform struct Material {
     float shininess;
 } material;
 uniform int pLightNum;
-uniform PointLight pLights[10];
+uniform PointLight pLights[number];
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;

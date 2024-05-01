@@ -15,6 +15,8 @@ struct PointLight {
     float specular;
 };
 
+#define number 7
+
 uniform struct AmibentLight {
     vec3 color;
 };
@@ -42,9 +44,9 @@ struct SpotLight {
     float diffuse;
     float specular;
 };
-uniform SpotLight sLights[10];
-uniform PointLight pLights[10];
-uniform DirectedLight dLights[10];
+uniform SpotLight sLights[number];
+uniform PointLight pLights[number];
+uniform DirectedLight dLights[number];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
 uniform int sLightNumber;
@@ -66,11 +68,11 @@ in struct Data {
     vec3 TangentFragPos;
 } data;
 
-in vec3 pLightPos[10];
-in vec3 dLightDir[10];
+in vec3 pLightPos[number];
+in vec3 dLightDir[number];
 
-in vec3 sLightDir[10];
-in vec3 sLightPos[10];
+in vec3 sLightDir[number];
+in vec3 sLightPos[number];
 
 vec3 applyAmbient(vec3 color) {
     return color * aLight.color;
@@ -106,19 +108,19 @@ vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 view
     return color * (diffuse + specular);
 }
 // calculates the color when using a spot light.
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int i)
 {
-    vec3 lightDir = normalize(light.position - fragPos);
+    vec3 lightDir = normalize(sLightPos[i] - fragPos);
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     // specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // attenuation
-    float distance = length(light.position - fragPos);
+    float distance = length(sLightPos[i] - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     // spotlight intensity
-    float theta = dot(lightDir, normalize(-light.direction));
+    float theta = dot(lightDir, normalize(-sLightDir[i]));
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     // combine results
@@ -128,8 +130,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
-    //return (ambient + diffuse + specular);
-    return lightDir;
+    return (ambient + diffuse + specular);
+    //return lightDir;
 }
 
 uniform int normalMapEnable;
@@ -152,7 +154,7 @@ void main()
         result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
     }
     for (int i = 0;i < sLightNumber; i++) {
-        result += CalcSpotLight(sLights[i], norm, data.TangentFragPos, viewDir);
+        result += CalcSpotLight(sLights[i], norm, data.TangentFragPos, viewDir, i);
     }
 
     FragColor = vec4(result, 1.0);
