@@ -65,9 +65,12 @@ in struct Data {
     vec3 TangentViewPos;
     vec3 TangentFragPos;
 } data;
+
 in vec3 pLightPos[10];
 in vec3 dLightDir[10];
 
+in vec3 sLightDir[10];
+in vec3 sLightPos[10];
 
 vec3 applyAmbient(vec3 color) {
     return color * aLight.color;
@@ -125,7 +128,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
-    return (ambient + diffuse + specular);
+    //return (ambient + diffuse + specular);
+    return lightDir;
 }
 
 uniform int normalMapEnable;

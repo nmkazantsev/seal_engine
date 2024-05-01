@@ -19,7 +19,7 @@ struct PointLight {
     float specular;
 };
 
-out struct Data{
+out struct Data {
     mat4 model2;
     vec3 normal;
     vec3 FragPos;
@@ -29,6 +29,9 @@ out struct Data{
 } data;
 out vec3 pLightPos[10];
 out vec3 dLightDir[10];
+
+out vec3 sLightDir[10];
+out vec3 sLightPos[10];
 
 struct AmibentLight {
     vec3 color;
@@ -57,7 +60,7 @@ struct SpotLight {
     float diffuse;
     float specular;
 };
-uniform SpotLight sLights [10];
+uniform SpotLight sLights[10];
 uniform DirectedLight dLights[10];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
@@ -71,7 +74,7 @@ uniform struct Material {
     float shininess;
 } material;
 uniform int pLightNum;
-uniform PointLight pLights [10];
+uniform PointLight pLights[10];
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -79,22 +82,26 @@ uniform vec3 viewPos;
 void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
-    data.FragPos = (vec4(aPos, 1.0f)*transpose(model)).xyz;
+    data.FragPos = (vec4(aPos, 1.0f) * transpose(model)).xyz;
     data.TexCoord = vec2(aTexCoord.x, aTexCoord.y);
-    data.normal=normalize(normalVec);
-    data.model2=model;
+    data.normal = normalize(normalVec);
+    data.model2 = model;
     mat3 normalMatrix = transpose(inverse(mat3(model)));
     vec3 T = normalize(normalMatrix * aT);
     vec3 N = normalize(normalMatrix * data.normal);
     T = normalize(T - dot(T, N) * N);
     vec3 B = cross(N, T);
     mat3 TBN = transpose(mat3(T, B, N));
-    for (int i=0;i<pLightNum;i++){
+    for (int i = 0;i < pLightNum; i++) {
         pLightPos[i] = TBN * pLights[i].position;
     }
-    for (int i=0;i<dLightNum;i++){
+    for (int i = 0;i < dLightNum; i++) {
         dLightDir[i] = TBN * dLights[i].direction;
     }
-    data.TangentViewPos  = TBN * viewPos;
-    data.TangentFragPos  = TBN * vec3(model * vec4(aPos, 1.0));
+    for (int i = 0;i < sLightNum; i++) {
+        sLightDir[i] = TBN * sLights[i].direction;
+        sLightPos[i] = TBN * sLights[i].position;
+    }
+    data.TangentViewPos = TBN * viewPos;
+    data.TangentFragPos = TBN * vec3(model * vec4(aPos, 1.0));
 }
