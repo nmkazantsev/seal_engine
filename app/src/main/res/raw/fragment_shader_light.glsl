@@ -47,6 +47,7 @@ uniform PointLight pLights [10];
 uniform DirectedLight dLights[10];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
+uniform int sLightNumber;
 uniform int sLightNum;
 uniform int dLightNum;
 uniform struct Material {
@@ -82,7 +83,6 @@ vec3 applyDirectedLight(vec3 color, vec3 normal, vec3 viewDir, int index) {
     return color* (specular+diffuse);
 }
 
-vec3 applySourceLight(vec3 color, int index) { return vec3(0.0); }
 
 vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 viewDir) {
     vec3 lightDir = normalize(pLightPos[index] - fragPos);
@@ -146,6 +146,9 @@ void main()
     }
     for (int i=0;i<pLightNumber;i++){
         result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
+    }
+    for (int i=0;i<sLightNumber;i++){
+        result+=CalcSpotLight(sLights[i],norm,data.TangentFragPos,viewDir);
     }
 
     FragColor=vec4(result, 1.0);
