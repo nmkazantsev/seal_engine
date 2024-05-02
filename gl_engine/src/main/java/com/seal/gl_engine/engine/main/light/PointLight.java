@@ -13,16 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PointLight extends ShaderData {
-    /*
-        vec3 position;
-
-    float constant;
-    float linear;
-    float quadratic;
-
-    float diffuse;
-    float specular;
-     */
     public Vec3 color;
     public Vec3 position;
     public float diffuse;

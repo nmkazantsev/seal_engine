@@ -32,6 +32,7 @@ struct DirectedLight {
 struct SpotLight {
     vec3 position;
     vec3 direction;
+    vec3 color;
     float cutOff;
     float outerCutOff;
 
@@ -128,7 +129,7 @@ vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
-    return (ambient + diffuse + specular)*color;
+    return (ambient + diffuse + specular)*color;//*light.color;
 }
 
 uniform int normalMapEnable;
@@ -140,7 +141,7 @@ void main()
     if (normalMapEnable == 1) {
         norm = normalize(texture(normalMap, data.TexCoord).rgb * 2.0 - 1.0);// god bless, everything is NORM
     } else {
-        norm = normalize(vec3(0.0, 0.0, 1.0).rgb * 2.0 - 1.0);
+        norm = vec3(0.0, 0.0, 1.0);
     }
     vec3 result = applyAmbient(color);
 

@@ -50,6 +50,7 @@ struct DirectedLight {
 struct SpotLight {
     vec3 position;
     vec3 direction;
+    vec3 color;
     float cutOff;
     float outerCutOff;
 
@@ -99,7 +100,7 @@ void main()
         dLightDir[i] = TBN * dLights[i].direction;
     }
     for (int i = 0;i < sLightNum; i++) {
-        sLightDir[i] = TBN * (-sLights[i].direction);//else , without -1, it is inversed
+        sLightDir[i] = TBN * sLights[i].direction;
         sLightPos[i] = TBN * sLights[i].position;
     }
     data.TangentViewPos = TBN * viewPos;
