@@ -17,17 +17,17 @@ public class AmbientLight extends ShaderData {
     }
 
     @Override
-    public void getLocations(int programId) {
+    protected void getLocations(int programId) {
         aLightLocation = glGetUniformLocation(programId, "aLight.color");
     }
 
     @Override
-    public void forwardData() {
+    protected void forwardData() {
         GLES30.glUniform3f(aLightLocation, color.x, color.y, color.z);
     }
 
     @Override
-    public void delete() {
+    protected void delete() {
 
     }
 

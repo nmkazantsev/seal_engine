@@ -89,6 +89,7 @@ public class Shader { //means shader program
         s.adaptor.programId = s.link;
         s.adaptor.updateLocations();
         Adaptor.updateShaderDataLocations();
+        Adaptor.forwardData();
     }
 
 

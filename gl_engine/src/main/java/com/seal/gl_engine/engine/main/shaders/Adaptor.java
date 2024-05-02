@@ -31,6 +31,12 @@ public abstract class Adaptor {
         }
     }
 
+    public static void forwardData() {
+        for (ShaderData e : shaderData) {
+            e.forwardData();
+        }
+    }
+
 
     public void setProgramId(int id) {
         this.programId = id;

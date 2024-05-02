@@ -77,13 +77,13 @@ vec3 applyAmbient(vec3 color) {
 }
 
 vec3 applyDirectedLight(vec3 color, vec3 normal, vec3 viewDir, int index) {
-    vec3 lightDir = normalize(-dLightDir[index]);
+    vec3 lightDir = normalize(dLightDir[index]);
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 reflectedDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectedDir), 0.0), material.shininess);
     vec3 diffuse = dLights[index].diffuse * diff * material.diffuse;
     vec3 specular = dLights[index].specular * spec * material.specular;
-    return color * (specular + diffuse);
+    return color *dLights[index].color* (diffuse+specular);
 }
 
 
@@ -154,5 +154,5 @@ void main()
         result += CalcSpotLight(color, sLights[i], norm, data.TangentFragPos, viewDir, i);
     }
 
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, 0.0);
 }

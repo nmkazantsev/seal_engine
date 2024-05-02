@@ -22,11 +22,13 @@ public class DirectedLight extends ShaderData {
     private int colorLoc, directionLoc, diffuseLoc, specLoc, numberLoc;
     private int index;
     private static final List<WeakReference<DirectedLight>> directLights = new ArrayList<>();
+    private final WeakReference<DirectedLight> thisRef;//link to this object for deleting later
 
     public DirectedLight(GamePageInterface gamePageInterface) {
         super(gamePageInterface);
         index = directLights.size();
-        directLights.add(new WeakReference<>(this));
+        thisRef = new WeakReference<>(this);
+        directLights.add(thisRef);
     }
 
     //always use before apply shader
@@ -38,7 +40,7 @@ public class DirectedLight extends ShaderData {
     }
 
     @Override
-    public void getLocations(int programId) {
+    protected void getLocations(int programId) {
         colorLoc = glGetUniformLocation(programId, "dLights[" + index + "].color");
         directionLoc = glGetUniformLocation(programId, "dLights[" + index + "].direction");
         diffuseLoc = glGetUniformLocation(programId, "dLights[" + index + "].diffuse");
@@ -47,7 +49,7 @@ public class DirectedLight extends ShaderData {
     }
 
     @Override
-    public void forwardData() {
+    protected void forwardData() {
         GLES30.glUniform3f(directionLoc, direction.x, direction.y, direction.z);
         GLES30.glUniform3f(colorLoc, color.x, color.y, color.z);
         GLES30.glUniform1f(specLoc, specular);
@@ -56,7 +58,7 @@ public class DirectedLight extends ShaderData {
     }
 
     @Override
-    public void delete() {
-        directLights.remove(index);
+    protected void delete() {
+        directLights.remove(thisRef);
     }
 }

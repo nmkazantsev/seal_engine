@@ -47,7 +47,7 @@ public class SecondRenderer implements GamePageInterface {
     private SkyBox skyBox;
     private PointLight pointLight, pointLight2;
     private final AmbientLight ambientLight;
-    private final DirectedLight directedLight1;//, directedLight2;
+    private final DirectedLight directedLight1, directedLight2;
 
     public SecondRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -63,10 +63,16 @@ public class SecondRenderer implements GamePageInterface {
         ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
         directedLight1 = new DirectedLight(this);
-        directedLight1.direction = new Vec3(-1, 0, 0);
+        directedLight1.direction = new Vec3(0, -1, 0);
         directedLight1.color = new Vec3(1, 0, 0);
-        directedLight1.diffuse = 0.9f;
-        directedLight1.specular = 0.1f;
+        directedLight1.diffuse = 0.2f;
+        directedLight1.specular = 0.8f;
+        directedLight2 = new DirectedLight(this);
+        directedLight2.direction = new Vec3(0, 1, 0);
+        directedLight2.color = new Vec3(0, 1, 0);
+        directedLight2.diffuse = 0.9f;
+        directedLight2.specular = 0.8f;
+
 
         skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
@@ -74,7 +80,6 @@ public class SecondRenderer implements GamePageInterface {
 
     @Override
     public void draw() {
-        //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
         cameraSettings.eyeZ = 0f;
@@ -89,8 +94,6 @@ public class SecondRenderer implements GamePageInterface {
         skyBox.prepareAndDraw();
 
         applyShader(lightShader);
-        ambientLight.forwardData();
-        directedLight1.forwardData();
 
         glClearColor(1f, 1, 1, 1);
 
