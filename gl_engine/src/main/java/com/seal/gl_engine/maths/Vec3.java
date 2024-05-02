@@ -33,6 +33,12 @@ public class Vec3 {
         this.z = v.z;
     }
 
+    public Vec3(float v) {
+        this.x = v;
+        this.y = v;
+        this.z = v;
+    }
+
     public float[] getArray() {
         return new float[]{x, y, z};
     }
@@ -86,6 +92,7 @@ public class Vec3 {
     public static Vec3 mul(Vec3 v, float a) {
         return new Vec3(v.x * a, v.y * a, v.z * a);
     }
+
     // cross product of two vectors
     public static Vec3 cross(Vec3 v, Vec3 u) {
         return new Vec3(v.y * u.z - v.z * u.y, v.z * u.x - v.x * u.z, v.x * u.y - v.y * u.x);

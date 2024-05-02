@@ -14,7 +14,9 @@ import java.util.List;
 public class Shader { //means shader program
     private static final List<Shader> allShaders = new ArrayList<>();
     private int link;
-    private final int vertex, fragment, geom = -1;
+    private final int vertex;
+    private final int fragment;
+    private int geom = -1;
     private String page = "";
     private boolean reloadNeeded = false;
     private final Adaptor adaptor;

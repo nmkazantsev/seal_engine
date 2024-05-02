@@ -64,12 +64,12 @@ public class SecondRenderer implements GamePageInterface {
 
         directedLight1 = new DirectedLight(this);
         directedLight1.direction = new Vec3(0, -1, 0);
-        directedLight1.color = new Vec3(1, 0, 0);
+        directedLight1.color = new Vec3(0.4f);
         directedLight1.diffuse = 0.2f;
         directedLight1.specular = 0.8f;
         directedLight2 = new DirectedLight(this);
         directedLight2.direction = new Vec3(0, 1, 0);
-        directedLight2.color = new Vec3(0, 1, 0);
+        directedLight2.color = new Vec3(0.6f);
         directedLight2.diffuse = 0.9f;
         directedLight2.specular = 0.8f;
 
