@@ -12,12 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Shader { //means shader program
-    private static List<Shader> allShaders = new ArrayList<>();
+    private static final List<Shader> allShaders = new ArrayList<>();
     private int link;
-    private int vertex, fragment, geom = -1;
+    private final int vertex, fragment, geom = -1;
     private String page = "";
     private boolean reloadNeeded = false;
-    private Adaptor adaptor;
+    private final Adaptor adaptor;
     private static Shader activeShader;
 
     public Shader(int vertex, int fragment, GamePageInterface page, Adaptor adaptor) {
@@ -64,7 +64,7 @@ public class Shader { //means shader program
     }
 
     private boolean unneeded() {
-        if (this.page.equals("")) {
+        if (this.page.isEmpty()) {
             return false;
         }
         if (!this.page.equals(OpenGLRenderer.getPageClassName())) {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class Adaptor {
-    private static ArrayList<ShaderData> shaderData = new ArrayList<>();
+    private static final ArrayList<ShaderData> shaderData = new ArrayList<>();
     protected int programId;
 
     protected void addLightAdaptor(ShaderData shaderData) {
