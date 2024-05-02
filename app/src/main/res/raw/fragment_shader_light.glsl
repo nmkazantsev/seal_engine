@@ -129,7 +129,7 @@ vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
-    return (ambient + diffuse + specular)*color;//*light.color;
+    return (ambient + diffuse + specular)*color*light.color;
 }
 
 uniform int normalMapEnable;

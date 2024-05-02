@@ -97,7 +97,7 @@ void main()
         pLightPos[i] = TBN * pLights[i].position;
     }
     for (int i = 0;i < dLightNum; i++) {
-        dLightDir[i] = TBN * dLights[i].direction;
+        dLightDir[i] = TBN * (-dLights[i].direction);
     }
     for (int i = 0;i < sLightNum; i++) {
         sLightDir[i] = TBN * sLights[i].direction;

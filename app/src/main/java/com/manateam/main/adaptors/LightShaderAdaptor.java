@@ -193,65 +193,6 @@ public class LightShaderAdaptor extends Adaptor {
         modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
         cameraPosLocation = GLES30.glGetUniformLocation(programId, "viewPos");
         normalMapEnableLocation = GLES30.glGetUniformLocation(programId, "normalMapEnable");
-
-
-      /*  GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 0 + "].direction"), 0, 0, -3);
-        GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 0 + "].color"), 0.5f, 0.5f, 0.5f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].diffuse"), 0.7f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].specular"), 0.1f);
-
-        GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 1 + "].direction"), 1, 0, 0);
-        GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 1 + "].color"), 0.5f, 0.5f, 0.5f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 1 + "].diffuse"), 0.7f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 1 + "].specular"), 0.9f);
-        GLES30.glUniform1i(glGetUniformLocation(programId, "dLightNum"), 2);*/
-
-
-/*
-        GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 0 + "].direction"), 1, -1, -3);
-        GLES30.glUniform3f(glGetUniformLocation(programId, "dLights[" + 0 + "].color"), 0.5f, 0.5f, 0.5f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].diffuse"), 0.7f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "dLights[" + 0 + "].specular"), 0.1f);
-        GLES30.glUniform1i(glGetUniformLocation(programId, "dLightNum"), 1);
-
-
-        GLES30.glUniform3f(glGetUniformLocation(programId, "pLights[" + 0 + "].position"), -1, 1, 3);
-        GLES30.glUniform3f(glGetUniformLocation(programId, "pLights[" + 0 + "].color"), 0.5f, 0.5f, 0.5f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].diffuse"), 0.9f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].specular"), 0.8f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].constant"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].linear"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "pLights[" + 0 + "].quadratic"), 0.1f);
-
-
-        GLES30.glUniform1i(glGetUniformLocation(programId, "pLightNumber"), 1);
-
-        GLES30.glUniform3f(glGetUniformLocation(programId, "sLights[" + 0 + "].direction"), -1, 0, 0f);
-        GLES30.glUniform3f(glGetUniformLocation(programId, "sLights[" + 0 + "].color"), 0.5f, 0.5f, 0.5f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].diffuse"), 0.7f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].specular"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].ambient"), 0.1f);
-
-
-        GLES30.glUniform3f(glGetUniformLocation(programId, "sLights[" + 0 + "].position"), 1.4f, 0, 0f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].constant"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].linear"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].quadratic"), 0.1f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].outerCutOff"), 0.002f);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].cutOff"), 0.001f);
-
-
-        GLES30.glUniform1i(glGetUniformLocation(programId, "sLightNum"), 1);
-
-
-       // GLES30.glUniform3f(glGetUniformLocation(programId, "aLight.color"), 0.3f, 0.3f, 0.3f);
-
- */
-
-        GLES30.glUniform3f(glGetUniformLocation(programId, "material.ambient"), 1, 1, 1);
-        GLES30.glUniform3f(glGetUniformLocation(programId, "material.diffuse"), 1, 1, 1);
-        GLES30.glUniform3f(glGetUniformLocation(programId, "material.specular"), 1, 1, 1);
-        GLES30.glUniform1f(glGetUniformLocation(programId, "material.shininess"), 1.1f);
     }
 
     @Override

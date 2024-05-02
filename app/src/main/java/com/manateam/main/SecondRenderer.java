@@ -31,6 +31,7 @@ import com.seal.gl_engine.engine.main.camera.CameraSettings;
 import com.seal.gl_engine.engine.main.camera.ProjectionMatrixSettings;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
+import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
@@ -49,7 +50,9 @@ public class SecondRenderer implements GamePageInterface {
     private SkyBox skyBox;
     private SourceLight sourceLight;
     private final AmbientLight ambientLight;
-    private DirectedLight directedLight1, directedLight2;
+    private DirectedLight directedLight1;
+    private Material material;
+
 
     public SecondRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -58,17 +61,17 @@ public class SecondRenderer implements GamePageInterface {
         cameraSettings = new CameraSettings(x, y);
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
-        s = new Shape("cube.obj", "texture.png", this);
-        //s.addNormalMap("noral_tex.png");
+        s = new Shape("ponchik.obj", "texture.png", this);
+        s.addNormalMap("noral_tex.png");
 
         ambientLight = new AmbientLight(this);
         // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
-       /* directedLight1 = new DirectedLight(this);
-        directedLight1.direction = new Vec3(0, -1, 0);
-        directedLight1.color = new Vec3(0.4f);
+        directedLight1 = new DirectedLight(this);
+        directedLight1.direction = new Vec3(-1, 0, 0);
+        directedLight1.color = new Vec3(0.9f);
         directedLight1.diffuse = 0.2f;
-        directedLight1.specular = 0.8f;*/
+        directedLight1.specular = 0.8f;
        /* directedLight2 = new DirectedLight(this);
         directedLight2.direction = new Vec3(0, 1, 0);
         directedLight2.color = new Vec3(0.6f);
@@ -82,12 +85,17 @@ public class SecondRenderer implements GamePageInterface {
         sourceLight.constant = 1f;
         sourceLight.linear = 0.01f;
         sourceLight.quadratic = 0.01f;
-        sourceLight.color = new Vec3(1);
+        sourceLight.color = new Vec3(0.5f);
         sourceLight.position = new Vec3(2.7f, 0, 0);
         sourceLight.direction = new Vec3(-0.3f, 0, 0);
         sourceLight.outerCutOff = cos(radians(40));
         sourceLight.cutOff = cos(radians(30f));
 
+        material=new Material(this);
+        material.ambient=new Vec3(1);
+        material.specular=new Vec3(1);
+        material.diffuse=new Vec3(1);
+        material.shininess=1.1f;
 
         skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
@@ -109,6 +117,7 @@ public class SecondRenderer implements GamePageInterface {
         skyBox.prepareAndDraw();
 
         applyShader(lightShader);
+        material.apply();
 
         glClearColor(1f, 1, 1, 1);
 
