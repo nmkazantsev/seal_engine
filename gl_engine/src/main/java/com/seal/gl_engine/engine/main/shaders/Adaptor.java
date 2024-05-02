@@ -16,11 +16,14 @@ public abstract class Adaptor {
         Adaptor.shaderData.add(shaderData);
     }
 
-    public static void updateLightLocations() {
+    public static void updateShaderDataLocations() {
         Iterator<ShaderData> iterator = shaderData.iterator();
         while (iterator.hasNext()) {
             ShaderData e = iterator.next();
-            if (e == null || (e.getCreatorClassName() != null && !e.getCreatorClassName().equals(OpenGLRenderer.getPageClassName()))) {
+            if (e == null) {
+                iterator.remove();
+            } else if (e.getCreatorClassName() != null && !e.getCreatorClassName().equals(OpenGLRenderer.getPageClassName())) {
+                e.delete();
                 iterator.remove();
             } else {
                 e.getLocations(Shader.getActiveShader().getAdaptor().getProgramId());

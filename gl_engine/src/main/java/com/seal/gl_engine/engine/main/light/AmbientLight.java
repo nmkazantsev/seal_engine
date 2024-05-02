@@ -26,5 +26,10 @@ public class AmbientLight extends ShaderData {
         GLES30.glUniform3f(aLightLocation, color.x, color.y, color.z);
     }
 
+    @Override
+    public void delete() {
+
+    }
+
 }
 

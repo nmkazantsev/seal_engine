@@ -36,4 +36,9 @@ public class PointLight extends ShaderData {
         GLES30.glUniform1f(specLoc, specular);
         GLES30.glUniform1i(countLoc, count);
     }
+
+    @Override
+    public void delete() {
+
+    }
 }

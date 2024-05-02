@@ -29,6 +29,7 @@ import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.camera.CameraSettings;
 import com.seal.gl_engine.engine.main.camera.ProjectionMatrixSettings;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
+import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
@@ -45,7 +46,8 @@ public class SecondRenderer implements GamePageInterface {
     private final Shape s;
     private SkyBox skyBox;
     private PointLight pointLight, pointLight2;
-    private AmbientLight ambientLight;
+    private final AmbientLight ambientLight;
+    private final DirectedLight directedLight1;//, directedLight2;
 
     public SecondRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -59,6 +61,13 @@ public class SecondRenderer implements GamePageInterface {
 
         ambientLight = new AmbientLight(this);
         ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
+
+        directedLight1 = new DirectedLight(this);
+        directedLight1.direction = new Vec3(-1, 0, 0);
+        directedLight1.color = new Vec3(1, 0, 0);
+        directedLight1.diffuse = 0.9f;
+        directedLight1.specular = 0.1f;
+
         skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
     }
@@ -81,6 +90,7 @@ public class SecondRenderer implements GamePageInterface {
 
         applyShader(lightShader);
         ambientLight.forwardData();
+        directedLight1.forwardData();
 
         glClearColor(1f, 1, 1, 1);
 

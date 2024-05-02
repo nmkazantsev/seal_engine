@@ -11,7 +11,7 @@ public abstract class ShaderData {
     }
 
     public String getCreatorClassName() {
-        if(gamePageInterface!=null) {
+        if (gamePageInterface != null) {
             return gamePageInterface.getClass().getName();
         }
         return null;
@@ -20,4 +20,6 @@ public abstract class ShaderData {
     public abstract void getLocations(int programId);
 
     public abstract void forwardData();
+
+    public abstract void delete();
 }
