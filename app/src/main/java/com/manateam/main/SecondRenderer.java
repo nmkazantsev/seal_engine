@@ -22,7 +22,6 @@ import android.util.Log;
 import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.LightShaderAdaptor;
 import com.manateam.main.adaptors.MainShaderAdaptor;
-import com.manateam.main.adaptors.PointLight;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.OpenGLRenderer;
@@ -30,6 +29,7 @@ import com.seal.gl_engine.engine.main.camera.CameraSettings;
 import com.seal.gl_engine.engine.main.camera.ProjectionMatrixSettings;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
+import com.seal.gl_engine.engine.main.light.PointLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
@@ -47,7 +47,7 @@ public class SecondRenderer implements GamePageInterface {
     private SkyBox skyBox;
     private PointLight pointLight, pointLight2;
     private final AmbientLight ambientLight;
-    private final DirectedLight directedLight1, directedLight2;
+    private DirectedLight directedLight1, directedLight2;
 
     public SecondRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -60,9 +60,9 @@ public class SecondRenderer implements GamePageInterface {
         s.addNormalMap("noral_tex.png");
 
         ambientLight = new AmbientLight(this);
-        ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
+       // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
-        directedLight1 = new DirectedLight(this);
+       /* directedLight1 = new DirectedLight(this);
         directedLight1.direction = new Vec3(0, -1, 0);
         directedLight1.color = new Vec3(0.4f);
         directedLight1.diffuse = 0.2f;
@@ -71,7 +71,15 @@ public class SecondRenderer implements GamePageInterface {
         directedLight2.direction = new Vec3(0, 1, 0);
         directedLight2.color = new Vec3(0.6f);
         directedLight2.diffuse = 0.9f;
-        directedLight2.specular = 0.8f;
+        directedLight2.specular = 0.8f;*/
+        pointLight = new PointLight(this);
+        pointLight.diffuse = 0.9f;
+        pointLight.specular = 0.4f;
+        pointLight.constant = 0.6f;
+        pointLight.linear = 0.1f;
+        pointLight.quadratic = 0.2f;
+        pointLight.color = new Vec3(1);
+        pointLight.position = new Vec3(1.7f);
 
 
         skyBox = new SkyBox("skybox/", "jpg", this);

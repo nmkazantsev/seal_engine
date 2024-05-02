@@ -11,7 +11,7 @@ layout (location = 4) in vec3 aB;//absolute bitangent
 
 struct PointLight {
     vec3 position;
-
+    vec3 color;
     float constant;
     float linear;
     float quadratic;

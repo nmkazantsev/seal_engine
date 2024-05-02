@@ -7,7 +7,7 @@ uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
 struct PointLight {
     vec3 position;
-
+    vec3 color;
     float constant;
     float linear;
     float quadratic;
@@ -47,7 +47,7 @@ uniform SpotLight sLights[number];
 uniform PointLight pLights[number];
 uniform DirectedLight dLights[number];
 uniform AmibentLight aLight;
-uniform int pLightNumber;
+uniform int pLightNum;
 uniform int sLightNum;
 uniform int dLightNum;
 uniform struct Material {
@@ -103,7 +103,7 @@ vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 view
     vec3 specular = pLights[index].specular * spec * material.specular;
     diffuse *= attenuation;
     specular *= attenuation;
-    return color * (diffuse + specular);
+    return color *pLights[index].color* (diffuse + specular);
 }
 // calculates the color when using a spot light.
 vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int i)
@@ -147,7 +147,7 @@ void main()
     for (int i = 0; i < dLightNum; i++) {
         result += applyDirectedLight(color, norm, viewDir, i);
     }
-    for (int i = 0;i < pLightNumber; i++) {
+    for (int i = 0;i < pLightNum; i++) {
         result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
     }
     for (int i = 0;i < sLightNum; i++) {
