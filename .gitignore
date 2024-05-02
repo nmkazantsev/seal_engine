@@ -1,5 +1,6 @@
 *.iml
 .gradle
+.idea
 /local.properties
 /.idea/caches
 /.idea/libraries
@@ -217,3 +218,4 @@ local.properties
 /seal_engine/build/.transforms/3711a77ed402fff68fe8bb46bd30606f/transformed/debug/debug_dex/com/seal/seal_engine/engine/main/verticles/VerticleSet.dex
 /.idea/shelf/Uncommitted_changes_before_Checkout_at_01_05_2024__22_12__Changes_.xml
 /.idea/shelf/Uncommitted_changes_before_Checkout_at_01_05_2024,_22_12_[Changes]/shelved.patch
+/.idea/deploymentTargetSelector.xml

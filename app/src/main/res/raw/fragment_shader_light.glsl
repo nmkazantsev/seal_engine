@@ -1,6 +1,7 @@
 #version 320 es
 precision mediump float;
 precision mediump int;
+#define number 7//max snuber of lights of each type
 out vec4 FragColor;
 uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
@@ -14,8 +15,6 @@ struct PointLight {
     float diffuse;
     float specular;
 };
-
-#define number 7
 
 uniform struct AmibentLight {
     vec3 color;

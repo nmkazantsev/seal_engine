@@ -212,7 +212,7 @@ public class LightShaderAdaptor extends Adaptor {
 
 
         GLES30.glUniform1i(glGetUniformLocation(programId, "pLightNumber"), 1);
-*/
+
         GLES30.glUniform3f(glGetUniformLocation(programId, "sLights[" + 0 + "].direction"), -1, 0, 0f);
         GLES30.glUniform3f(glGetUniformLocation(programId, "sLights[" + 0 + "].color"), 0.5f, 0.5f, 0.5f);
         GLES30.glUniform1f(glGetUniformLocation(programId, "sLights[" + 0 + "].diffuse"), 0.7f);
@@ -236,6 +236,8 @@ public class LightShaderAdaptor extends Adaptor {
         GLES30.glUniform1f(glGetUniformLocation(programId, "material.shininess"), 1.1f);
 
        // GLES30.glUniform3f(glGetUniformLocation(programId, "aLight.color"), 0.3f, 0.3f, 0.3f);
+
+ */
     }
 
     @Override
