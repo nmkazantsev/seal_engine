@@ -1,5 +1,6 @@
 package com.manateam.main;
 
+import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
@@ -14,10 +15,10 @@ import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.millis;
 import static com.seal.gl_engine.utils.Utils.radians;
-import static com.seal.gl_engine.utils.Utils.sin;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
+import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -40,6 +41,7 @@ import com.seal.gl_engine.engine.main.verticles.SkyBox;
 import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
+import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer implements GamePageInterface {
     private final Poligon fpsPoligon;
@@ -91,11 +93,11 @@ public class SecondRenderer implements GamePageInterface {
         sourceLight.outerCutOff = cos(radians(40));
         sourceLight.cutOff = cos(radians(30f));
 
-        material=new Material(this);
-        material.ambient=new Vec3(1);
-        material.specular=new Vec3(1);
-        material.diffuse=new Vec3(1);
-        material.shininess=1.1f;
+        material = new Material(this);
+        material.ambient = new Vec3(1);
+        material.specular = new Vec3(1);
+        material.diffuse = new Vec3(1);
+        material.shininess = 1.1f;
 
         skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
@@ -103,29 +105,27 @@ public class SecondRenderer implements GamePageInterface {
 
     @Override
     public void draw() {
+        GLES30.glDisable(GL_BLEND);
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
         cameraSettings.eyeZ = 0f;
         cameraSettings.eyeX = 5f;
-        cameraSettings.centerX = 0.5f * sin(millis() / 1000.0f);
+        float x = 3.5f * Utils.sin(millis() / 1000.0f);
         cameraSettings.centerY = 0;
-        cameraSettings.centerZ = 0;
+        cameraSettings.centerZ = x;
         applyShader(skyBoxShader);
         applyProjectionMatrix(projectionMatrixSettings);
         applyCameraSettings(cameraSettings);
-
         skyBox.prepareAndDraw();
-
         applyShader(lightShader);
         material.apply();
-
         glClearColor(1f, 1, 1, 1);
-
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
-        Matrix.scaleM(mMatrix, 0, 1.5f, 1.5f, 1.5f);
+        Matrix.translateM(mMatrix, 0, 0, -0f, 0);
+        Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
 

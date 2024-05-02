@@ -1,13 +1,16 @@
 #version 320 es
 precision mediump float;
 precision mediump int;
+
+#define  snumber 1//spot number
+#define  dnumber 1//direct number
+#define  pnumber 1//point number
+
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
 layout (location = 2) in vec3 normalVec;
 layout (location = 3) in vec3 aT;//abs tangent
 layout (location = 4) in vec3 aB;//absolute bitangent
-
-#define number 7
 
 struct PointLight {
     vec3 position;
@@ -28,11 +31,11 @@ out struct Data {
     vec3 TangentViewPos;
     vec3 TangentFragPos;
 } data;
-out vec3 pLightPos[number];
-out vec3 dLightDir[number];
+out vec3 pLightPos[pnumber];
+out vec3 dLightDir[dnumber];
 
-out vec3 sLightDir[number];
-out vec3 sLightPos[number];
+out vec3 sLightDir[snumber];
+out vec3 sLightPos[snumber];
 
 struct AmibentLight {
     vec3 color;
@@ -62,8 +65,8 @@ struct SpotLight {
     float diffuse;
     float specular;
 };
-uniform SpotLight sLights[number];
-uniform DirectedLight dLights[number];
+uniform SpotLight sLights[snumber];
+uniform DirectedLight dLights[dnumber];
 uniform AmibentLight aLight;
 uniform int pLightNumber;
 uniform int sLightNum;
@@ -75,7 +78,7 @@ uniform struct Material {
     float shininess;
 } material;
 uniform int pLightNum;
-uniform PointLight pLights[number];
+uniform PointLight pLights[pnumber];
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;

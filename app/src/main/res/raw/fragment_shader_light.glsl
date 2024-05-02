@@ -1,7 +1,10 @@
 #version 320 es
 precision mediump float;
 precision mediump int;
-#define number 7//max snuber of lights of each type
+//max snuber of lights of each type
+#define  snumber 1 //spot number
+#define  dnumber 1 //direct number
+#define  pnumber 1 //point number
 out vec4 FragColor;
 uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
@@ -44,9 +47,9 @@ struct SpotLight {
     float diffuse;
     float specular;
 };
-uniform SpotLight sLights[number];
-uniform PointLight pLights[number];
-uniform DirectedLight dLights[number];
+uniform SpotLight sLights[snumber];
+uniform PointLight pLights[pnumber];
+uniform DirectedLight dLights[dnumber];
 uniform AmibentLight aLight;
 uniform int pLightNum;
 uniform int sLightNum;
@@ -67,11 +70,11 @@ in struct Data {
     vec3 TangentFragPos;
 } data;
 
-in vec3 pLightPos[number];
-in vec3 dLightDir[number];
+in vec3 pLightPos[pnumber];
+in vec3 dLightDir[dnumber];
 
-in vec3 sLightDir[number];
-in vec3 sLightPos[number];
+in vec3 sLightDir[snumber];
+in vec3 sLightPos[snumber];
 
 vec3 applyAmbient(vec3 color) {
     return color * aLight.color;
