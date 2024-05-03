@@ -23,26 +23,26 @@
 	@SuppressLint("ClickableViewAccessibility")  
 	@Override  
 	protected void onCreate(Bundle savedInstanceState) {  
-	    super.onCreate(savedInstanceState);  
-	  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  
-	  requestWindowFeature(Window.FEATURE_NO_TITLE);  
-	  getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
-	  GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);  
-	  setContentView(v);  
-	 assert v != null;  
-	  v.setOnTouchListener(this);  
+		super.onCreate(savedInstanceState);  
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  
+		requestWindowFeature(Window.FEATURE_NO_TITLE);  
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
+		GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);  
+		setContentView(v);  
+		assert v != null;  
+		v.setOnTouchListener(this);  
 	}  
   
 	@Override  
 	protected void onPause() {  
-	    super.onPause();  
-	  engine.onPause();  
+		super.onPause();  
+		engine.onPause();  
 	}  
   
 	@Override  
 	protected void onResume() {  
-	    super.onResume();  
-	  engine.onResume();  
+		super.onResume();  
+		engine.onResume();  
 	}  
 	  
 	  
@@ -81,4 +81,7 @@ GamePageInterface является центральной сущностью д�
 **Объект движка не будет удален после закрытия вашей страницы сборщиком мусора сразу, так как движок ещё какое-то время будет хранить на него ссылку.** 
 
 Если нужно, чтобы объект не удалялся каждый раз (напрмер, тяжелый меш), то его нужно объявить static, а в вместо this предать null.
+
 **если не static объекту передать null, это приведет к утечке видео памяти и непредсказуемым последствиям**
+
+
