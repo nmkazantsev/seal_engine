@@ -7,7 +7,6 @@ import com.seal.gl_engine.engine.main.engine_object.EnObject;
 import com.seal.gl_engine.utils.Utils;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.function.Function;
 
 public class Animator {
@@ -26,6 +25,7 @@ public class Animator {
     }
 
     public static void freezeAnimations(EnObject target) {
+        if (animQueue.get(target) == null) return;
         for (Animation a: animQueue.get(target)) {
             if (a.waiting) continue;
             a.waiting = true;
@@ -33,6 +33,7 @@ public class Animator {
         }
     }
     public static void unfreezeAnimations(EnObject target) {
+        if (animQueue.get(target) == null) return;
         for (Animation a: animQueue.get(target)) {
             if (!a.waiting) continue;
             a.waiting = false;
@@ -116,10 +117,11 @@ public class Animator {
     }
 
     public static void animate(EnObject target) {
+        if (animQueue.get(target) == null) return;
         // getting targets space attributes
         float[] b = target.getSpaceAttrs();
         // getting array related to the object and going though it
-        for (Animation animation : Objects.requireNonNull(animQueue.get(target))) {
+        for (Animation animation : animQueue.get(target)) {
             if (!animation.isDead) {
                 // giving attributes to the animator and getting computation result
                 animation.setAttrs(b);
