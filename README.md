@@ -20,44 +20,42 @@
  перегрузим методы:
 
  
-	@SuppressLint("ClickableViewAccessibility")  
-	@Override  
-	protected void onCreate(Bundle savedInstanceState) {  
-	super.onCreate(savedInstanceState);  
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  
-		requestWindowFeature(Window.FEATURE_NO_TITLE);  
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
-		GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);  
-		setContentView(v);  
-		assert v != null;  
-		v.setOnTouchListener(this);  
-	}  
-  
-	@Override  
-	protected void onPause() {  
-		super.onPause();  
-		engine.onPause();  
-	}  
-  
-	@Override  
-	protected void onResume() {  
-		super.onResume();  
-		engine.onResume();  
-	}  
-	  
-	  
-	@SuppressLint("ClickableViewAccessibility")  
-	@Override  
-	public boolean onTouch(View v, MotionEvent event) {  
-	    return Engine.onTouch(v, event);  
-	}  
-	  
-	@Override  
-	public void onPointerCaptureChanged(boolean hasCapture) {  
-	    super.onPointerCaptureChanged(hasCapture);  
-	}
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);
+        setContentView(v);
+        assert v != null;
+        v.setOnTouchListener(this);
+    }
 
- 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        engine.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        engine.onResume();
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return Engine.onTouch(v, event);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
 
  6. Теперь создаим класс MainRenderer. Это будет входная точка в наш проект. Навзние класса можно изменить в строке `GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);`  Данный класс является классом страницы, он обязательно должен implement `GamePageInterface`. Конструтор странц может быть любым, но для входной точки обязательно наличие пустого (в процем, мы сами вызываем его из MainActivity). После переопределения всех функций движок готов к использованию
 
@@ -66,12 +64,14 @@
 GamePageInterface является центральной сущностью движка и устроен следующим образом:
 
 	package com.seal.gl_engine;
-	public interface GamePageInterface {  
-		public void draw();  
-		public void touchStarted();  
-		public void touchMoved(); 
-		public void touchEnded();  
+	
+	public interface GamePageInterface {
+	    public void draw();
+	    public void touchStarted();
+	    public void touchMoved();
+	    public void touchEnded();
 	}
+
 
 не спрашивайте почему тюлень. Мем.
 Мы видими, что получив досутп к нашем листенерам, движок отслеживает открытие страницы, вызыввет  draw каждый кадр и колбеки на тач
