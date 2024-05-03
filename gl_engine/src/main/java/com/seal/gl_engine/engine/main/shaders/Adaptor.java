@@ -1,30 +1,39 @@
 package com.seal.gl_engine.engine.main.shaders;
 
 
-import com.seal.gl_engine.engine.main.verticles.Face;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
+import com.seal.gl_engine.engine.main.verticles.Face;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class Adaptor {
-    private static ArrayList<ShaderData> shaderData = new ArrayList<>();
+    private static final ArrayList<ShaderData> shaderData = new ArrayList<>();
     protected int programId;
 
     protected void addLightAdaptor(ShaderData shaderData) {
         Adaptor.shaderData.add(shaderData);
     }
 
-    public static void updateLightLocations() {
+    public static void updateShaderDataLocations() {
         Iterator<ShaderData> iterator = shaderData.iterator();
         while (iterator.hasNext()) {
             ShaderData e = iterator.next();
-            if (e == null || (e.getCreatorClassName() != null && !e.getCreatorClassName().equals(OpenGLRenderer.getPageClassName()))) {
+            if (e == null) {
+                iterator.remove();
+            } else if (e.getCreatorClassName() != null && !e.getCreatorClassName().equals(OpenGLRenderer.getPageClassName())) {
+                e.delete();
                 iterator.remove();
             } else {
                 e.getLocations(Shader.getActiveShader().getAdaptor().getProgramId());
             }
+        }
+    }
+
+    public static void forwardData() {
+        for (ShaderData e : shaderData) {
+            e.forwardData();
         }
     }
 
@@ -52,6 +61,8 @@ public abstract class Adaptor {
     public abstract int getTextureLocation();
 
     public abstract int getNormalTextureLocation();
+
+    public abstract int getNormalMapEnableLocation();
 
     public abstract int getCameraPosLlocation();
 }

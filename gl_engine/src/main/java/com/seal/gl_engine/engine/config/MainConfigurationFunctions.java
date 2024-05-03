@@ -42,7 +42,7 @@ public class MainConfigurationFunctions {
     public static void applyCameraSettings(CameraSettings cam) {
         Matrix.setLookAtM(mViewMatrix, 0, cam.eyeX, cam.eyeY, cam.eyeZ, cam.centerX, cam.centerY, cam.centerZ, cam.upX, cam.upY, cam.upZ);
         glUniformMatrix4fv(Shader.getActiveShader().getAdaptor().getCameraLocation(), 1, false, mViewMatrix, 0);
-        glUniform3f(Shader.getActiveShader().getAdaptor().getCameraPosLlocation(), cam.centerX, cam.centerY, cam.centerZ);
+        glUniform3f(Shader.getActiveShader().getAdaptor().getCameraPosLlocation(), cam.eyeX, cam.eyeY, cam.eyeZ);
     }
 
     public static void applyMatrix(float[] mMatrix) {

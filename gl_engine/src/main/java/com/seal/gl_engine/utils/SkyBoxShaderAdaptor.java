@@ -89,6 +89,11 @@ public class SkyBoxShaderAdaptor extends Adaptor {
     }
 
     @Override
+    public int getNormalMapEnableLocation() {
+        return -1;
+    }
+
+    @Override
     public int getCameraPosLlocation() {
         return viewMatrixLocation;
     }

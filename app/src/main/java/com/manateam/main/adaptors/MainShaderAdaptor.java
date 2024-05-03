@@ -14,7 +14,6 @@ import android.opengl.GLES30;
 
 import com.seal.gl_engine.engine.main.shaders.Adaptor;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
-import com.seal.gl_engine.engine.main.verticles.DrawableShape;
 import com.seal.gl_engine.engine.main.verticles.Face;
 
 import java.nio.ByteBuffer;
@@ -167,6 +166,11 @@ public class MainShaderAdaptor extends Adaptor {
 
     @Override
     public int getNormalTextureLocation() {
+        return -1;
+    }
+
+    @Override
+    public int getNormalMapEnableLocation() {
         return -1;
     }
 

@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import com.seal.gl_engine.Engine;
+import  com.seal.gl_engine.Engine;
 
 
 public class MainActivity extends Activity implements View.OnTouchListener {

@@ -1,27 +1,39 @@
 package com.manateam.main;
 
+import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.glClearColor;
+import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyCameraSettings;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
+import static com.seal.gl_engine.utils.Utils.cos;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.millis;
+import static com.seal.gl_engine.utils.Utils.radians;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
+import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.util.Log;
 
 import com.example.gl_engine_3_1.R;
+import com.manateam.main.adaptors.LightShaderAdaptor;
+import com.manateam.main.adaptors.MainShaderAdaptor;
+import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.camera.CameraSettings;
 import com.seal.gl_engine.engine.main.camera.ProjectionMatrixSettings;
+import com.seal.gl_engine.engine.main.light.AmbientLight;
+import com.seal.gl_engine.engine.main.light.DirectedLight;
+import com.seal.gl_engine.engine.main.light.Material;
+import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
@@ -29,10 +41,7 @@ import com.seal.gl_engine.engine.main.verticles.SkyBox;
 import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
-import com.manateam.main.adaptors.LightShaderAdaptor;
-import com.manateam.main.adaptors.MainShaderAdaptor;
-import com.manateam.main.adaptors.PointLight;
-import com.manateam.main.redrawFunctions.MainRedrawFunctions;
+import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer implements GamePageInterface {
     private final Poligon fpsPoligon;
@@ -41,7 +50,11 @@ public class SecondRenderer implements GamePageInterface {
     private final CameraSettings cameraSettings;
     private final Shape s;
     private SkyBox skyBox;
-    private PointLight pointLight, pointLight2;
+    private SourceLight sourceLight;
+    private final AmbientLight ambientLight;
+    private DirectedLight directedLight1;
+    private Material material;
+
 
     public SecondRenderer() {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -52,19 +65,39 @@ public class SecondRenderer implements GamePageInterface {
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
         s = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
-        pointLight = new PointLight(0, this);
-        pointLight.position = new Vec3(0, 0, 4);
-        pointLight.ambient = 0.2f;
-        pointLight.diffuse = 0.3f;
-        pointLight.specular = 0.3f;
 
-        pointLight2 = new PointLight(1, this);
-        pointLight2.position = new Vec3(4, 0, 0);
-        pointLight2.ambient = 0;
-        pointLight2.diffuse = 0.7f;
-        pointLight2.specular = 0.3f;
+        ambientLight = new AmbientLight(this);
+        // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
-        PointLight.count = 2;
+        directedLight1 = new DirectedLight(this);
+        directedLight1.direction = new Vec3(-1, 0, 0);
+        directedLight1.color = new Vec3(0.9f);
+        directedLight1.diffuse = 0.2f;
+        directedLight1.specular = 0.8f;
+       /* directedLight2 = new DirectedLight(this);
+        directedLight2.direction = new Vec3(0, 1, 0);
+        directedLight2.color = new Vec3(0.6f);
+        directedLight2.diffuse = 0.9f;
+        directedLight2.specular = 0.8f;
+
+        */
+        sourceLight = new SourceLight(this);
+        sourceLight.diffuse = 0.8f;
+        sourceLight.specular = 0.9f;
+        sourceLight.constant = 1f;
+        sourceLight.linear = 0.01f;
+        sourceLight.quadratic = 0.01f;
+        sourceLight.color = new Vec3(0.5f);
+        sourceLight.position = new Vec3(2.7f, 0, 0);
+        sourceLight.direction = new Vec3(-0.3f, 0, 0);
+        sourceLight.outerCutOff = cos(radians(40));
+        sourceLight.cutOff = cos(radians(30f));
+
+        material = new Material(this);
+        material.ambient = new Vec3(1);
+        material.specular = new Vec3(1);
+        material.diffuse = new Vec3(1);
+        material.shininess = 1.1f;
 
         skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
@@ -72,26 +105,27 @@ public class SecondRenderer implements GamePageInterface {
 
     @Override
     public void draw() {
-        //shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this);
+        GLES30.glDisable(GL_BLEND);
         cameraSettings.resetFor3d();
         projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ = 5;
-        cameraSettings.eyeY = -5;
+        cameraSettings.eyeZ = 0f;
+        cameraSettings.eyeX = 5f;
+        float x = 3.5f * Utils.sin(millis() / 1000.0f);
+        cameraSettings.centerY = 0;
+        cameraSettings.centerZ = x;
         applyShader(skyBoxShader);
         applyProjectionMatrix(projectionMatrixSettings);
         applyCameraSettings(cameraSettings);
         skyBox.prepareAndDraw();
-
         applyShader(lightShader);
-        pointLight.forwardData();
-        pointLight2.forwardData();
-        glClearColor(1f, 1,1,1);
-
+        material.apply();
+        glClearColor(1f, 1, 1, 1);
         applyCameraSettings(cameraSettings);
         applyProjectionMatrix(projectionMatrixSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
-        Matrix.scaleM(mMatrix,0,2f,2f,2f);
+        Matrix.translateM(mMatrix, 0, 0, -0f, 0);
+        Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
 
@@ -104,7 +138,7 @@ public class SecondRenderer implements GamePageInterface {
         applyCameraSettings(cameraSettings);
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        fpsPoligon.redrawParams.set(0, String.valueOf(millis()));
+        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
         fpsPoligon.redrawNow();
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
     }

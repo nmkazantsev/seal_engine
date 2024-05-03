@@ -10,14 +10,16 @@ public abstract class ShaderData {
         Shader.getActiveShader().getAdaptor().addLightAdaptor(this);
     }
 
-    public String getCreatorClassName() {
-        if(gamePageInterface!=null) {
+    protected String getCreatorClassName() {
+        if (gamePageInterface != null) {
             return gamePageInterface.getClass().getName();
         }
         return null;
     }
 
-    public abstract void getLocations(int programId);
+    protected abstract void getLocations(int programId);
 
-    public abstract void forwardData();
+    protected abstract void forwardData();
+
+    protected abstract void delete();
 }

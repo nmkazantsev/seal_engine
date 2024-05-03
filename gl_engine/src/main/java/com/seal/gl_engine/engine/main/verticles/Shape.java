@@ -14,6 +14,7 @@ import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glUniform1i;
 
 import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLUtils;
 
 import com.seal.gl_engine.GamePageInterface;
@@ -147,6 +148,13 @@ public class Shape implements VerticleSet, DrawableShape {
         }
         // юнит текстуры
         glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
+        
+        //enable or disable normal map in dhader
+        if (normalTexture != null) {
+            GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
+        } else {
+            GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 0);
+        }
         postToGlNeeded = false;
     }
 

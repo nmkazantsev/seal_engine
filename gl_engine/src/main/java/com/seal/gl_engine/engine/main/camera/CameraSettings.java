@@ -25,7 +25,7 @@ public class CameraSettings {
         eyeX=eyeY=0;
         eyeZ=7;
         centerX=centerY=centerZ=0;
-        upX=upZ=0;
+       // upX=upZ=0;
         upY=1;
     }
     public void resetFor2d() {

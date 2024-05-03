@@ -19,7 +19,7 @@ import static android.opengl.GLES30.glShaderSource;
 import static android.opengl.GLES32.GL_GEOMETRY_SHADER;
 
 import android.content.Context;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.util.Log;
 
 import com.seal.gl_engine.utils.Utils;
@@ -42,6 +42,7 @@ public class ShaderUtils {
         glGetProgramiv(programId, GL_LINK_STATUS, linkStatus, 0);
         if (linkStatus[0] == 0) {
             Log.e("error compiling shaders", String.valueOf(glGetError()));
+            Log.e("Load Shader Failed" , "loading\n" + GLES30.glGetProgramInfoLog(programId));
             glDeleteProgram(programId);
             return 0;
         }
@@ -63,6 +64,7 @@ public class ShaderUtils {
         glGetProgramiv(programId, GL_LINK_STATUS, linkStatus, 0);
         if (linkStatus[0] == 0) {
             Log.e("error compiling shaders", String.valueOf(glGetError()));
+            Log.e("Load Shader Failed" , "loading\n" + GLES30.glGetProgramInfoLog(programId));
             glDeleteProgram(programId);
             return 0;
         }
@@ -79,7 +81,7 @@ public class ShaderUtils {
     static int createShader(int type, String shaderText) {
         final int shaderId = glCreateShader(type);
         if (shaderId == 0) {
-            Log.e("Load Shader Failed" + shaderText, "loading\n" + GLES20.glGetShaderInfoLog(shaderId));
+            Log.e("Load Shader Failed" + shaderText, "loading\n" + GLES30.glGetShaderInfoLog(shaderId));
 
             return 0;
         }
@@ -88,7 +90,7 @@ public class ShaderUtils {
         final int[] compileStatus = new int[1];
         glGetShaderiv(shaderId, GL_COMPILE_STATUS, compileStatus, 0);
         if (compileStatus[0] == 0) {
-            Log.e("Load Shader Failed" + shaderText, "Compilation\n" + GLES20.glGetShaderInfoLog(shaderId));
+            Log.e("Load Shader Failed" + shaderText, "Compilation\n" + GLES30.glGetShaderInfoLog(shaderId));
             glDeleteShader(shaderId);
             return 0;
         }
