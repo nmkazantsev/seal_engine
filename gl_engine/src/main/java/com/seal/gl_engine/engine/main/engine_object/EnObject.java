@@ -13,6 +13,7 @@ import com.seal.gl_engine.utils.Utils;
 import java.util.Arrays;
 
 public class EnObject {
+    private float objScale = 1;
     private final Shape shape;
     private float[] posMatrix;
     private float[] rotMatrix;
@@ -73,6 +74,10 @@ public class EnObject {
         Animator.unfreezeAnimations(this);
     }
 
+    public void setObjScale(float scale) {
+        this.objScale = scale;
+    }
+
     public void prepareAndDraw() {
         Animator.animate(this);
         float[] b = new float[16];
@@ -81,6 +86,7 @@ public class EnObject {
         Matrix.rotateM(b, 0, rotMatrix[0], 1, 0, 0);
         Matrix.rotateM(b, 0, rotMatrix[1], 0, 1, 0);
         Matrix.rotateM(b, 0, rotMatrix[2], 0, 0, 1);
+        Matrix.scaleM(b, 0, objScale, objScale, objScale);
         applyMatrix(b);
         shape.prepareAndDraw();
     }
