@@ -21,7 +21,7 @@ import com.seal.gl_engine.engine.main.engine_object.EnObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
-import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
+import com.seal.gl_engine.engine.main.verticles.SimplePolygon;
 import com.seal.gl_engine.maths.Point;
 import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.MainShaderAdaptor;
@@ -33,7 +33,7 @@ public class MainRenderer implements GamePageInterface {
     private final Shader shader;
     private final ProjectionMatrixSettings projectionMatrixSettings;
     private final CameraSettings cameraSettings;
-    private static SimplePoligon simplePolygon;
+    private static SimplePolygon simplePolygon;
     private final EnObject s;
     //private final Shape s2;
     boolean f = true;
@@ -49,7 +49,7 @@ public class MainRenderer implements GamePageInterface {
         cameraSettings.resetFor3d();
         projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
         if (simplePolygon == null) {
-            simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
+            simplePolygon = new SimplePolygon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePolygon.redrawNow();
         }
         s = new EnObject(new Shape("building_big.obj", "box.jpg", this)); //new EnObject(new Shape("tank.obj", "cube.png", this));

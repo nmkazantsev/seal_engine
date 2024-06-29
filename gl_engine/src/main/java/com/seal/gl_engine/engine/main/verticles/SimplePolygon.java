@@ -8,14 +8,21 @@ import com.seal.gl_engine.engine.main.images.PImage;
 import java.util.List;
 import java.util.function.Function;
 
-public class SimplePoligon extends Poligon {
-    public SimplePoligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
+public class SimplePolygon extends Poligon {
+    public SimplePolygon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
         super(redrawFunction, saveMemory, paramSize, page);
     }
 
     public void prepareAndDraw(float x, float y, float b, float z) {
         Point A = new Point(x, y, z);
         Point B = new Point(x + b, y, z);
+        Point C = new Point(x, y + b, z);
+        super.prepareAndDraw(A, B, C);
+    }
+
+    public void prepareAndDraw(float x, float y, float a, float b, float z) {
+        Point A = new Point(x, y, z);
+        Point B = new Point(x + a, y, z);
         Point C = new Point(x, y + b, z);
         super.prepareAndDraw(A, B, C);
     }
