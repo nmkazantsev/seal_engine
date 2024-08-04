@@ -107,12 +107,12 @@ public class MainRenderer implements GamePageInterface {
     }
 
     private Void touchStartedCallback(TouchPoint p) {
-        Log.e("touch", "started");
+      //  Log.e("touch", "started");
         return null;
     }
 
     private Void touchMovedCallback(TouchPoint p) {
-        Log.e("moved", String.valueOf(p.touchX));
+      //  Log.e("moved", String.valueOf(p.touchX));
         return null;
     }
 

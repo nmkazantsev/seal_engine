@@ -1,6 +1,5 @@
 package com.seal.gl_engine.engine.main.touch;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -20,7 +19,7 @@ import java.util.function.Function;
  */
 public class TouchProcessor {
     private static final List<MotionEvent> eventsQueue = new ArrayList<>();
-    private Integer touchId = 0;
+    private Integer touchId = -1;
     private final String creatorClassName;
     private static final HashMap<Integer, TouchProcessor> activeProcessors = new HashMap<>();
     private static final List<TouchProcessor> allProcessors = new ArrayList<>();
@@ -104,6 +103,7 @@ public class TouchProcessor {
                 } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN || event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                     touchStarted(event);
                 }
+                iterator.remove();//no need in this event any more
             }
         }
         pageChanged = false;
@@ -145,7 +145,6 @@ public class TouchProcessor {
             if (e.creatorClassName != null) {
                 if (!e.creatorClassName.equals(OpenGLRenderer.getPageClassName())) {
                     //do not call terminate here not to call touch ended
-                    Log.e("touch id removing", String.valueOf(e.touchId));
                     iterator2.remove();
                 }
             }
