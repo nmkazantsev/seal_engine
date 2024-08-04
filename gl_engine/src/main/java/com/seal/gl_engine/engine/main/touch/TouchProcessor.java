@@ -16,16 +16,20 @@ import java.util.function.Function;
 /**
  * A class, created for tracking touch.
  * On every new ouch it's object is being bind (in accordance with defined hitbox) to some touch and object's callbacks will be called for certain touch.
+ * All touch events are buffered and then processed in main thread, for it to be possible to call opengl functions
  */
 public class TouchProcessor {
+    private static final List<MotionEvent> eventsQueue = new ArrayList<>();
     private Integer touchId = 0;
-    private String creatorClassName = null;
+    private final String creatorClassName;
     private static final HashMap<Integer, TouchProcessor> activeProcessors = new HashMap<>();
     private static final List<TouchProcessor> allProcessors = new ArrayList<>();
-    private Function<MotionEvent, Boolean> checkHitboxCallback;
-    private Function<TouchPoint, Void> touchStartedCallback;
-    private Function<TouchPoint, Void> touchMovedCallback;
-    private Function<Void, Void> touchEndedCallback;
+    private final Function<MotionEvent, Boolean> checkHitboxCallback;
+    private final Function<TouchPoint, Void> touchStartedCallback;
+    private final Function<TouchPoint, Void> touchMovedCallback;
+    private final Function<Void, Void> touchEndedCallback;
+    public TouchPoint lastTouchPoint = null;
+    private static boolean pageChanged = false;
 
     /**
      * Create a new TouchProcessor
@@ -40,7 +44,7 @@ public class TouchProcessor {
                           Function<TouchPoint, Void> touchStartedCallback,
                           Function<TouchPoint, Void> touchMovedCallback,
                           Function<Void, Void> touchEndedCallback, GamePageInterface creatorPage) {
-        creatorClassName = (String) creatorPage.getClass().getName();
+        this.creatorClassName = creatorPage.getClass().getName();
         this.checkHitboxCallback = checkHitboxCallback;
         this.touchStartedCallback = touchStartedCallback;
         this.touchMovedCallback = touchMovedCallback;
@@ -59,64 +63,90 @@ public class TouchProcessor {
     private void terminate(MotionEvent event) {
         activeProcessors.remove(touchId);
         touchId = 0;
-        touchEndedCallback.apply(null);
+        if (touchEndedCallback != null) {
+            touchEndedCallback.apply(null);
+        }
     }
 
     private boolean checkHitbox(MotionEvent event) {
         return checkHitboxCallback.apply(event);
     }
 
-    private void delete() {
-        allProcessors.remove(this);
-        activeProcessors.remove(touchId);
-    }
-
     //**********STATIC METHODS********************
     public static boolean onTouch(View v, MotionEvent event) {
-        //if it is registered touch
-        if (activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null) != null) {
-            if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
-                touchMoved(event);
-            }
-            if (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP) {
-                touchEnded(event);
-            }
-        } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-            touchStarted(event);
-        } else { //if not registered and not started
-            Log.e("touch", "error in touch processor. Not registered event called with not touchStarted flag");
+        synchronized (eventsQueue) {
+            eventsQueue.add(event);
         }
-
         return true; //a listener has reacted on event
+    }
+
+    public static void processMotions() {
+        synchronized (eventsQueue) {
+            Iterator<MotionEvent> iterator = eventsQueue.iterator();
+            while (iterator.hasNext()) {
+                MotionEvent event = iterator.next();
+                //clean events if page changed
+                if (pageChanged) {
+                    iterator.remove();
+                    continue;
+                }
+                //if it is registered touch
+                TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
+                if (t != null) {
+                    if (t.creatorClassName.equals(OpenGLRenderer.getPageClassName())) {
+                        if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                            touchMoved(event);
+                        }
+                        if (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP || event.getActionMasked() == MotionEvent.ACTION_UP) {
+                            touchEnded(event);
+                        }
+                    }
+                } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN || event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                    touchStarted(event);
+                }
+            }
+        }
+        pageChanged = false;
     }
 
     private static void touchStarted(MotionEvent event) {
         for (TouchProcessor t : allProcessors) {
-            if (t.checkHitbox(event)) {
+            if (t.checkHitbox(event) && t.creatorClassName.equals(OpenGLRenderer.getPageClassName())) {
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
-                t.touchStartedCallback.apply(new TouchPoint(event.getX(), event.getY()));
+                t.lastTouchPoint = new TouchPoint(event.getX(), event.getY());
+                if (t.touchStartedCallback != null) {
+                    t.touchStartedCallback.apply(t.lastTouchPoint);
+                }
                 return;
             }
         }
     }
 
     private static void touchMoved(MotionEvent event) {
-        activeProcessors.get(event.getPointerId(event.getActionIndex())).touchMovedCallback.apply(new TouchPoint(event.getX(), event.getY()));
+        TouchProcessor t = activeProcessors.get(event.getPointerId(event.getActionIndex()));
+        t.lastTouchPoint = new TouchPoint(event.getX(), event.getY());
+        if (t.touchMovedCallback != null) {
+            t.touchMovedCallback.apply(t.lastTouchPoint);
+        }
     }
 
     private static void touchEnded(MotionEvent event) {
-        activeProcessors.get(event.getPointerId(event.getActionIndex())).terminate(event);
+        TouchProcessor t = activeProcessors.get(event.getPointerId(event.getActionIndex()));
+        t.terminate(event);
     }
 
-    protected static void onPageChange() {
-        Iterator<TouchProcessor> iterator = allProcessors.iterator();
-        while (iterator.hasNext()) {
-            TouchProcessor e = iterator.next();
+    public static void onPageChange() {
+        //clearing only through iterator, else concurrent modification error
+        activeProcessors.clear();
+        pageChanged = true;
+        Iterator<TouchProcessor> iterator2 = allProcessors.iterator();
+        while (iterator2.hasNext()) {
+            TouchProcessor e = iterator2.next();
             if (e.creatorClassName != null) {
                 if (!e.creatorClassName.equals(OpenGLRenderer.getPageClassName())) {
-                    e.terminate();
-                    e.delete();
-                    iterator.remove();
+                    //do not call terminate here not to call touch ended
+                    Log.e("touch id removing", String.valueOf(e.touchId));
+                    iterator2.remove();
                 }
             }
         }

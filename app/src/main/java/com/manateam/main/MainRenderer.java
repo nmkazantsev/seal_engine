@@ -12,6 +12,12 @@ import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
+import android.util.Log;
+import android.view.MotionEvent;
+
+import com.example.gl_engine_3_1.R;
+import com.manateam.main.adaptors.MainShaderAdaptor;
+import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.animator.Animator;
@@ -19,13 +25,12 @@ import com.seal.gl_engine.engine.main.camera.CameraSettings;
 import com.seal.gl_engine.engine.main.camera.ProjectionMatrixSettings;
 import com.seal.gl_engine.engine.main.engine_object.EnObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
+import com.seal.gl_engine.engine.main.touch.TouchPoint;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
-import com.example.gl_engine_3_1.R;
-import com.manateam.main.adaptors.MainShaderAdaptor;
-import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 
 public class MainRenderer implements GamePageInterface {
     private final Poligon fpsPolygon;
@@ -37,6 +42,7 @@ public class MainRenderer implements GamePageInterface {
     private final EnObject s;
     //private final Shape s2;
     boolean f = true;
+    private TouchProcessor touchProcessor;
 
     //  private FrameBuffer frameBuffer;
     public MainRenderer() {
@@ -62,6 +68,7 @@ public class MainRenderer implements GamePageInterface {
         // s.animMotion(0, 0, -6, 3000, 600, false);
 
         // s2 =  new Shape("building_big.obj","box.jpg",this);
+        touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
     }
 
     @Override
@@ -95,18 +102,23 @@ public class MainRenderer implements GamePageInterface {
         // frameBuffer.drawTexture(new Point(x/3,y/2),new Point(2*x/3,y/2),new Point(x/3,y));
     }
 
-    @Override
-    public void touchStarted() {
-        OpenGLRenderer.startNewPage(new SecondRenderer());
+    private Boolean touchProcHitbox(MotionEvent event) {
+        return event.getX() < x / 2;
     }
 
-    @Override
-    public void touchMoved() {
-
+    private Void touchStartedCallback(TouchPoint p) {
+        Log.e("touch", "started");
+        return null;
     }
 
-    @Override
-    public void touchEnded() {
+    private Void touchMovedCallback(TouchPoint p) {
+        Log.e("moved", String.valueOf(p.touchX));
+        return null;
+    }
 
+    private Void touchEndCallback(Void unused) {
+        Log.e("ended", "touch");
+        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
+        return null;
     }
 }
