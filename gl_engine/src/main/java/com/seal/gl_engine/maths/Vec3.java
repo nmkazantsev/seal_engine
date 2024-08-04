@@ -135,10 +135,10 @@ public class Vec3 {
      */
     public static Vec3 rotateVec3(Vec3 vec, Vec3 axis, float a) {
         //create empty translate matrix
-        float matrix[];
+        float [] matrix;
         matrix = resetTranslateMatrix(new float[16]);
         Matrix.rotateM(matrix, 0, a, axis.x, axis.y, axis.z);
-        float resultVec[] = new float[4];
+        float [] resultVec = new float[4];
         Matrix.multiplyMV(resultVec, 0, matrix, 0, new float[]{vec.x, vec.y, vec.z, 0}, 0);
         return new Vec3(resultVec[0], resultVec[1], resultVec[2]);
     }
@@ -150,10 +150,10 @@ public class Vec3 {
      */
     public void rotateVec3(Vec3 axis, float a) {
         //create empty translate matrix
-        float matrix[];
+        float [] matrix;
         matrix = resetTranslateMatrix(new float[16]);
         Matrix.rotateM(matrix, 0, a, axis.x, axis.y, axis.z);
-        float resultVec[] = new float[4];
+        float [] resultVec = new float[4];
         Matrix.multiplyMV(resultVec, 0, matrix, 0, new float[]{this.x, this.y, this.z, 0}, 0);
         //return new Vec3(resultVec[0], resultVec[1], resultVec[2]);
         this.x = resultVec[0];
