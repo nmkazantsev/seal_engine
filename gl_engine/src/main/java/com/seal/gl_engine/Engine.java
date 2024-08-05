@@ -82,6 +82,16 @@ public class Engine {
         return (configurationInfo.reqGlEsVersion >= 0x20000);
     }
 
+    /**
+     * Redefinition of OpenglRenderer.startNewPage(..). Calls the function above.
+     *
+     * @param pageInterface - object of new page
+     */
+    public static void StartNewPage(GamePageInterface pageInterface) {
+        OpenGLRenderer.startNewPage(pageInterface);
+    }
+
+
     public static boolean onTouch(View v, MotionEvent event) {
         int actionMask = event.getActionMasked();
         pointsNumber = event.getPointerCount();
