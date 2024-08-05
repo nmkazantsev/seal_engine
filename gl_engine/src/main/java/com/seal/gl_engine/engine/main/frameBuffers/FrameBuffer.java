@@ -67,7 +67,7 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
 
     public void drawTexture(Point a, Point b, Point d) {
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
-        float[][] vertexes = new float[][]{
+        float[][] vertices = new float[][]{
                 {a.x, a.y, a.z},
                 {d.x, d.y, d.z},
                 {b.x, b.y, b.z},
@@ -82,9 +82,9 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
         };
         Face face1 = new Face(
                 new Point[]{
-                        new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
-                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                        new Point(vertices[0][0], vertices[0][1], vertices[0][2]),
+                        new Point(vertices[1][0], vertices[1][1], vertices[1][2]),
+                        new Point(vertices[2][0], vertices[2][1], vertices[2][2]),
                 },
                 new Point[]{
                         new Point(textCoords[0][0], textCoords[0][1]),
@@ -94,9 +94,9 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
                 new Point(0, 0, 1));
         Face face2 = new Face(
                 new Point[]{
-                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
-                        new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                        new Point(vertices[1][0], vertices[1][1], vertices[1][2]),
+                        new Point(vertices[2][0], vertices[2][1], vertices[2][2]),
+                        new Point(vertices[3][0], vertices[3][1], vertices[3][2]),
                 },
                 new Point[]{
                         new Point(textCoords[1][0], textCoords[1][1]),
@@ -105,7 +105,7 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
                 },
                 new Point(0, 0, 1));
         Shader.getActiveShader().getAdaptor().bindData(new Face[]{face1, face2});
-        // помещаем текстуру в target 2D юнита 0
+        //place texture to target 2D of unit 0
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }

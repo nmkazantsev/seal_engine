@@ -24,14 +24,14 @@ public class Texture extends VRAMobject {
 
     @Override
     public void delete() {
-        glDeleteTextures(1, new int[]{id}, 0);//удалить текстуру с id texture, отступ ноль длина массива 1
+        glDeleteTextures(1, new int[]{id}, 0);//delete texture with id texture, offset zero, array length 1
     }
 
     protected int createTexture() {
         final int[] textureIds = new int[1];
-        //создаем пустой массив из одного элемента
-        //в этот массив OpenGL ES запишет свободный номер текстуры,
-        // получаем свободное имя текстуры, которое будет записано в names[0]
+        /*create an empty array of one element
+        OpenGL ES will write a free texture number to this array,
+        get a free texture name, which will be written to names[0]*/
         glGenTextures(1, textureIds, 0);
         if (textureIds[0] == 0) {
             return 0;
