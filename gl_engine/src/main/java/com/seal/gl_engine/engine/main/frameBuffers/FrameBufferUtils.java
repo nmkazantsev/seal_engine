@@ -5,16 +5,8 @@ import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 
 import android.opengl.GLES20;
-
-import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.GamePageInterface;
-
-import java.lang.ref.WeakReference;
-import java.util.Iterator;
-
 public class FrameBufferUtils {
-
-
     // https://www.programcreek.com/java-api-examples/?class=android.opengl.GLES20&method=glBindFramebuffer
     public static FrameBuffer createFrameBuffer(int width, int height, GamePageInterface page) {
         int[] frameBuffers = new int[1];
@@ -36,7 +28,7 @@ public class FrameBufferUtils {
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
-        int depthBuffer[] = new int[1];
+        int[] depthBuffer = new int[1];
         GLES20.glGenRenderbuffers(1, depthBuffer, 0);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthBuffer[0]);
         GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, width, height);
@@ -56,25 +48,13 @@ public class FrameBufferUtils {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
+    public void connectFramebuffer(FrameBuffer fb) {
+        connectFrameBuffer(fb.getFrameBuffer());
+    }
+
     public static void connectDefaultFrameBuffer() {
         // switch to the buffer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-
-
-    public static void onPageChanged() {
-        Iterator<WeakReference<FrameBuffer>> iterator = FrameBuffer.allFrameBuffers.iterator();
-        while (iterator.hasNext()) {
-            WeakReference<FrameBuffer> e = iterator.next();
-            if (!(e.get() == null)) {
-                if (e.get().getCreatorClassName() != null) {
-                    if (!e.get().getCreatorClassName().equals(OpenGLRenderer.getPageClassName())) {
-                        e.get().delete();
-                        iterator.remove();
-                    }
-                }
-            }
-        }
     }
 }

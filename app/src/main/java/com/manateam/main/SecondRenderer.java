@@ -43,11 +43,13 @@ public class SecondRenderer implements GamePageInterface {
     private final Shader shader, lightShader, skyBoxShader;
     Camera camera;
     private final Shape s;
-    private SkyBox skyBox;
+    private final SkyBox skyBox;
     private SourceLight sourceLight;
     private final AmbientLight ambientLight;
     private DirectedLight directedLight1;
     private Material material;
+
+    //private FrameBuffer frameBuffer;
 
 
     public SecondRenderer() {
@@ -93,6 +95,7 @@ public class SecondRenderer implements GamePageInterface {
 
         skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
+        //frameBuffer = FrameBufferUtils.createFrameBuffer((int) x, (int) y, this);
     }
 
     @Override
@@ -116,8 +119,9 @@ public class SecondRenderer implements GamePageInterface {
         Matrix.translateM(mMatrix, 0, 0, -0f, 0);
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
+        //FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-
+       // FrameBufferUtils.connectDefaultFrameBuffer();
 
         applyShader(shader);
         fpsPoligon.setRedrawNeeded(true);
@@ -128,6 +132,7 @@ public class SecondRenderer implements GamePageInterface {
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
         fpsPoligon.redrawNow();
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
+        //frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(Utils.x, y, 1));
     }
 
     @Override
