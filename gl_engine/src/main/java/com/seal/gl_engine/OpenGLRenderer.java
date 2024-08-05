@@ -69,10 +69,8 @@ public class OpenGLRenderer implements Renderer {
 
     private void gaphicsSetup() {
         Shader.updateAllLocations();
-        //Texture.reloadAll();
         VRAMobject.onRedraw();
         VectriesShapesManager.onRedrawSetup();
-        FrameBuffer.onRedraw();
     }
 
     private void setup() {
