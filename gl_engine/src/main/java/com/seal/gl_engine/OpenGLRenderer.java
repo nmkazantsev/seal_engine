@@ -16,7 +16,6 @@ import android.util.Log;
 import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
 import com.seal.gl_engine.utils.Utils;
@@ -134,7 +133,7 @@ public class OpenGLRenderer implements Renderer {
         gamePage = newPage;
         //Texture.onPageChanged();
         VRAMobject.onPageChange();
-        FrameBufferUtils.onPageChanged();
+        //FrameBufferUtils.onPageChanged();
         Shader.onPageChange();
     }
 

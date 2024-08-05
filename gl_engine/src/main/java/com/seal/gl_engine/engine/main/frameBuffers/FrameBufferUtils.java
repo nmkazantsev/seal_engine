@@ -56,25 +56,13 @@ public class FrameBufferUtils {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
+    public void connectFramebuffer(FrameBuffer fb) {
+        connectFrameBuffer(fb.getFrameBuffer());
+    }
+
     public static void connectDefaultFrameBuffer() {
         // switch to the buffer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-
-
-    public static void onPageChanged() {
-        Iterator<WeakReference<FrameBuffer>> iterator = FrameBuffer.allFrameBuffers.iterator();
-        while (iterator.hasNext()) {
-            WeakReference<FrameBuffer> e = iterator.next();
-            if (!(e.get() == null)) {
-                if (e.get().getCreatorClassName() != null) {
-                    if (!e.get().getCreatorClassName().equals(OpenGLRenderer.getPageClassName())) {
-                        e.get().delete();
-                        iterator.remove();
-                    }
-                }
-            }
-        }
     }
 }
