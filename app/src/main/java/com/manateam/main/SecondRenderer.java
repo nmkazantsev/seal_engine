@@ -16,7 +16,6 @@ import static com.seal.gl_engine.utils.Utils.radians;
 
 import android.opengl.GLES30;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.LightShaderAdaptor;
@@ -30,6 +29,7 @@ import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SkyBox;
@@ -49,7 +49,7 @@ public class SecondRenderer implements GamePageInterface {
     private DirectedLight directedLight1;
     private Material material;
 
-    //private FrameBuffer frameBuffer;
+    TouchProcessor touchProcessor;
 
 
     public SecondRenderer() {
@@ -95,7 +95,11 @@ public class SecondRenderer implements GamePageInterface {
 
         skyBox = new SkyBox("skybox/", "jpg", this);
         skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
-        //frameBuffer = FrameBufferUtils.createFrameBuffer((int) x, (int) y, this);
+
+        touchProcessor = new TouchProcessor(MotionEvent -> true, touchPoint -> {
+            OpenGLRenderer.startNewPage(new MainRenderer());
+            return null;
+        }, null, null, this);
     }
 
     @Override
@@ -133,21 +137,5 @@ public class SecondRenderer implements GamePageInterface {
         fpsPoligon.redrawNow();
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         //frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(Utils.x, y, 1));
-    }
-
-    @Override
-    public void touchStarted() {
-        Log.e("touch", "statred");
-        OpenGLRenderer.startNewPage(new MainRenderer());
-    }
-
-    @Override
-    public void touchMoved() {
-
-    }
-
-    @Override
-    public void touchEnded() {
-
     }
 }

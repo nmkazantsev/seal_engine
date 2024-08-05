@@ -15,7 +15,11 @@ import android.util.Log;
 
 import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.shaders.Shader;
+import com.seal.gl_engine.engine.main.textures.Texture;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
 import com.seal.gl_engine.utils.Utils;
 
@@ -80,7 +84,7 @@ public class OpenGLRenderer implements Renderer {
     public void onDrawFrame(GL10 arg0) {
         //calculate fps:
         if (Utils.millis() - prevFps > 100) {
-            fps = 1000.0f / (int) ((Utils.millis() - prevFps) / (float) cadrs);
+            fps = (float) 1000.0f / (int) ((Utils.millis() - prevFps) / (float) cadrs);
             prevFps = Utils.millis();
             cadrs = 0;
         }
@@ -88,7 +92,7 @@ public class OpenGLRenderer implements Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         draw();
         VectriesShapesManager.redrawAll();
-        touchEvent();
+        TouchProcessor.processMotions();
     }
 
     private void draw() {
@@ -98,40 +102,14 @@ public class OpenGLRenderer implements Renderer {
         gamePage.draw();
     }
 
-    public void touchEvent() {
-        for (int i = 0; i < Utils.min(Engine.touchEventsNumb, 100); i++) {
-            for (int j = 0; j < 10; j++) {
-                Engine.touches[j].x = Engine.touchEvents[i][j * 2];
-                Engine.touches[j].y = Engine.touchEvents[i][j * 2 + 1];
-            }
-            float y = Engine.touchEvents[i][20];
-            Engine.pointsNumber = Utils.parseInt(Engine.touchEvents[i][21]);
-            if (y == 0) {
-                touchStarted();
-                Engine.touchEvent = "";
-            }
-            if (y == 1) {
-                touchMoved();
-                Engine.touchEvent = "";
-            }
-            if (y == 2) {
-                touchEnded();
-                Engine.touchEvent = "";
-            }
-        }
-        Engine.touchEvents = new float[100][22];
-        Engine.touchEventsNumb = 0;
-    }
-
     public static void startNewPage(GamePageInterface newPage) {
         prevPageChangeTime = Utils.millis();
         gamePage = null;
         System.gc();
         gamePage = newPage;
-        //Texture.onPageChanged();
         VRAMobject.onPageChange();
-        //FrameBufferUtils.onPageChanged();
         Shader.onPageChange();
+        TouchProcessor.onPageChange();
     }
 
     public static long pageMillis() {
@@ -140,18 +118,5 @@ public class OpenGLRenderer implements Renderer {
 
     public static String getPageClassName() {
         return gamePage.getClass().getName();
-    }
-
-
-    static void touchStarted() {
-        gamePage.touchStarted();
-    }
-
-    static void touchMoved() {
-        gamePage.touchMoved();
-    }
-
-    static void touchEnded() {
-        gamePage.touchEnded();
     }
 }

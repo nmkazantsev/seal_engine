@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import  com.seal.gl_engine.Engine;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 
 
 public class MainActivity extends Activity implements View.OnTouchListener {
@@ -45,7 +46,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return Engine.onTouch(v, event);
+        return TouchProcessor.onTouch(v, event);
     }
 
     @Override

@@ -8,6 +8,12 @@ import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 
+import android.util.Log;
+import android.view.MotionEvent;
+
+import com.example.gl_engine_3_1.R;
+import com.manateam.main.adaptors.MainShaderAdaptor;
+import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
@@ -17,6 +23,8 @@ import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.engine_object.EnObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
+import com.seal.gl_engine.engine.main.touch.TouchPoint;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
@@ -48,6 +56,7 @@ public class MainRenderer implements GamePageInterface {
         s.animRotation(0f, 0f, 90f, 3000, 0, false);
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
+        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
     }
 
     @Override
@@ -74,18 +83,20 @@ public class MainRenderer implements GamePageInterface {
         simplePolygon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
     }
 
-    @Override
-    public void touchStarted() {
-        OpenGLRenderer.startNewPage(new SecondRenderer());
+    private Boolean touchProcHitbox(MotionEvent event) {
+        return event.getX() < x / 2;
     }
 
-    @Override
-    public void touchMoved() {
-
+    private Void touchStartedCallback(TouchPoint p) {
+        return null;
     }
 
-    @Override
-    public void touchEnded() {
+    private Void touchMovedCallback(TouchPoint p) {
+        return null;
+    }
 
+    private Void touchEndCallback(Void unused) {
+        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
+        return null;
     }
 }
