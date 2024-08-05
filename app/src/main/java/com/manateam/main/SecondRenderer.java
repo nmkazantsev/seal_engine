@@ -30,8 +30,6 @@ import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.camera.CameraSettings;
 import com.seal.gl_engine.engine.main.camera.ProjectionMatrixSettings;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.Material;

@@ -95,8 +95,6 @@ public class Engine {
     public static boolean onTouch(View v, MotionEvent event) {
         int actionMask = event.getActionMasked();
         pointsNumber = event.getPointerCount();
-        // touches = new touch[pointsNumber];
-        ////Log.i("",String.valueOf(pointsNumber));
         for (int i = 0; i < Math.min(pointsNumber, 49); i++) {
             tch[i][0] = event.getX(i);
             tch[i][1] = event.getY(i);
@@ -106,16 +104,6 @@ public class Engine {
             }
             touchEvents[touchEventsNumb][i * 2] = event.getX(i);
             touchEvents[touchEventsNumb][i * 2 + 1] = event.getY(i);
-           /* if (callAlertHitbox != null) {
-                if (callAlertHitbox.checkHitbox(event.getX(i), event.getY(i))) {
-                    if (!enterTextAlertIsShown) {
-                        showAlertDialog();
-                        Log.e("alert", "showing");
-                        break;//exit because we will not need to check touch on main screen any more
-                    }
-                }
-            }
-            */
         }
         touchEvents[touchEventsNumb][21] = pointsNumber;
         if (actionMask == MotionEvent.ACTION_DOWN || actionMask == MotionEvent.ACTION_POINTER_DOWN) {

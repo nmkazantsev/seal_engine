@@ -14,7 +14,6 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
 import com.seal.gl_engine.engine.main.VRAMobject;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
