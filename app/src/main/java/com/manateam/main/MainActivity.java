@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return TouchProcessor.onTouch(v, event);//Engine.onTouch(v, event);
+        return TouchProcessor.onTouch(v, event);
     }
 
     @Override

@@ -42,7 +42,6 @@ public class MainRenderer implements GamePageInterface {
     private final EnObject s;
     //private final Shape s2;
     boolean f = true;
-    private TouchProcessor touchProcessor;
 
     //  private FrameBuffer frameBuffer;
     public MainRenderer() {
@@ -68,7 +67,7 @@ public class MainRenderer implements GamePageInterface {
         // s.animMotion(0, 0, -6, 3000, 600, false);
 
         // s2 =  new Shape("building_big.obj","box.jpg",this);
-        touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
     }
 
     @Override
