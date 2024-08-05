@@ -32,7 +32,6 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
     }
 
     public void onRedrawSetup() {
-        //this.delete();
         int[] frameBuffers = new int[1];
         GLES20.glGenFramebuffers(1, frameBuffers, 0);
 
