@@ -71,7 +71,7 @@ public class Shape implements VerticleSet, DrawableShape {
             } catch (IOException e) {
                 Log.e("ERROR LOADING", fileName);
             }
-            //конвертируем в Face
+            //convert to Face
             this.faces = new Face[object.getNumFaces()];
             for (int i = 0; i < object.getNumFaces(); i++) {
                 faces[i] = new Face(new Point[]{
@@ -125,7 +125,7 @@ public class Shape implements VerticleSet, DrawableShape {
             vboLoaded = true;
         }
 
-        // помещаем текстуру в target 2D юнита 0
+        // place texture in target 2D unit 0
         glActiveTexture(GL_TEXTURE0);
         if (!postToGlNeeded) {
             glBindTexture(GL_TEXTURE_2D, texture.getId());
@@ -133,10 +133,10 @@ public class Shape implements VerticleSet, DrawableShape {
         if (postToGlNeeded) {
             postToGl();
         }
-        // юнит текстуры
+        // texture unit
         glUniform1i(Shader.getActiveShader().getAdaptor().getTextureLocation(), 0);
 
-        // помещаем текстуру в target 2D юнита 0
+        //  place texture in target 2D unit 0
         glActiveTexture(GL_TEXTURE1);
         if (!postToGlNeeded && normalTexture != null) {
             glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
@@ -144,7 +144,7 @@ public class Shape implements VerticleSet, DrawableShape {
         if (postToGlNeeded) {
             postToGlNormals();
         }
-        // юнит текстуры
+        //texture unit
         glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
 
         //enable or disable normal map in shader
