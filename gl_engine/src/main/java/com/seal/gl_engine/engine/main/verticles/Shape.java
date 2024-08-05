@@ -16,6 +16,7 @@ import static android.opengl.GLES20.glUniform1i;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.engine.main.images.PImage;
@@ -68,7 +69,7 @@ public class Shape implements VerticleSet, DrawableShape {
                 object = ObjUtils.convertToRenderable(
                         ObjReader.read(inputStream));
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("ERROR LOADING", fileName);
             }
             //конвертируем в Face
             this.faces = new Face[object.getNumFaces()];
@@ -119,10 +120,7 @@ public class Shape implements VerticleSet, DrawableShape {
 
     public void bindData() {
         if (!vboLoaded) {
-            if (vertexBuffer != null) {
-                //vertexBuffer.delete(); //ACHUTNG! MAY CAUSE MEMORY PROBLEMS WITH BUFFERS!
-            }
-            vertexBuffer = new VertexBuffer(5); //5 because 5 types of coordinates so we need 5 buffers
+            vertexBuffer = new VertexBuffer(5, creator); //5 because 5 types of coordinates so we need 5 buffers
             Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
             vboLoaded = true;
         }
@@ -148,7 +146,7 @@ public class Shape implements VerticleSet, DrawableShape {
         }
         // юнит текстуры
         glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
-        
+
         //enable or disable normal map in shader
         if (normalTexture != null) {
             GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
