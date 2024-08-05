@@ -27,7 +27,7 @@ public class FrameBuffer implements DrawableShape {
     private int w;
     private int h;
     private String creatorClassName;
-    private float[][] vertexes,textCoords;
+    private float[][] vertexes, textCoords;
 
     public FrameBuffer(int frameBuffer, int depth, int texture, GamePageInterface page) {
         this.frameBuffer = frameBuffer;

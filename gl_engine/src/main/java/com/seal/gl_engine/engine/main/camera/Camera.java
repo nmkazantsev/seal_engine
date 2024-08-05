@@ -15,7 +15,7 @@ public class Camera {
 
     /**
      * A constructor to create new game camera. Resets CameraSettings and ProjectionMatrix Settings for 3d drawing.
-     * Takes x and y dimensions equals to screen size.
+     * Takes x and y dimensions equal to screen size.
      */
     public Camera() {
         cameraSettings = new CameraSettings(x, y);
@@ -56,9 +56,9 @@ public class Camera {
     }
 
     /**
-     * applies camera and projection matrix.
+     * applies camera and projection matrices.
      *
-     * @param perspectiveEnabled enable or disable perspective.
+     * @param perspectiveEnabled enables or disables perspective.
      */
     public void apply(boolean perspectiveEnabled) {
         applyCameraSettings(cameraSettings);

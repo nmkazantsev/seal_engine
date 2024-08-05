@@ -86,10 +86,10 @@ public class Poligon implements VerticleSet, DrawableShape {
         };
         face1 = new Face(
                 new Point[]{
-                new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
-                new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
-        },
+                        new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
+                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                },
                 new Point[]{
                         new Point(textCoords[0][0], textCoords[0][1]),
                         new Point(textCoords[1][0], textCoords[1][1]),
@@ -98,10 +98,10 @@ public class Poligon implements VerticleSet, DrawableShape {
                 new Point(0, 0, 1));
         face2 = new Face(
                 new Point[]{
-                new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
-                new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
-        },
+                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                        new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                },
                 new Point[]{
                         new Point(textCoords[1][0], textCoords[1][1]),
                         new Point(textCoords[2][0], textCoords[2][1]),
