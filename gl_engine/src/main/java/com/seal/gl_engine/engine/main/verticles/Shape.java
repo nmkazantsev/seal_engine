@@ -16,6 +16,7 @@ import static android.opengl.GLES20.glUniform1i;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.engine.main.images.PImage;
@@ -68,9 +69,9 @@ public class Shape implements VerticleSet, DrawableShape {
                 object = ObjUtils.convertToRenderable(
                         ObjReader.read(inputStream));
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("ERROR LOADING", fileName);
             }
-            //конвертируем в Face
+            //convert to Face
             this.faces = new Face[object.getNumFaces()];
             for (int i = 0; i < object.getNumFaces(); i++) {
                 faces[i] = new Face(new Point[]{
@@ -119,15 +120,12 @@ public class Shape implements VerticleSet, DrawableShape {
 
     public void bindData() {
         if (!vboLoaded) {
-            if (vertexBuffer != null) {
-                //vertexBuffer.delete(); //ACHUTNG! MAY CAUSE MEMORY PROBLEMS WITH BUFFERS!
-            }
-            vertexBuffer = new VertexBuffer(5); //5 because 5 types of coordinates so we need 5 buffers
+            vertexBuffer = new VertexBuffer(5, creator); //5 because 5 types of coordinates so we need 5 buffers
             Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
             vboLoaded = true;
         }
 
-        // помещаем текстуру в target 2D юнита 0
+        // place texture in target 2D unit 0
         glActiveTexture(GL_TEXTURE0);
         if (!postToGlNeeded) {
             glBindTexture(GL_TEXTURE_2D, texture.getId());
@@ -135,10 +133,10 @@ public class Shape implements VerticleSet, DrawableShape {
         if (postToGlNeeded) {
             postToGl();
         }
-        // юнит текстуры
+        // texture unit
         glUniform1i(Shader.getActiveShader().getAdaptor().getTextureLocation(), 0);
 
-        // помещаем текстуру в target 2D юнита 0
+        //  place texture in target 2D unit 0
         glActiveTexture(GL_TEXTURE1);
         if (!postToGlNeeded && normalTexture != null) {
             glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
@@ -146,10 +144,10 @@ public class Shape implements VerticleSet, DrawableShape {
         if (postToGlNeeded) {
             postToGlNormals();
         }
-        // юнит текстуры
+        //texture unit
         glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
-        
-        //enable or disable normal map in dhader
+
+        //enable or disable normal map in shader
         if (normalTexture != null) {
             GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
         } else {

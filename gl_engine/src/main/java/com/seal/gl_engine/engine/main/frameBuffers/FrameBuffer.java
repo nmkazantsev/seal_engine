@@ -10,52 +10,25 @@ import static android.opengl.GLES20.glDrawArrays;
 
 import android.opengl.GLES20;
 
+import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.DrawableShape;
 import com.seal.gl_engine.engine.main.verticles.Face;
 import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.maths.Point;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-public class FrameBuffer implements DrawableShape {
-    protected static List<WeakReference<FrameBuffer>> allFrameBuffers = new ArrayList<>();
-    private int texture, depth, frameBuffer;
+public class FrameBuffer extends VRAMobject implements DrawableShape {
+    private int texture;
+    private final int depth;
+    private int frameBuffer;
     private int w;
     private int h;
-    private String creatorClassName;
-    private float[][] vertexes,textCoords;
 
     public FrameBuffer(int frameBuffer, int depth, int texture, GamePageInterface page) {
+        super(page);
         this.frameBuffer = frameBuffer;
         this.texture = texture;
         this.depth = depth;
-        allFrameBuffers.add(new WeakReference<>(this));
-        if (page != null) {
-            this.creatorClassName = (String) page.getClass().getName();
-        }
-    }
-
-    public String getCreatorClassName() {
-        return creatorClassName;
-    }
-
-    public static void onRedraw() {
-        for (int i = 0; i < allFrameBuffers.size(); i++) {
-            if (allFrameBuffers.get(i).get() != null) {
-                allFrameBuffers.get(i).get().onRedrawSetup();
-            }
-        }
-        Iterator<WeakReference<FrameBuffer>> iterator = allFrameBuffers.iterator();
-        while (iterator.hasNext()) {
-            WeakReference<FrameBuffer> f = iterator.next();
-            if (f.get() == null) {
-                iterator.remove();
-            }
-        }
     }
 
     public void onRedrawSetup() {
@@ -65,7 +38,7 @@ public class FrameBuffer implements DrawableShape {
 
         this.frameBuffer = frameBuffers[0];
 
-        int frameBufferTextures[] = new int[1];
+        int[] frameBufferTextures = new int[1];
         if (this.texture != 0) {
             GLES20.glGenTextures(1, frameBufferTextures, 0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, frameBufferTextures[0]);
@@ -85,7 +58,7 @@ public class FrameBuffer implements DrawableShape {
 
         this.texture = frameBufferTextures[0];
 
-        int depthBuffer[] = new int[1];
+        int[] depthBuffer = new int[1];
         GLES20.glGenRenderbuffers(1, depthBuffer, 0);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthBuffer[0]);
         GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, w, h);
@@ -94,14 +67,14 @@ public class FrameBuffer implements DrawableShape {
 
     public void drawTexture(Point a, Point b, Point d) {
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
-        vertexes = new float[][]{
+        float[][] vertices = new float[][]{
                 {a.x, a.y, a.z},
                 {d.x, d.y, d.z},
                 {b.x, b.y, b.z},
                 {c.x, c.y, c.z}
         };
 
-        textCoords = new float[][]{
+        float[][] textCoords = new float[][]{
                 {0, 0},
                 {0, 1},
                 {1, 0},
@@ -109,9 +82,9 @@ public class FrameBuffer implements DrawableShape {
         };
         Face face1 = new Face(
                 new Point[]{
-                        new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
-                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                        new Point(vertices[0][0], vertices[0][1], vertices[0][2]),
+                        new Point(vertices[1][0], vertices[1][1], vertices[1][2]),
+                        new Point(vertices[2][0], vertices[2][1], vertices[2][2]),
                 },
                 new Point[]{
                         new Point(textCoords[0][0], textCoords[0][1]),
@@ -121,9 +94,9 @@ public class FrameBuffer implements DrawableShape {
                 new Point(0, 0, 1));
         Face face2 = new Face(
                 new Point[]{
-                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
-                        new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                        new Point(vertices[1][0], vertices[1][1], vertices[1][2]),
+                        new Point(vertices[2][0], vertices[2][1], vertices[2][2]),
+                        new Point(vertices[3][0], vertices[3][1], vertices[3][2]),
                 },
                 new Point[]{
                         new Point(textCoords[1][0], textCoords[1][1]),
@@ -132,7 +105,7 @@ public class FrameBuffer implements DrawableShape {
                 },
                 new Point(0, 0, 1));
         Shader.getActiveShader().getAdaptor().bindData(new Face[]{face1, face2});
-        // помещаем текстуру в target 2D юнита 0
+        //place texture to target 2D of unit 0
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
@@ -169,5 +142,10 @@ public class FrameBuffer implements DrawableShape {
         glDeleteFramebuffers(1, new int[]{getFrameBuffer()}, 0);
         glDeleteRenderbuffers(1, new int[]{getDepth()}, 0);
         glDeleteTextures(1, new int[]{getTexture()}, 0);
+    }
+
+    @Override
+    public void reload() {
+        onRedrawSetup();
     }
 }

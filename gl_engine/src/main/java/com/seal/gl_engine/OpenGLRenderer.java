@@ -7,19 +7,15 @@ import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
-import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
-import static com.seal.gl_engine.utils.Utils.parseInt;
 
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
+import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.engine.main.textures.Texture;
 import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
 import com.seal.gl_engine.utils.Utils;
 
@@ -72,9 +68,8 @@ public class OpenGLRenderer implements Renderer {
 
     private void gaphicsSetup() {
         Shader.updateAllLocations();
-        Texture.reloadAll();
+        VRAMobject.onRedraw();
         VectriesShapesManager.onRedrawSetup();
-        FrameBuffer.onRedraw();
     }
 
     private void setup() {
@@ -85,7 +80,7 @@ public class OpenGLRenderer implements Renderer {
     public void onDrawFrame(GL10 arg0) {
         //calculate fps:
         if (Utils.millis() - prevFps > 100) {
-            fps = 1000 / (int) ((Utils.millis() - prevFps) / (float) cadrs);
+            fps = 1000.0f / (int) ((Utils.millis() - prevFps) / (float) cadrs);
             prevFps = Utils.millis();
             cadrs = 0;
         }
@@ -97,7 +92,7 @@ public class OpenGLRenderer implements Renderer {
     }
 
     private void draw() {
-        if(gamePage==null){
+        if (gamePage == null) {
             startNewPage(Engine.getStartPage.apply(null));
         }
         gamePage.draw();
@@ -133,8 +128,9 @@ public class OpenGLRenderer implements Renderer {
         gamePage = null;
         System.gc();
         gamePage = newPage;
-        Texture.onPageChanged();
-        FrameBufferUtils.onPageChanged();
+        //Texture.onPageChanged();
+        VRAMobject.onPageChange();
+        //FrameBufferUtils.onPageChanged();
         Shader.onPageChange();
     }
 
