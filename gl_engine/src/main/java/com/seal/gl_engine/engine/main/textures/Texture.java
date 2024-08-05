@@ -10,27 +10,21 @@ import static android.opengl.GLES20.glGenTextures;
 
 import android.opengl.GLES20;
 
-import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.engine.main.VRAMobject;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-public class Texture {
-    private static List<Texture> textures = new ArrayList<>();
+public class Texture extends VRAMobject {
     private int id;
-    private String creatorClassName = null;
 
     public Texture(GamePageInterface creator) {
-        textures.add(this);
-        if (creator == null) {
-            creatorClassName = null;
-        }
-        else {
-            creatorClassName = (String) creator.getClass().getName();
-        }
+        super(creator);
         id = createTexture();
+    }
+
+    @Override
+    public void delete() {
+        glDeleteTextures(1, new int[]{id}, 0);//удалить текстуру с id texture, отступ ноль длина массива 1
     }
 
     protected int createTexture() {
@@ -54,37 +48,8 @@ public class Texture {
         return textureIds[0];
     }
 
-    private String getCreatorClassName() {
-        return (String) creatorClassName;
-    }
-
-    private void reload() {
+    public void reload() {
         id = createTexture();//create it once again. Do not delete it, you may delete a previously created in this loop texture
-    }
-
-    public static void onPageChanged() {
-        Iterator<Texture> iterator = textures.iterator();
-        while (iterator.hasNext()) {
-            Texture e = iterator.next();
-            if (e.getCreatorClassName() != null) {
-                if (!e.getCreatorClassName().equals(OpenGLRenderer.getPageClassName())) {
-                    e.deleteTexture();
-                    iterator.remove();
-                }
-            }
-        }
-    }
-
-    public static void reloadAll() {
-        Iterator<Texture> iterator = textures.iterator();
-        while (iterator.hasNext()) {
-            Texture e = iterator.next();
-            e.reload();
-        }
-    }
-
-    public void deleteTexture() {
-        glDeleteTextures(1, new int[]{id}, 0);//удалить текстуру с id texture, отступ ноль длина массива 1
     }
 
     public int getId() {

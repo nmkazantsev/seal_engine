@@ -149,7 +149,7 @@ public class Shape implements VerticleSet, DrawableShape {
         // юнит текстуры
         glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
         
-        //enable or disable normal map in dhader
+        //enable or disable normal map in shader
         if (normalTexture != null) {
             GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
         } else {

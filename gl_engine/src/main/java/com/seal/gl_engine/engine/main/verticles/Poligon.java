@@ -23,20 +23,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-//это 3д glShape так теперь называется)
+/**это 3д glShape так теперь называется)
+ */
 public class Poligon implements VerticleSet, DrawableShape {
     private Face face1;
     private Face face2;
-    private boolean saveMemory;
-    private String creatorClassName;
+    private final boolean saveMemory;
+    private final String creatorClassName;
     float[] vertexes, textCoords;
-    private Texture texture;
+    private final Texture texture;
     protected boolean postToGlNeeded = true;
     protected boolean redrawNeeded = true;
     public PImage image;
     public List<Object> redrawParams = new ArrayList<>();//change it in the way you like
 
-    private Function<List<Object>, PImage> redrawFunction;
+    private final Function<List<Object>, PImage> redrawFunction;
 
 
     public Poligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
@@ -51,12 +52,12 @@ public class Poligon implements VerticleSet, DrawableShape {
         if (page == null) {
             creatorClassName = null;
         } else {
-            creatorClassName = (String) page.getClass().getName();
+            creatorClassName =  page.getClass().getName();
         }
     }
 
     public void newParamsSize(int paramSize) {
-        redrawParams = new ArrayList<Object>();
+        redrawParams = new ArrayList<>();
         for (int i = 0; i < paramSize; i++) {
             redrawParams.add("");
         }
