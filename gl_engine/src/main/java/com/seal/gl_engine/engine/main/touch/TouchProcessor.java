@@ -103,7 +103,7 @@ public class TouchProcessor {
                 } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN || event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                     touchStarted(event);
                 }
-                iterator.remove();//no need in this event any more
+                iterator.remove();//no need in this event to be buffered any more
             }
         }
         pageChanged = false;

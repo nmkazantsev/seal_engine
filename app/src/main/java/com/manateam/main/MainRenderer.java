@@ -40,7 +40,6 @@ public class MainRenderer implements GamePageInterface {
     private final CameraSettings cameraSettings;
     private static SimplePoligon simplePolygon;
     private final EnObject s;
-    //private final Shape s2;
     boolean f = true;
 
     //  private FrameBuffer frameBuffer;
@@ -62,11 +61,7 @@ public class MainRenderer implements GamePageInterface {
         s.animMotion(1f, 0f, -6f, 1000, 0, false);
         s.animRotation(0f, 0f, 90f, 3000, 0, false);
         s.animRotation(90f, 0, 0, 1000, 3000, false);
-        //s.animPivotRotation(0, 0, 0, 1, 1, 1, 1000, 5000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
-        // s.animMotion(0, 0, -6, 3000, 600, false);
-
-        // s2 =  new Shape("building_big.obj","box.jpg",this);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
     }
 
@@ -86,7 +81,6 @@ public class MainRenderer implements GamePageInterface {
         applyProjectionMatrix(projectionMatrixSettings);
         // connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-        // s2.prepareAndDraw();
         fpsPolygon.setRedrawNeeded(true);
         cameraSettings.resetFor2d();
         projectionMatrixSettings.resetFor2d();
@@ -106,17 +100,14 @@ public class MainRenderer implements GamePageInterface {
     }
 
     private Void touchStartedCallback(TouchPoint p) {
-      //  Log.e("touch", "started");
         return null;
     }
 
     private Void touchMovedCallback(TouchPoint p) {
-      //  Log.e("moved", String.valueOf(p.touchX));
         return null;
     }
 
     private Void touchEndCallback(Void unused) {
-        Log.e("ended", "touch");
         OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
         return null;
     }
