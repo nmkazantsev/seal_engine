@@ -4,9 +4,7 @@ import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
-import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyCameraSettings;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
-import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyProjectionMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.cos;
@@ -15,8 +13,6 @@ import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.millis;
 import static com.seal.gl_engine.utils.Utils.radians;
-import static com.seal.gl_engine.utils.Utils.x;
-import static com.seal.gl_engine.utils.Utils.y;
 
 import android.opengl.GLES30;
 import android.opengl.Matrix;
@@ -28,8 +24,7 @@ import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageInterface;
 import com.seal.gl_engine.OpenGLRenderer;
-import com.seal.gl_engine.engine.main.camera.CameraSettings;
-import com.seal.gl_engine.engine.main.camera.ProjectionMatrixSettings;
+import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.Material;
@@ -46,8 +41,7 @@ import com.seal.gl_engine.utils.Utils;
 public class SecondRenderer implements GamePageInterface {
     private final Poligon fpsPoligon;
     private final Shader shader, lightShader, skyBoxShader;
-    private final ProjectionMatrixSettings projectionMatrixSettings;
-    private final CameraSettings cameraSettings;
+    Camera camera;
     private final Shape s;
     private SkyBox skyBox;
     private SourceLight sourceLight;
@@ -60,9 +54,7 @@ public class SecondRenderer implements GamePageInterface {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(R.raw.vertex_shader_light, R.raw.fragment_shader_light, this, new LightShaderAdaptor());
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
-        cameraSettings = new CameraSettings(x, y);
-        cameraSettings.resetFor3d();
-        projectionMatrixSettings = new ProjectionMatrixSettings(x, y);
+        camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
 
@@ -106,22 +98,19 @@ public class SecondRenderer implements GamePageInterface {
     @Override
     public void draw() {
         GLES30.glDisable(GL_BLEND);
-        cameraSettings.resetFor3d();
-        projectionMatrixSettings.resetFor3d();
-        cameraSettings.eyeZ = 0f;
-        cameraSettings.eyeX = 5f;
+        camera.resetFor3d();
+        camera.cameraSettings.eyeZ = 0f;
+        camera.cameraSettings.eyeX = 5f;
         float x = 3.5f * Utils.sin(millis() / 1000.0f);
-        cameraSettings.centerY = 0;
-        cameraSettings.centerZ = x;
+        camera.cameraSettings.centerY = 0;
+        camera.cameraSettings.centerZ = x;
         applyShader(skyBoxShader);
-        applyProjectionMatrix(projectionMatrixSettings);
-        applyCameraSettings(cameraSettings);
+        camera.apply();
         skyBox.prepareAndDraw();
         applyShader(lightShader);
         material.apply();
         glClearColor(1f, 1, 1, 1);
-        applyCameraSettings(cameraSettings);
-        applyProjectionMatrix(projectionMatrixSettings);
+        camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
         Matrix.translateM(mMatrix, 0, 0, -0f, 0);
@@ -132,10 +121,8 @@ public class SecondRenderer implements GamePageInterface {
 
         applyShader(shader);
         fpsPoligon.setRedrawNeeded(true);
-        cameraSettings.resetFor2d();
-        projectionMatrixSettings.resetFor2d();
-        applyProjectionMatrix(projectionMatrixSettings, false);
-        applyCameraSettings(cameraSettings);
+        camera.resetFor2d();
+       camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
