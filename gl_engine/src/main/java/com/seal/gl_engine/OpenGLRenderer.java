@@ -13,8 +13,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
-import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
+import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
@@ -100,7 +100,6 @@ public class OpenGLRenderer implements Renderer {
     }
 
     public static void startNewPage(GamePageInterface newPage) {
-        prevPageChangeTime = Utils.millis();
         gamePage = null;
         System.gc();
         gamePage = newPage;
@@ -116,5 +115,9 @@ public class OpenGLRenderer implements Renderer {
 
     public static String getPageClassName() {
         return gamePage.getClass().getName();
+    }
+
+    public static void resetPageMillis() {
+        prevPageChangeTime = Utils.millis();
     }
 }

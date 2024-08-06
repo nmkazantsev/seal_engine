@@ -38,7 +38,7 @@ import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
-public class SecondRenderer implements GamePageInterface {
+public class SecondRenderer extends GamePageInterface {
     private final Poligon fpsPoligon;
     private final Shader shader, lightShader, skyBoxShader;
     Camera camera;

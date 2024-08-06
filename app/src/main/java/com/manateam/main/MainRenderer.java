@@ -27,7 +27,7 @@ import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
 
-public class MainRenderer implements GamePageInterface {
+public class MainRenderer extends GamePageInterface {
     private final Poligon fpsPolygon;
     private final Poligon polygon;
     private final Shader shader;
