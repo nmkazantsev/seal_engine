@@ -10,14 +10,14 @@ import static android.opengl.GLES20.glGenTextures;
 
 import android.opengl.GLES20;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.VRAMobject;
 
 
 public class Texture extends VRAMobject {
     private int id;
 
-    public Texture(GamePageInterface creator) {
+    public Texture(GamePageClass creator) {
         super(creator);
         id = createTexture();
     }

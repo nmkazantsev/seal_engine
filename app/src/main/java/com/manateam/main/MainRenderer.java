@@ -14,7 +14,7 @@ import android.view.MotionEvent;
 import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
@@ -27,7 +27,7 @@ import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
 
-public class MainRenderer extends GamePageInterface {
+public class MainRenderer extends GamePageClass {
     private final Poligon fpsPolygon;
     private final Poligon polygon;
     private final Shader shader;
@@ -47,17 +47,15 @@ public class MainRenderer extends GamePageInterface {
             simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePolygon.redrawNow();
         }
-        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
-    }
-
-    public void initialize() {
         s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
         s.animRotation(0f, 0f, 90f, 3000, 1000, false);
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
+        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
     }
+
 
     @Override
     public void draw() {

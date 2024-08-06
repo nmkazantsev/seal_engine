@@ -6,8 +6,6 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -31,9 +29,9 @@ public class Engine {
 
     private GLSurfaceView glSurfaceView;
     public Context context;
-    protected static Function<Void, GamePageInterface> getStartPage;
+    protected static Function<Void, GamePageClass> getStartPage;
 
-    public GLSurfaceView onCreate(Context c, Function<Void, GamePageInterface> getStartPage, boolean landscape) {
+    public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape) {
         Engine.getStartPage = getStartPage;
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -71,7 +69,7 @@ public class Engine {
         return glSurfaceView;
     }
 
-    public void startPage(GamePageInterface pageInterface) {
+    public void startPage(GamePageClass pageInterface) {
         OpenGLRenderer.startNewPage(pageInterface);
     }
 
@@ -87,7 +85,7 @@ public class Engine {
      *
      * @param pageInterface - object of new page
      */
-    public static void StartNewPage(GamePageInterface pageInterface) {
+    public static void StartNewPage(GamePageClass pageInterface) {
         OpenGLRenderer.startNewPage(pageInterface);
     }
 

@@ -29,7 +29,7 @@ public class OpenGLRenderer implements Renderer {
     private long prevFps;
     private int cadrs;
     public static float[] mMatrix = new float[16];
-    private static GamePageInterface gamePage;
+    private static GamePageClass gamePage;
     private boolean firstStart = true;
     private static long prevPageChangeTime = 0;
 
@@ -99,14 +99,13 @@ public class OpenGLRenderer implements Renderer {
         gamePage.draw();
     }
 
-    public static void startNewPage(GamePageInterface newPage) {
+    public static void startNewPage(GamePageClass newPage) {
         gamePage = null;
         System.gc();
         gamePage = newPage;
         VRAMobject.onPageChange();
         Shader.onPageChange();
         TouchProcessor.onPageChange();
-        gamePage.initialize();
     }
 
     public static long pageMillis() {

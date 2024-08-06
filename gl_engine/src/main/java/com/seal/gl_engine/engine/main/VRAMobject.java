@@ -1,7 +1,7 @@
 package com.seal.gl_engine.engine.main;
 
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public abstract class VRAMobject {
     private final String creator;
     private static final List<VRAMobject> allObjects = new ArrayList<>();//links to all objects
 
-    public VRAMobject(GamePageInterface creator) {
+    public VRAMobject(GamePageClass creator) {
         if (creator != null) {
             this.creator = creator.getClass().getName();
         } else {

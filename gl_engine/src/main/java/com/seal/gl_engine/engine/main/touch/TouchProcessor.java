@@ -3,7 +3,7 @@ package com.seal.gl_engine.engine.main.touch;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class TouchProcessor {
     public TouchProcessor(Function<MotionEvent, Boolean> checkHitboxCallback,
                           Function<TouchPoint, Void> touchStartedCallback,
                           Function<TouchPoint, Void> touchMovedCallback,
-                          Function<Void, Void> touchEndedCallback, GamePageInterface creatorPage) {
+                          Function<Void, Void> touchEndedCallback, GamePageClass creatorPage) {
         this.creatorClassName = creatorPage.getClass().getName();
         this.checkHitboxCallback = checkHitboxCallback;
         this.touchStartedCallback = touchStartedCallback;

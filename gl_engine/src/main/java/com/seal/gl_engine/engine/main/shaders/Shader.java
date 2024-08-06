@@ -5,7 +5,7 @@ import static com.seal.gl_engine.engine.main.shaders.ShaderUtils.createShaderPro
 import android.opengl.GLES20;
 
 import com.seal.gl_engine.OpenGLRenderer;
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ public class Shader { //means shader program
     private final Adaptor adaptor;
     private static Shader activeShader;
 
-    public Shader(int vertex, int fragment, GamePageInterface page, Adaptor adaptor) {
+    public Shader(int vertex, int fragment, GamePageClass page, Adaptor adaptor) {
         link = createShaderProgram(vertex, fragment);
         this.vertex = vertex;
         this.fragment = fragment;
@@ -34,7 +34,7 @@ public class Shader { //means shader program
         adaptor.setProgramId(link);
     }
 
-    public Shader(int vertex, int fragment, int geom, GamePageInterface page, Adaptor adaptor) {
+    public Shader(int vertex, int fragment, int geom, GamePageClass page, Adaptor adaptor) {
         link = createShaderProgram(vertex, fragment, geom);
         this.vertex = vertex;
         this.fragment = fragment;
