@@ -10,9 +10,9 @@ public abstract class ShaderData {
         Shader.getActiveShader().getAdaptor().addLightAdaptor(this);
     }
 
-    protected String getCreatorClassName() {
+    protected Class<?> getCreatorClass() {
         if (gamePageInterface != null) {
-            return gamePageInterface.getClass().getName();
+            return gamePageInterface.getClass();
         }
         return null;
     }

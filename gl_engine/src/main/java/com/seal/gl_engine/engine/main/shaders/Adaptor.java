@@ -22,7 +22,7 @@ public abstract class Adaptor {
             ShaderData e = iterator.next();
             if (e == null) {
                 iterator.remove();
-            } else if (e.getCreatorClassName() != null && !e.getCreatorClassName().equals(OpenGLRenderer.getPageClassName())) {
+            } else if (e.getCreatorClass() != null && !(e.getCreatorClass() == OpenGLRenderer.getPageClass())) {
                 e.delete();
                 iterator.remove();
             } else {

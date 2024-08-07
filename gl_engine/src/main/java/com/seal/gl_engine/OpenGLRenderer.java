@@ -114,7 +114,7 @@ public class OpenGLRenderer implements Renderer {
         return Utils.millis() - prevPageChangeTime;
     }
 
-    public static String getPageClassName() {
-        return gamePage.getClass().getName();
+    public static Class<?> getPageClass() {
+        return gamePage.getClass();
     }
 }
