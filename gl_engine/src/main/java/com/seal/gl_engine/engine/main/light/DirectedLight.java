@@ -4,7 +4,7 @@ import static android.opengl.GLES20.glGetUniformLocation;
 
 import android.opengl.GLES30;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.shaders.ShaderData;
 import com.seal.gl_engine.maths.Vec3;
 
@@ -24,8 +24,8 @@ public class DirectedLight extends ShaderData {
     private static final List<WeakReference<DirectedLight>> directLights = new ArrayList<>();
     private final WeakReference<DirectedLight> thisRef;//link to this object for deleting later
 
-    public DirectedLight(GamePageInterface gamePageInterface) {
-        super(gamePageInterface);
+    public DirectedLight(GamePageClass gamePageClass) {
+        super(gamePageClass);
         index = directLights.size();
         thisRef = new WeakReference<>(this);
         directLights.add(thisRef);

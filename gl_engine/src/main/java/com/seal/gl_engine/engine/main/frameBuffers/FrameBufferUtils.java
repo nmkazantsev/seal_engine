@@ -5,10 +5,10 @@ import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 
 import android.opengl.GLES20;
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 public class FrameBufferUtils {
     // https://www.programcreek.com/java-api-examples/?class=android.opengl.GLES20&method=glBindFramebuffer
-    public static FrameBuffer createFrameBuffer(int width, int height, GamePageInterface page) {
+    public static FrameBuffer createFrameBuffer(int width, int height, GamePageClass page) {
         int[] frameBuffers = new int[1];
         int[] frameBufferTextures = new int[1];
         GLES20.glGenFramebuffers(1, frameBuffers, 0);

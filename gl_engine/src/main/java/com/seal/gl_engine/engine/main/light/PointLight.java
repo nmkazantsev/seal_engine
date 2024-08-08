@@ -4,7 +4,7 @@ import static android.opengl.GLES20.glGetUniformLocation;
 
 import android.opengl.GLES30;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.shaders.ShaderData;
 import com.seal.gl_engine.maths.Vec3;
 
@@ -25,8 +25,8 @@ public class PointLight extends ShaderData {
     private final WeakReference<PointLight> thisRef;//link to this object for deleting later
 
 
-    public PointLight(GamePageInterface gamePageInterface) {
-        super(gamePageInterface);
+    public PointLight(GamePageClass gamePageClass) {
+        super(gamePageClass);
         index = pointLights.size();
         thisRef = new WeakReference<>(this);
         pointLights.add(thisRef);

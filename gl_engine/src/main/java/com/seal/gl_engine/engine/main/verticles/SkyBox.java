@@ -18,7 +18,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.seal.gl_engine.engine.main.textures.CubeMap;
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.maths.Point;
@@ -46,7 +46,7 @@ public class SkyBox implements VerticleSet {
 
     private final String[] names = new String[]{"right", "left", "bottom", "top", "front", "back"};
 
-    public SkyBox(String textureFileName, String res, GamePageInterface page) {
+    public SkyBox(String textureFileName, String res, GamePageClass page) {
         this.res = res;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;

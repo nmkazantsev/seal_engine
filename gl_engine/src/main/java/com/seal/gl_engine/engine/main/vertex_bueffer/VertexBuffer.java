@@ -8,7 +8,7 @@ import static android.opengl.GLES30.glDeleteVertexArrays;
 import static android.opengl.GLES30.glGenBuffers;
 import static android.opengl.GLES30.glGenVertexArrays;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.VRAMobject;
 
 public class VertexBuffer extends VRAMobject {
@@ -17,7 +17,7 @@ public class VertexBuffer extends VRAMobject {
 
     private final int vboNum;
 
-    public VertexBuffer(int vboNum, GamePageInterface creator) {
+    public VertexBuffer(int vboNum, GamePageClass creator) {
         super(creator);
         vbo = new int[vboNum];
         this.vboNum = vboNum;
