@@ -12,14 +12,14 @@ import java.util.List;
  * An abstract class for all objects, using video memory
  */
 public abstract class VRAMobject {
-    private final String creator;
+    private final Class<?> creator;
     private static final List<VRAMobject> allObjects = new ArrayList<>();//links to all objects
 
     public VRAMobject(GamePageClass creator) {
         if (creator != null) {
-            this.creator = creator.getClass().getName();
+            this.creator = creator.getClass();
         } else {
-            this.creator = "null";
+            this.creator = null;
         }
         allObjects.add(this);
     }
@@ -32,7 +32,7 @@ public abstract class VRAMobject {
         Iterator<VRAMobject> iterator = allObjects.iterator();
         while (iterator.hasNext()) {
             VRAMobject obj = iterator.next();
-            if (!obj.creator.equals(OpenGLRenderer.getPageClassName()) && !obj.creator.equals("null")) {
+            if (!(obj.creator == OpenGLRenderer.getPageClass()) && !(obj.creator == null)) {
                 obj.delete();
                 iterator.remove();
             }

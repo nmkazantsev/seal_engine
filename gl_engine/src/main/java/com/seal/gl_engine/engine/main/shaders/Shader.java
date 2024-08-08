@@ -17,7 +17,7 @@ public class Shader { //means shader program
     private final int vertex;
     private final int fragment;
     private int geom = -1;
-    private String page = "";
+    private Class<?> page;
     private boolean reloadNeeded = false;
     private final Adaptor adaptor;
     private static Shader activeShader;
@@ -27,7 +27,7 @@ public class Shader { //means shader program
         this.vertex = vertex;
         this.fragment = fragment;
         if (page != null) {
-            this.page = (String) page.getClass().getName();
+            this.page = page.getClass();
         }
         allShaders.add(this);
         this.adaptor = adaptor;
@@ -40,7 +40,7 @@ public class Shader { //means shader program
         this.fragment = fragment;
         this.geom = geom;
         if (page != null) {
-            this.page = (String) page.getClass().getName();
+            this.page = page.getClass();
         }
         allShaders.add(this);
         this.adaptor = adaptor;
@@ -66,10 +66,10 @@ public class Shader { //means shader program
     }
 
     private boolean unneeded() {
-        if (this.page.isEmpty()) {
+        if (this.page == null) {
             return false;
         }
-        if (!this.page.equals(OpenGLRenderer.getPageClassName())) {
+        if (!(this.page == OpenGLRenderer.getPageClass())) {
             this.delete();
             return true;
         }

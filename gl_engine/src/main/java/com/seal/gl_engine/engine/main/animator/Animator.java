@@ -164,8 +164,6 @@ public class Animator {
                 startTiming = st;
                 isActive = false;
             }
-            Log.e("st", Float.toString(st));
-            Log.e("timing", Float.toString(startTiming));
             this.tf = tf;
             this.vf = vf;
             this.args = args;
