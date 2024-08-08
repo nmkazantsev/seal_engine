@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class TouchProcessor {
     private static final List<MotionEvent> eventsQueue = new ArrayList<>();
     private Integer touchId = -1;
-    private final String creatorClassName;
+    private final Class<?> creatorClassName;
     private static final HashMap<Integer, TouchProcessor> activeProcessors = new HashMap<>();
     private static final List<TouchProcessor> allProcessors = new ArrayList<>();
     private final Function<MotionEvent, Boolean> checkHitboxCallback;
@@ -43,7 +43,7 @@ public class TouchProcessor {
                           Function<TouchPoint, Void> touchStartedCallback,
                           Function<TouchPoint, Void> touchMovedCallback,
                           Function<Void, Void> touchEndedCallback, GamePageInterface creatorPage) {
-        this.creatorClassName = creatorPage.getClass().getName();
+        this.creatorClassName = creatorPage.getClass();
         this.checkHitboxCallback = checkHitboxCallback;
         this.touchStartedCallback = touchStartedCallback;
         this.touchMovedCallback = touchMovedCallback;
@@ -92,7 +92,7 @@ public class TouchProcessor {
                 //if it is registered touch
                 TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
                 if (t != null) {
-                    if (t.creatorClassName.equals(OpenGLRenderer.getPageClassName())) {
+                    if (t.creatorClassName == OpenGLRenderer.getPageClass()) {
                         if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
                             touchMoved(event);
                         }
@@ -111,7 +111,7 @@ public class TouchProcessor {
 
     private static void touchStarted(MotionEvent event) {
         for (TouchProcessor t : allProcessors) {
-            if (t.checkHitbox(event) && t.creatorClassName.equals(OpenGLRenderer.getPageClassName())) {
+            if (t.checkHitbox(event) && (t.creatorClassName == OpenGLRenderer.getPageClass())) {
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(), event.getY());
                 if (t.touchStartedCallback != null) {
@@ -143,7 +143,7 @@ public class TouchProcessor {
         while (iterator2.hasNext()) {
             TouchProcessor e = iterator2.next();
             if (e.creatorClassName != null) {
-                if (!e.creatorClassName.equals(OpenGLRenderer.getPageClassName())) {
+                if (!(e.creatorClassName == OpenGLRenderer.getPageClass())) {
                     //do not call terminate here not to call touch ended
                     iterator2.remove();
                 }

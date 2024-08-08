@@ -2,6 +2,8 @@ package com.seal.gl_engine.engine.main.animator;
 
 import static com.seal.gl_engine.utils.Utils.contactArray;
 
+import android.util.Log;
+
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.engine_object.EnObject;
 import com.seal.gl_engine.utils.Utils;

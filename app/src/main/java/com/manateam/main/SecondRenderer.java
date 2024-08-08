@@ -44,10 +44,10 @@ public class SecondRenderer implements GamePageInterface {
     Camera camera;
     private final Shape s;
     private final SkyBox skyBox;
-    private SourceLight sourceLight;
+    private final SourceLight sourceLight;
     private final AmbientLight ambientLight;
-    private DirectedLight directedLight1;
-    private Material material;
+    private final DirectedLight directedLight1;
+    private final Material material;
 
     TouchProcessor touchProcessor;
 
@@ -101,6 +101,9 @@ public class SecondRenderer implements GamePageInterface {
             return null;
         }, null, null, this);
     }
+
+    @Override
+    public void initialize() {}
 
     @Override
     public void draw() {

@@ -7,13 +7,10 @@ import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyM
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
+import static com.seal.gl_engine.utils.Utils.x;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
-import com.example.gl_engine_3_1.R;
-import com.manateam.main.adaptors.MainShaderAdaptor;
-import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
@@ -36,7 +33,7 @@ public class MainRenderer implements GamePageInterface {
     private final Shader shader;
     private final Camera camera;
     private static SimplePoligon simplePolygon;
-    private final EnObject s;
+    private EnObject s;
     boolean f = true;
 
     public MainRenderer() {
@@ -50,13 +47,16 @@ public class MainRenderer implements GamePageInterface {
             simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePolygon.redrawNow();
         }
+        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+    }
+
+    public void initialize() {
         s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
-        s.animMotion(1f, 0f, -6f, 1000, 0, false);
-        s.animRotation(0f, 0f, 90f, 3000, 0, false);
+        s.animMotion(1f, 0f, -6f, 1000, 1000, false);
+        s.animRotation(0f, 0f, 90f, 3000, 1000, false);
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
-        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
     }
 
     @Override

@@ -15,10 +15,7 @@ import android.util.Log;
 
 import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.engine.main.textures.Texture;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
 import com.seal.gl_engine.utils.Utils;
@@ -84,7 +81,7 @@ public class OpenGLRenderer implements Renderer {
     public void onDrawFrame(GL10 arg0) {
         //calculate fps:
         if (Utils.millis() - prevFps > 100) {
-            fps = (float) 1000.0f / (int) ((Utils.millis() - prevFps) / (float) cadrs);
+            fps = 1000.0f / (int) ((Utils.millis() - prevFps) / (float) cadrs);
             prevFps = Utils.millis();
             cadrs = 0;
         }
@@ -110,13 +107,14 @@ public class OpenGLRenderer implements Renderer {
         VRAMobject.onPageChange();
         Shader.onPageChange();
         TouchProcessor.onPageChange();
+        gamePage.initialize();
     }
 
     public static long pageMillis() {
         return Utils.millis() - prevPageChangeTime;
     }
 
-    public static String getPageClassName() {
-        return gamePage.getClass().getName();
+    public static Class<?> getPageClass() {
+        return gamePage.getClass();
     }
 }
