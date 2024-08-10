@@ -33,7 +33,7 @@ public class MainRenderer extends GamePageClass {
     private final Shader shader;
     private final Camera camera;
     private static SimplePoligon simplePolygon;
-    private EnObject s;
+    private final EnObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
 
