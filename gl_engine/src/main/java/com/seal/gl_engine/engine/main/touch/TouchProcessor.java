@@ -61,6 +61,7 @@ public class TouchProcessor {
     }
 
     private void terminate(MotionEvent event) {
+        touchAlive = false;
         activeProcessors.remove(touchId);
         touchId = 0;
         if (touchEndedCallback != null) {
@@ -87,7 +88,7 @@ public class TouchProcessor {
                 MotionEvent event = iterator.next();
                 //clean events if page changed
                 if (pageChanged) {
-                    iterator.remove();
+                    iterator.remove(); //remove all without processing
                     continue;
                 }
                 //if it is registered touch
@@ -116,6 +117,7 @@ public class TouchProcessor {
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(), event.getY());
                 t.touchAlive = true;
+                t.touchId = event.getPointerId(event.getActionIndex());
                 if (t.touchStartedCallback != null) {
                     t.touchStartedCallback.apply(t.lastTouchPoint);
                 }
@@ -135,7 +137,6 @@ public class TouchProcessor {
     private static void touchEnded(MotionEvent event) {
         TouchProcessor t = activeProcessors.get(event.getPointerId(event.getActionIndex()));
         t.terminate(event);
-        t.touchAlive = false;
     }
 
     public static void onPageChange() {
@@ -156,6 +157,7 @@ public class TouchProcessor {
 
     /**
      * Get if touch is pressed at the moment of calling this.
+     *
      * @return true if finger is pressing, false if finger is released and this touch object is ready to capture new touch.
      */
     public boolean getTouchAlive() {
