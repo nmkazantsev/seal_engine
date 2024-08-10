@@ -21,7 +21,7 @@ import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.LightShaderAdaptor;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
@@ -38,7 +38,7 @@ import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
-public class SecondRenderer implements GamePageInterface {
+public class SecondRenderer extends GamePageClass {
     private final Poligon fpsPoligon;
     private final Shader shader, lightShader, skyBoxShader;
     Camera camera;
@@ -101,9 +101,6 @@ public class SecondRenderer implements GamePageInterface {
             return null;
         }, null, null, this);
     }
-
-    @Override
-    public void initialize() {}
 
     @Override
     public void draw() {

@@ -18,7 +18,7 @@ import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import android.util.Log;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.textures.Texture;
@@ -44,7 +44,7 @@ public class Shape implements VerticleSet, DrawableShape {
     private String normalMapFileName;
     private Obj object;
     private Face[] faces;
-    private final GamePageInterface creator;
+    private final GamePageClass creator;
 
     private boolean postToGlNeeded = true;
     private boolean redrawNeeded = true;
@@ -56,7 +56,7 @@ public class Shape implements VerticleSet, DrawableShape {
 
     private boolean vboLoaded = false;
 
-    public Shape(String fileName, String textureFileName, GamePageInterface page) {
+    public Shape(String fileName, String textureFileName, GamePageClass page) {
         creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
