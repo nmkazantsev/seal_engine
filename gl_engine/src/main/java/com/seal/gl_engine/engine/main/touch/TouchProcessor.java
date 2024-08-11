@@ -1,5 +1,6 @@
 package com.seal.gl_engine.engine.main.touch;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -63,7 +64,9 @@ public class TouchProcessor {
     private void terminate(MotionEvent event) {
         touchAlive = false;
         activeProcessors.remove(touchId);
-        touchId = 0;
+        Log.e("removed", String.valueOf(touchId));
+        Log.e("size", String.valueOf(activeProcessors.size()));
+        touchId = -1;
         if (touchEndedCallback != null) {
             touchEndedCallback.apply(null);
         }
@@ -75,8 +78,23 @@ public class TouchProcessor {
 
     //**********STATIC METHODS********************
     public static boolean onTouch(View v, MotionEvent event) {
+        TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
+        if (t != null) {
+            if (t.creatorClassName == OpenGLRenderer.getPageClass()) {
+                if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                    touchMoved(event);
+                }
+                if (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP || event.getActionMasked() == MotionEvent.ACTION_UP) {
+                    Log.e("touch ended", String.valueOf(event.getPointerId(event.getActionIndex())));
+                    touchEnded(event);
+                }
+            }
+        } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN || event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            Log.e("touch started", String.valueOf(event.getPointerId(event.getActionIndex())));
+            touchStarted(event);
+        }
         synchronized (eventsQueue) {
-            eventsQueue.add(event);
+            //eventsQueue.add(event);
         }
         return true; //a listener has reacted on event
     }
@@ -92,19 +110,21 @@ public class TouchProcessor {
                     continue;
                 }
                 //if it is registered touch
-                TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
+               /* TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
                 if (t != null) {
                     if (t.creatorClassName == OpenGLRenderer.getPageClass()) {
                         if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
                             touchMoved(event);
                         }
                         if (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP || event.getActionMasked() == MotionEvent.ACTION_UP) {
+                            Log.e("touch ended", String.valueOf(event.getPointerId(event.getActionIndex())));
                             touchEnded(event);
                         }
                     }
                 } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN || event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                    Log.e("touch started", String.valueOf(event.getPointerId(event.getActionIndex())));
                     touchStarted(event);
-                }
+                }*/
                 iterator.remove();//no need in this event to be buffered any more
             }
         }
@@ -113,7 +133,7 @@ public class TouchProcessor {
 
     private static void touchStarted(MotionEvent event) {
         for (TouchProcessor t : allProcessors) {
-            if (t.checkHitbox(event) && (t.creatorClassName == OpenGLRenderer.getPageClass())) {
+            if (t.checkHitbox(event) && (t.creatorClassName == OpenGLRenderer.getPageClass()) && !t.touchAlive) { //not to start the same processor twice if 2 touches in 1 area
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(), event.getY());
                 t.touchAlive = true;

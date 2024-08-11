@@ -8,7 +8,6 @@ import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
-import static com.seal.gl_engine.utils.Utils.y;
 
 import android.view.MotionEvent;
 
@@ -16,7 +15,6 @@ import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
-import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.engine_object.EnObject;
@@ -36,7 +34,7 @@ public class MainRenderer extends GamePageClass {
     private static SimplePoligon simplePolygon;
     private final EnObject s;
     boolean f = true;
-    private final TouchProcessor touchProcessor;
+    private final TouchProcessor touchProcessor, touchProcessor2;
 
     public MainRenderer() {
         Animator.initialize();
@@ -50,6 +48,7 @@ public class MainRenderer extends GamePageClass {
             simplePolygon.redrawNow();
         }
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
@@ -93,14 +92,11 @@ public class MainRenderer extends GamePageClass {
     }
 
     private Void touchMovedCallback(TouchPoint p) {
-        if (p.touchY > y / 2) {
-            touchProcessor.terminate();
-        }
         return null;
     }
 
     private Void touchEndCallback(Void unused) {
-        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
+        // OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
         return null;
     }
 }
