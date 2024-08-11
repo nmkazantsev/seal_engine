@@ -9,8 +9,6 @@ import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
 
-import android.view.MotionEvent;
-
 import com.example.gl_engine_3_1.R;
 import com.manateam.main.adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
@@ -79,12 +77,12 @@ public class MainRenderer extends GamePageClass {
         fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         if (touchProcessor.getTouchAlive()) {
-            simplePolygon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
+            simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }
     }
 
-    private Boolean touchProcHitbox(MotionEvent event) {
-        return event.getX() < x / 2;
+    private Boolean touchProcHitbox(TouchPoint event) {
+        return event.touchX < x / 2;
     }
 
     private Void touchStartedCallback(TouchPoint p) {
@@ -95,7 +93,7 @@ public class MainRenderer extends GamePageClass {
         return null;
     }
 
-    private Void touchEndCallback(Void unused) {
+    private Void touchEndCallback(TouchPoint t) {
         // OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
         return null;
     }
