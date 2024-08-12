@@ -113,7 +113,7 @@ public class TouchProcessor {
         for (int i = 0; i < event.getPointerCount(); i++) {
             if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
                 TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(i), null);
-                if (t != null) {
+                if (t != null && t.touchAlive) {
                     t.lastTouchPoint = new TouchPoint(event.getX(i), event.getY(i));
                     if (t.touchMovedCallback != null) {
                         commandQueue.add(new Command(t.lastTouchPoint, t.touchMovedCallback));
@@ -149,7 +149,13 @@ public class TouchProcessor {
      * Also called when touch ends.
      */
     public void terminate() {
-        terminate(null);
+        //the same as usual terminate(event), but call callback ot once, because we are already in main thread and editing command queue will crash the app
+        touchAlive = false;
+        activeProcessors.remove(touchId);
+        touchId = -1;
+        if (touchEndedCallback != null) {
+            touchEndedCallback.apply(null);
+        }
     }
 
     private void terminate(MotionEvent event) {
@@ -157,7 +163,6 @@ public class TouchProcessor {
         activeProcessors.remove(touchId);
         touchId = -1;
         if (touchEndedCallback != null) {
-            //touchEndedCallback.apply(null);
             commandQueue.add(new Command(lastTouchPoint, touchEndedCallback));
         }
     }
