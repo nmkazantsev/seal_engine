@@ -30,6 +30,7 @@ public class TouchProcessor {
     public TouchPoint lastTouchPoint = null;
     private Integer touchId = -1;
     private boolean touchAlive = false;
+    private boolean touchEndProcessed = false;
 
     /**
      * Create a new TouchProcessor
@@ -82,7 +83,7 @@ public class TouchProcessor {
                     iterator.remove(); //remove all without processing
                     continue;
                 }
-                if (command.parent.touchAlive) {
+                if (command.parent.touchAlive || (!command.parent.touchAlive && !command.parent.touchEndProcessed && command.isTouchEnded)) {
                     command.run();
                 }
                 iterator.remove();//no need in this event to be buffered any more
@@ -153,6 +154,7 @@ public class TouchProcessor {
     public void terminate() {
         //the same as usual terminate(event), but call callback ot once, because we are already in main thread and editing command queue will crash the app
         touchAlive = false;
+        touchEndProcessed = true;
         activeProcessors.remove(touchId);
         touchId = -1;
         if (touchEndedCallback != null) {
@@ -162,10 +164,13 @@ public class TouchProcessor {
 
     private void terminate(MotionEvent event) {
         touchAlive = false;
+        touchEndProcessed = false;
         activeProcessors.remove(touchId);
         touchId = -1;
         if (touchEndedCallback != null) {
-            commandQueue.add(new Command(lastTouchPoint, touchEndedCallback, this));
+            Command c = new Command(lastTouchPoint, touchEndedCallback, this);
+            c.isTouchEnded = true;
+            commandQueue.add(c);
         }
     }
 
@@ -187,6 +192,7 @@ public class TouchProcessor {
         private final TouchPoint touchPoint;
         private final Function<TouchPoint, Void> function;
         private final TouchProcessor parent;
+        private boolean isTouchEnded = false;
 
         private Command(TouchPoint t, Function<TouchPoint, Void> function, TouchProcessor parent) {
             this.touchPoint = t;
