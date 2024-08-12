@@ -82,7 +82,9 @@ public class TouchProcessor {
                     iterator.remove(); //remove all without processing
                     continue;
                 }
-                command.run();
+                if (command.parent.touchAlive) {
+                    command.run();
+                }
                 iterator.remove();//no need in this event to be buffered any more
             }
         }
@@ -97,7 +99,7 @@ public class TouchProcessor {
                 t.touchAlive = true;
                 t.touchId = event.getPointerId(event.getActionIndex());
                 if (t.touchStartedCallback != null) {
-                    commandQueue.add(new Command(t.lastTouchPoint, t.touchStartedCallback));
+                    commandQueue.add(new Command(t.lastTouchPoint, t.touchStartedCallback, t));
                     //t.touchStartedCallback.apply(t.lastTouchPoint);
                 }
                 return;
@@ -116,7 +118,7 @@ public class TouchProcessor {
                 if (t != null && t.touchAlive) {
                     t.lastTouchPoint = new TouchPoint(event.getX(i), event.getY(i));
                     if (t.touchMovedCallback != null) {
-                        commandQueue.add(new Command(t.lastTouchPoint, t.touchMovedCallback));
+                        commandQueue.add(new Command(t.lastTouchPoint, t.touchMovedCallback, t));
                     }
                 }
             }
@@ -163,7 +165,7 @@ public class TouchProcessor {
         activeProcessors.remove(touchId);
         touchId = -1;
         if (touchEndedCallback != null) {
-            commandQueue.add(new Command(lastTouchPoint, touchEndedCallback));
+            commandQueue.add(new Command(lastTouchPoint, touchEndedCallback, this));
         }
     }
 
@@ -184,10 +186,12 @@ public class TouchProcessor {
     private static class Command {
         private final TouchPoint touchPoint;
         private final Function<TouchPoint, Void> function;
+        private final TouchProcessor parent;
 
-        private Command(TouchPoint t, Function<TouchPoint, Void> function) {
+        private Command(TouchPoint t, Function<TouchPoint, Void> function, TouchProcessor parent) {
             this.touchPoint = t;
             this.function = function;
+            this.parent = parent;
         }
 
         private void run() {
