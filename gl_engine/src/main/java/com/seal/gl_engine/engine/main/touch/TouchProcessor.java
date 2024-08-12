@@ -1,6 +1,5 @@
 package com.seal.gl_engine.engine.main.touch;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,34 +18,18 @@ import java.util.function.Function;
  * All touch events are buffered and then processed in main thread, for it to be possible to call opengl functions
  */
 public class TouchProcessor {
-    private Integer touchId = -1;
-    private final Class<?> creatorClassName;
     private static final HashMap<Integer, TouchProcessor> activeProcessors = new HashMap<>();
     private static final List<TouchProcessor> allProcessors = new ArrayList<>();
+    private static final List<Command> commandQueue = new ArrayList<>();
+    private static boolean pageChanged = false;
+    private final Class<?> creatorClassName;
     private final Function<TouchPoint, Boolean> checkHitboxCallback;
     private final Function<TouchPoint, Void> touchStartedCallback;
     private final Function<TouchPoint, Void> touchMovedCallback;
     private final Function<TouchPoint, Void> touchEndedCallback; //here the last known touch point
     public TouchPoint lastTouchPoint = null;
-    private static boolean pageChanged = false;
+    private Integer touchId = -1;
     private boolean touchAlive = false;
-
-    //a class for queue of postponed (in nearest frame) callback (not all callbacks are allowed in touch thread, problems with openGL context)
-    private static class Command {
-        private final TouchPoint touchPoint;
-        private final Function<TouchPoint, Void> function;
-
-        private Command(TouchPoint t, Function<TouchPoint, Void> function) {
-            this.touchPoint = t;
-            this.function = function;
-        }
-
-        private void run() {
-            function.apply(touchPoint);
-        }
-    }
-
-    private static final List<Command> commandQueue = new ArrayList<>();
 
     /**
      * Create a new TouchProcessor
@@ -69,48 +52,20 @@ public class TouchProcessor {
         allProcessors.add(this);
     }
 
-    /**
-     * A function that stops tracking current touch. May be called any time you wish.
-     * Also called when touch ends.
-     */
-    public void terminate() {
-        terminate(null);
-    }
-
-    private void terminate(MotionEvent event) {
-        touchAlive = false;
-        activeProcessors.remove(touchId);
-        Log.e("removed", String.valueOf(touchId));
-        Log.e("size", String.valueOf(activeProcessors.size()));
-        touchId = -1;
-        if (touchEndedCallback != null) {
-            //touchEndedCallback.apply(null);
-            commandQueue.add(new Command(lastTouchPoint, touchEndedCallback));
-        }
-    }
-
-    private boolean checkHitbox(TouchPoint event) {
-        return checkHitboxCallback.apply(event);
-    }
-
     //**********STATIC METHODS********************
     public static boolean onTouch(View v, MotionEvent event) {
         synchronized (commandQueue) {
-            //  Log.e("event",event.toString());
             TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
-            //Log.e(event.toString(), String.valueOf(event.getPointerId(event.getActionIndex())));
             if (t != null) {
                 if (t.creatorClassName == OpenGLRenderer.getPageClass()) {
                     if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
                         touchMoved(event);
                     }
                     if (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP || event.getActionMasked() == MotionEvent.ACTION_UP) {
-                        Log.e("touch ended", String.valueOf(event.getPointerId(event.getActionIndex())));
                         touchEnded(event);
                     }
                 }
             } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN || event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                Log.e("touch started", String.valueOf(event.getPointerId(event.getActionIndex())));
                 touchStarted(event);
             }
         }
@@ -136,13 +91,11 @@ public class TouchProcessor {
 
     private static void touchStarted(MotionEvent event) {
         for (TouchProcessor t : allProcessors) {
-            //Log.e("checking", "touch hitbox " + t.checkHitbox(event) + " alive " + t.touchAlive + " x " + event.getX(event.getActionIndex()));
             if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass()) && !t.touchAlive) { //not to start the same processor twice if 2 touches in 1 area
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));
                 t.touchAlive = true;
                 t.touchId = event.getPointerId(event.getActionIndex());
-                Log.e("adding", "new touch");
                 if (t.touchStartedCallback != null) {
                     commandQueue.add(new Command(t.lastTouchPoint, t.touchStartedCallback));
                     //t.touchStartedCallback.apply(t.lastTouchPoint);
@@ -153,7 +106,6 @@ public class TouchProcessor {
     }
 
     private static void touchMoved(MotionEvent event) {
-        // Log.e("touch moved", event.toString() + " "+event.getActionIndex());
         /*
         No other ways here to get indexes of touch moved are not specified in docs.
         Process all moved touches here.
@@ -163,9 +115,7 @@ public class TouchProcessor {
                 TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(i), null);
                 if (t != null) {
                     t.lastTouchPoint = new TouchPoint(event.getX(i), event.getY(i));
-                    // Log.e("touch moved", String.valueOf(t.lastTouchPoint.touchY));
                     if (t.touchMovedCallback != null) {
-                        //t.touchMovedCallback.apply(t.lastTouchPoint);
                         commandQueue.add(new Command(t.lastTouchPoint, t.touchMovedCallback));
                     }
                 }
@@ -175,7 +125,6 @@ public class TouchProcessor {
 
     private static void touchEnded(MotionEvent event) {
         TouchProcessor t = activeProcessors.get(event.getPointerId(event.getActionIndex()));
-        Log.e("fuond", String.valueOf(t.touchId));
         t.terminate(event);
     }
 
@@ -196,12 +145,49 @@ public class TouchProcessor {
     }
 
     /**
+     * A function that stops tracking current touch. May be called any time you wish.
+     * Also called when touch ends.
+     */
+    public void terminate() {
+        terminate(null);
+    }
+
+    private void terminate(MotionEvent event) {
+        touchAlive = false;
+        activeProcessors.remove(touchId);
+        touchId = -1;
+        if (touchEndedCallback != null) {
+            //touchEndedCallback.apply(null);
+            commandQueue.add(new Command(lastTouchPoint, touchEndedCallback));
+        }
+    }
+
+    private boolean checkHitbox(TouchPoint event) {
+        return checkHitboxCallback.apply(event);
+    }
+
+    /**
      * Get if touch is pressed at the moment of calling this.
      *
      * @return true if finger is pressing, false if finger is released and this touch object is ready to capture new touch.
      */
     public boolean getTouchAlive() {
         return touchAlive;
+    }
+
+    //a class for queue of postponed (in nearest frame) callback (not all callbacks are allowed in touch thread, problems with openGL context)
+    private static class Command {
+        private final TouchPoint touchPoint;
+        private final Function<TouchPoint, Void> function;
+
+        private Command(TouchPoint t, Function<TouchPoint, Void> function) {
+            this.touchPoint = t;
+            this.function = function;
+        }
+
+        private void run() {
+            function.apply(touchPoint);
+        }
     }
 }
 
