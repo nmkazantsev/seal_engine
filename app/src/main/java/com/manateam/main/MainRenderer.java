@@ -32,7 +32,7 @@ public class MainRenderer extends GamePageClass {
     private static SimplePoligon simplePolygon;
     private final EnObject s;
     boolean f = true;
-    private final TouchProcessor touchProcessor, touchProcessor2;
+    private final TouchProcessor touchProcessor;
 
     public MainRenderer() {
         Animator.initialize();
@@ -46,7 +46,7 @@ public class MainRenderer extends GamePageClass {
             simplePolygon.redrawNow();
         }
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
-        touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);

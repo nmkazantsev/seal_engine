@@ -96,7 +96,7 @@ public class TouchProcessor {
     //**********STATIC METHODS********************
     public static boolean onTouch(View v, MotionEvent event) {
         synchronized (commandQueue) {
-          //  Log.e("event",event.toString());
+            //  Log.e("event",event.toString());
             TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
             //Log.e(event.toString(), String.valueOf(event.getPointerId(event.getActionIndex())));
             if (t != null) {
@@ -153,13 +153,23 @@ public class TouchProcessor {
     }
 
     private static void touchMoved(MotionEvent event) {
-        Log.e("touch moved", event.toString() + " "+event.getActionIndex());
-        TouchProcessor t = activeProcessors.get(event.getPointerId(event.getPointerCount()));
-        t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));
-       // Log.e("touch moved", String.valueOf(t.lastTouchPoint.touchY));
-        if (t.touchMovedCallback != null) {
-            //t.touchMovedCallback.apply(t.lastTouchPoint);
-            commandQueue.add(new Command(t.lastTouchPoint, t.touchMovedCallback));
+        // Log.e("touch moved", event.toString() + " "+event.getActionIndex());
+        /*
+        No other ways here to get indexes of touch moved are not specified in docs.
+        Process all moved touches here.
+         */
+        for (int i = 0; i < event.getPointerCount(); i++) {
+            if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(i), null);
+                if (t != null) {
+                    t.lastTouchPoint = new TouchPoint(event.getX(i), event.getY(i));
+                    // Log.e("touch moved", String.valueOf(t.lastTouchPoint.touchY));
+                    if (t.touchMovedCallback != null) {
+                        //t.touchMovedCallback.apply(t.lastTouchPoint);
+                        commandQueue.add(new Command(t.lastTouchPoint, t.touchMovedCallback));
+                    }
+                }
+            }
         }
     }
 
