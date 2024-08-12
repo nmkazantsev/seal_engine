@@ -31,6 +31,7 @@ public class TouchProcessor {
     private Integer touchId = -1;
     private boolean touchAlive = false;
     private boolean touchEndProcessed = false;
+    private boolean blocked = false;
 
     /**
      * Create a new TouchProcessor
@@ -53,11 +54,25 @@ public class TouchProcessor {
         allProcessors.add(this);
     }
 
+    /**
+     * blocks this processor as if it was not created
+     */
+    public void block() {
+        this.blocked = true;
+    }
+
+    /**
+     * resumes touch capturing.
+     */
+    public void unblock() {
+        this.blocked = false;
+    }
+
     //**********STATIC METHODS********************
     public static boolean onTouch(View v, MotionEvent event) {
         synchronized (commandQueue) {
             TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
-            if (t != null) {
+            if (t != null && !t.blocked) {
                 if (t.creatorClassName == OpenGLRenderer.getPageClass()) {
                     if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
                         touchMoved(event);
@@ -94,7 +109,7 @@ public class TouchProcessor {
 
     private static void touchStarted(MotionEvent event) {
         for (TouchProcessor t : allProcessors) {
-            if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass()) && !t.touchAlive) { //not to start the same processor twice if 2 touches in 1 area
+            if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass()) && !t.touchAlive && !t.blocked) { //not to start the same processor twice if 2 touches in 1 area
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));
                 t.touchAlive = true;
