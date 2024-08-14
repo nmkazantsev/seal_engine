@@ -9,13 +9,11 @@ import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
 
-import android.view.MotionEvent;
 
 import com.example.gl_engine_3_1.R;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
-import com.seal.gl_engine.GamePageInterface;
-import com.seal.gl_engine.OpenGLRenderer;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.engine_object.EnObject;
@@ -27,14 +25,15 @@ import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
 
-public class MainRenderer implements GamePageInterface {
+public class MainRenderer extends GamePageClass {
     private final Poligon fpsPolygon;
     private final Poligon polygon;
     private final Shader shader;
     private final Camera camera;
     private static SimplePoligon simplePolygon;
-    private EnObject s;
+    private final EnObject s;
     boolean f = true;
+    private final TouchProcessor touchProcessor;
 
     public MainRenderer() {
         Animator.initialize();
@@ -47,10 +46,8 @@ public class MainRenderer implements GamePageInterface {
             simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePolygon.redrawNow();
         }
-        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
-    }
-
-    public void initialize() {
+        touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
@@ -80,11 +77,13 @@ public class MainRenderer implements GamePageInterface {
         fpsPolygon.redrawNow();
         fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
-        simplePolygon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
+        if (touchProcessor.getTouchAlive()) {
+            simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
+        }
     }
 
-    private Boolean touchProcHitbox(MotionEvent event) {
-        return event.getX() < x / 2;
+    private Boolean touchProcHitbox(TouchPoint event) {
+        return event.touchX < x / 2;
     }
 
     private Void touchStartedCallback(TouchPoint p) {
@@ -95,8 +94,8 @@ public class MainRenderer implements GamePageInterface {
         return null;
     }
 
-    private Void touchEndCallback(Void unused) {
-        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
+    private Void touchEndCallback(TouchPoint t) {
+        // OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
         return null;
     }
 }

@@ -14,7 +14,7 @@ import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.DrawableShape;
 import com.seal.gl_engine.engine.main.verticles.Face;
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.maths.Point;
 
 public class FrameBuffer extends VRAMobject implements DrawableShape {
@@ -24,7 +24,7 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
     private int w;
     private int h;
 
-    public FrameBuffer(int frameBuffer, int depth, int texture, GamePageInterface page) {
+    public FrameBuffer(int frameBuffer, int depth, int texture, GamePageClass page) {
         super(page);
         this.frameBuffer = frameBuffer;
         this.texture = texture;

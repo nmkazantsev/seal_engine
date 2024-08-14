@@ -12,7 +12,7 @@ import static android.opengl.GLES20.glUniform1i;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.textures.Texture;
@@ -41,7 +41,7 @@ public class Poligon implements VerticleSet, DrawableShape {
     private final Function<List<Object>, PImage> redrawFunction;
 
 
-    public Poligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageInterface page) {
+    public Poligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page) {
         this.redrawFunction = redrawFunction;
         VectriesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
         texture = new Texture(page);

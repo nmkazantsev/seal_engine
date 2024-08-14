@@ -1,18 +1,18 @@
 package com.seal.gl_engine.engine.main.shaders;
 
-import com.seal.gl_engine.GamePageInterface;
+import com.seal.gl_engine.GamePageClass;
 
 public abstract class ShaderData {
-    private final GamePageInterface gamePageInterface;
+    private final GamePageClass gamePageClass;
 
-    protected ShaderData(GamePageInterface gamePageInterface) {
-        this.gamePageInterface = gamePageInterface;
+    protected ShaderData(GamePageClass gamePageClass) {
+        this.gamePageClass = gamePageClass;
         Shader.getActiveShader().getAdaptor().addLightAdaptor(this);
     }
 
     protected Class<?> getCreatorClass() {
-        if (gamePageInterface != null) {
-            return gamePageInterface.getClass();
+        if (gamePageClass != null) {
+            return gamePageClass.getClass();
         }
         return null;
     }
