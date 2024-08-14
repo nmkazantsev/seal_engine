@@ -38,7 +38,7 @@ public class MainRenderer extends GamePageClass {
 
     public MainRenderer() {
         Animator.initialize();
-        shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
+        shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         fpsPolygon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
         polygon.redrawNow();
