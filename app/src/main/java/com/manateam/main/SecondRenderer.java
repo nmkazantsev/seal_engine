@@ -102,6 +102,7 @@ public class SecondRenderer extends GamePageClass {
         }, null, null, this);
     }
 
+
     @Override
     public void draw() {
         GLES30.glDisable(GL_BLEND);

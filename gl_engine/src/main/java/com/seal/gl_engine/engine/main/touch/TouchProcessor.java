@@ -48,7 +48,9 @@ public class TouchProcessor {
     public TouchProcessor(Function<TouchPoint, Boolean> checkHitboxCallback,
                           Function<TouchPoint, Void> touchStartedCallback,
                           Function<TouchPoint, Void> touchMovedCallback,
-                          Function<TouchPoint, Void> touchEndedCallback, GamePageClass creatorPage) {
+
+     Function<TouchPoint, Void> touchEndedCallback, GamePageClass creatorPage) {
+
         this.creatorClassName = creatorPage.getClass();
         this.checkHitboxCallback = checkHitboxCallback;
         this.touchStartedCallback = touchStartedCallback;

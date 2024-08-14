@@ -14,6 +14,8 @@ import com.example.gl_engine_3_1.R;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
+import com.seal.gl_engine.OpenGLRenderer;
+
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.engine_object.EnObject;
@@ -46,15 +48,19 @@ public class MainRenderer extends GamePageClass {
             simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePolygon.redrawNow();
         }
+
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+
         s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
         s.animRotation(0f, 0f, 90f, 3000, 1000, false);
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
+        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
     }
+
 
     @Override
     public void draw() {
