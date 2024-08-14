@@ -1,5 +1,7 @@
 package com.seal.gl_engine.engine.main.touch;
 
+import static com.seal.gl_engine.utils.Utils.millis;
+
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -32,6 +34,7 @@ public class TouchProcessor {
     private boolean touchAlive = false;
     private boolean touchEndProcessed = false;
     private boolean blocked = false;
+    private long startTime;
 
     /**
      * Create a new TouchProcessor
@@ -66,6 +69,13 @@ public class TouchProcessor {
      */
     public void unblock() {
         this.blocked = false;
+    }
+
+    public long getDuration() {
+        if (!getTouchAlive()) {
+            return -1;
+        }
+        return millis() - startTime;
     }
 
     //**********STATIC METHODS********************
@@ -114,6 +124,7 @@ public class TouchProcessor {
                 t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));
                 t.touchAlive = true;
                 t.touchId = event.getPointerId(event.getActionIndex());
+                t.startTime = millis();
                 if (t.touchStartedCallback != null) {
                     commandQueue.add(new Command(t.lastTouchPoint, t.touchStartedCallback, t));
                     //t.touchStartedCallback.apply(t.lastTouchPoint);
