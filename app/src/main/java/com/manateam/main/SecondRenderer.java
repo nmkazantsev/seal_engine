@@ -18,8 +18,8 @@ import android.opengl.GLES30;
 import android.opengl.Matrix;
 
 import com.example.gl_engine_3_1.R;
-import com.manateam.main.adaptors.LightShaderAdaptor;
-import com.manateam.main.adaptors.MainShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
@@ -53,8 +53,8 @@ public class SecondRenderer extends GamePageClass {
 
 
     public SecondRenderer() {
-        shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, this, new MainShaderAdaptor());
-        lightShader = new Shader(R.raw.vertex_shader_light, R.raw.fragment_shader_light, this, new LightShaderAdaptor());
+        shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
+        lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
         fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
@@ -94,7 +94,7 @@ public class SecondRenderer extends GamePageClass {
         material.shininess = 1.1f;
 
         skyBox = new SkyBox("skybox/", "jpg", this);
-        skyBoxShader = new Shader(R.raw.skybox_vertex, R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
+        skyBoxShader = new Shader(com.example.gl_engine.R.raw.skybox_vertex, com.example.gl_engine.R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
 
         touchProcessor = new TouchProcessor(MotionEvent -> true, touchPoint -> {
             OpenGLRenderer.startNewPage(new MainRenderer());
