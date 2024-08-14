@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
 import com.seal.gl_engine.engine.main.VRAMobject;
+import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
@@ -97,6 +98,7 @@ public class OpenGLRenderer implements Renderer {
             startNewPage(Engine.getStartPage.apply(null));
         }
         gamePage.draw();
+        Debugger.draw();
     }
 
     public static void startNewPage(GamePageClass newPage) {

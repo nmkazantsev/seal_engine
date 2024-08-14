@@ -39,7 +39,6 @@ import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {
-    private final Poligon fpsPoligon;
     private final Shader shader, lightShader, skyBoxShader;
     Camera camera;
     private final Shape s;
@@ -55,7 +54,6 @@ public class SecondRenderer extends GamePageClass {
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
@@ -126,17 +124,13 @@ public class SecondRenderer extends GamePageClass {
         applyMatrix(mMatrix);
         //FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-       // FrameBufferUtils.connectDefaultFrameBuffer();
+        // FrameBufferUtils.connectDefaultFrameBuffer();
 
         applyShader(shader);
-        fpsPoligon.setRedrawNeeded(true);
         camera.resetFor2d();
-       camera.apply();
+        camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
-        fpsPoligon.redrawNow();
-        fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         //frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(Utils.x, y, 1));
     }
 }

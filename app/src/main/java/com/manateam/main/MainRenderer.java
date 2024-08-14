@@ -28,7 +28,6 @@ import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
 
 public class MainRenderer extends GamePageClass {
-    private final Poligon fpsPolygon;
     private final Poligon polygon;
     private final Shader shader;
     private final Camera camera;
@@ -39,8 +38,7 @@ public class MainRenderer extends GamePageClass {
     public MainRenderer() {
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
-        fpsPolygon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
-        polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
+        polygon = new Poligon(MainRedrawFunctions::redrawPolig, true, 0, this);
         polygon.redrawNow();
         camera = new Camera();
         if (simplePolygon == null) {
@@ -70,13 +68,9 @@ public class MainRenderer extends GamePageClass {
         camera.cameraSettings.eyeZ = 5;
         camera.apply();
         s.prepareAndDraw();
-        fpsPolygon.setRedrawNeeded(true);
         camera.resetFor2d();
         camera.apply(false);
         applyMatrix(mMatrix);
-        fpsPolygon.redrawParams.set(0, String.valueOf(pageMillis()));
-        fpsPolygon.redrawNow();
-        fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         simplePolygon.prepareAndDraw(0, 300, 300, 300, 300, 0.01f);
     }
