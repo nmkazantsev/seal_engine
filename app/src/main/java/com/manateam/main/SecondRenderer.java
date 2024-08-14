@@ -18,8 +18,8 @@ import android.opengl.GLES30;
 import android.opengl.Matrix;
 
 import com.example.gl_engine_3_1.R;
-import com.manateam.main.adaptors.LightShaderAdaptor;
-import com.manateam.main.adaptors.MainShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
