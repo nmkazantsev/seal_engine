@@ -14,7 +14,6 @@ public abstract class ShaderData {
     protected Class<?> getCreatorClass() {
         if (gamePageClass != null) {
             return gamePageClass.getClass();
-
         }
         return null;
     }

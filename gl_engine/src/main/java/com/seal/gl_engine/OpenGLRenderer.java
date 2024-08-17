@@ -40,6 +40,10 @@ public class OpenGLRenderer implements Renderer {
         Utils.y = height;
         Utils.ky = Utils.y / 1280.0f;
         Utils.kx = Utils.x / 720.0f;
+        if (Utils.x > Utils.y) {
+            Utils.kx = Utils.x / 1280.0f;
+            Utils.ky = Utils.y / 720.0f;
+        }
     }
 
     @Override
@@ -110,6 +114,10 @@ public class OpenGLRenderer implements Renderer {
         TouchProcessor.onPageChange();
     }
 
+    public static void resetPageMillis() {
+        prevPageChangeTime = Utils.millis();
+    }
+
     public static long pageMillis() {
         return Utils.millis() - prevPageChangeTime;
     }
@@ -118,7 +126,4 @@ public class OpenGLRenderer implements Renderer {
         return gamePage.getClass();
     }
 
-    public static void resetPageMillis() {
-        prevPageChangeTime = Utils.millis();
-    }
 }

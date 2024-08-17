@@ -12,7 +12,7 @@ import com.seal.gl_engine.utils.Utils;
 
 import java.util.Arrays;
 
-public class EnObject {
+public class sealObject {
     private float objScale = 1;
     private final Shape shape;
     private float[] posMatrix;
@@ -27,7 +27,7 @@ public class EnObject {
         rotMatrix = Arrays.copyOfRange(attrs, 3, 6);
     }
 
-    public EnObject(Shape shape) {
+    public sealObject(Shape shape) {
         this.shape = shape;
         posMatrix = new float[3];
         rotMatrix = new float[3];
