@@ -20,6 +20,8 @@ import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
+import com.seal.gl_engine.engine.main.touch.TouchPoint;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
 
@@ -32,8 +34,12 @@ public class Debugger {
     private static SimplePoligon debuggerPage, fpsPolygon;
     private static Shader shader;
     private static float[] matrix = new float[16];
+    private static int page = 0;//0 if no page, then numbers of pages from 1
 
     public static void debuggerInit() {
+        new TouchProcessor(
+                TouchPoint->(TouchPoint.touchX)
+        );
         enabled = true;
         debuggerCamera = new Camera(x, y);
         debuggerCamera.resetFor2d();
@@ -50,11 +56,15 @@ public class Debugger {
             applyMatrix(matrix);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
-            fpsPolygon.setRedrawNeeded(true);
-            fpsPolygon.redrawNow();
-            fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
-
-            debuggerPage.prepareAndDraw(0, 0, 0, x, y, 9);
+            if (page == 0) {
+                fpsPolygon.setRedrawNeeded(true);
+                fpsPolygon.redrawNow();
+                fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
+            } else {
+                debuggerPage.setRedrawNeeded(true);
+                debuggerPage.redrawNow();
+                debuggerPage.prepareAndDraw(0, 0, 0, x, y, 9);
+            }
             glDisable(GL_BLEND);
         }
     }
@@ -68,18 +78,7 @@ public class Debugger {
         image.background(255, 255, 255, 140);
         return image;
     };
-    /*
-     public static PImage redrawFps(List<Object> param) {
-        PImage image = new PImage(100, 100);
-        image.background(150);
-        image.textSize(20);
-        image.fill(0);
-        if (param.size() > 0) {
-            image.text((String) param.get(0), 10, 10);
-        }
-        return image;
-    }
-     */
+
 
     private static final Function<List<Object>, PImage> redrawFps = objects -> {
         PImage image = new PImage(100, 100);
