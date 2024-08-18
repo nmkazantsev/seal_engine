@@ -15,12 +15,10 @@ import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.max;
 import static com.seal.gl_engine.utils.Utils.min;
-import static com.seal.gl_engine.utils.Utils.tg;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.example.gl_engine.R;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
@@ -30,11 +28,9 @@ import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
-import com.seal.gl_engine.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.function.Function;
 
@@ -79,10 +75,13 @@ public class Debugger {
                     //shorter the code
                     float tx = TouchPoint.touchX;
                     float ty = TouchPoint.touchY;
-                    if (tx < fps_x && ty < fps_y) {
+                    //process quit
+                    if (tx < fps_x && ty < fps_y || ty > y - 100 * ky) {
                         page = 0;//exit
                         selectedValue = null;
+                        mainTP.terminate();
                         mainTP.block();
+                        return null;
                     }
                     if (selectedValue == null) {
                         //processing menu
@@ -97,6 +96,12 @@ public class Debugger {
                             }
                         }
                     } else {
+                        //back
+                        if (TouchPoint.touchY > y - 250 * ky && TouchPoint.touchY < y - 100 * ky) {
+                            selectedValue = null;
+                            mainTP.terminate();
+                            return null;
+                        }
                         //processing slider
                         selectSlider(tx);
                     }
@@ -191,7 +196,11 @@ public class Debugger {
             image.text(selectedValue.max, x - 20 * kx, y / 2 + 50 * ky);
             image.textAlign(Paint.Align.CENTER);
             image.text(selectedValue.value, x / 2, y / 2 - 70 * ky);
+            image.text("<< back", x / 2, y - 200 * ky);
         }
+        //navigation
+        image.textAlign(Paint.Align.CENTER);
+        image.text("X quit", x / 2, y - 100 * ky);
         return image;
     };
 
