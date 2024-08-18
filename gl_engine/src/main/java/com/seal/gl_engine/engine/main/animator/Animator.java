@@ -3,7 +3,7 @@ package com.seal.gl_engine.engine.main.animator;
 import static com.seal.gl_engine.utils.Utils.contactArray;
 
 import com.seal.gl_engine.OpenGLRenderer;
-import com.seal.gl_engine.engine.main.engine_object.sealObject;
+import com.seal.gl_engine.engine.main.engine_object.SealObject;
 import com.seal.gl_engine.utils.Utils;
 
 import java.util.HashMap;
@@ -18,13 +18,13 @@ public class Animator {
             PIVOT_ROTATION = 2,
             LINEAR = 0,
             SIGMOID = 1;
-    private static HashMap<sealObject, Animation[]> animQueue;
+    private static HashMap<SealObject, Animation[]> animQueue;
 
     public static void initialize() {
         animQueue = new HashMap<>();
     }
 
-    public static void freezeAnimations(sealObject target) {
+    public static void freezeAnimations(SealObject target) {
         if (animQueue.get(target) == null) return;
         for (Animation a: animQueue.get(target)) {
             if (a.waiting) continue;
@@ -32,7 +32,7 @@ public class Animator {
             a.frozen = false;
         }
     }
-    public static void unfreezeAnimations(sealObject target) {
+    public static void unfreezeAnimations(SealObject target) {
         if (animQueue.get(target) == null) return;
         for (Animation a: animQueue.get(target)) {
             if (!a.waiting) continue;
@@ -42,7 +42,7 @@ public class Animator {
     }
 
     // template constructor itself, uses predefined indexes instead of manual function specifying
-    public static void addAnimation(sealObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st, boolean recurring) {
+    public static void addAnimation(SealObject target, int tfType, float[] args, int vfType, float duration, float vfa, long st, boolean recurring) {
         Function<Animation, float[]> tf = null;
         Function<float[], Float> vf = null;
 
@@ -102,11 +102,11 @@ public class Animator {
         5000
     );
      */
-    public static void addAnimation(sealObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st, boolean recurring) {
+    public static void addAnimation(SealObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st, boolean recurring) {
         new Animation(target, tf, args, vf, duration, vfa, st, recurring);
     }
 
-    private static void listAnimation(Animation animation, sealObject target) {
+    private static void listAnimation(Animation animation, SealObject target) {
         if (!animQueue.containsKey(target)) {
             animQueue.put(target, new Animation[]{animation});
             return;
@@ -116,7 +116,7 @@ public class Animator {
         else animQueue.replace(target, contactArray(a, new Animation[]{animation}));
     }
 
-    public static void animate(sealObject target) {
+    public static void animate(SealObject target) {
         if (animQueue.get(target) == null) return;
         // getting targets space attributes
         float[] b = target.getSpaceAttrs();
@@ -153,7 +153,7 @@ public class Animator {
         private final boolean recurring;
         private int loopCounter;
 
-        private Animation(sealObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st, boolean recurring) {
+        private Animation(SealObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st, boolean recurring) {
             long c = OpenGLRenderer.pageMillis();
             if (st <= c) {
                 startTiming = c;

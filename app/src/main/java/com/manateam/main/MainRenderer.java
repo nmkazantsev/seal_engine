@@ -18,7 +18,7 @@ import com.seal.gl_engine.OpenGLRenderer;
 
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
-import com.seal.gl_engine.engine.main.engine_object.EnObject;
+import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -26,17 +26,21 @@ import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.engine.main.engine_object.SealObject;
+
 
 public class MainRenderer extends GamePageClass {
     private final Poligon polygon;
     private final Shader shader;
     private final Camera camera;
     private static SimplePoligon simplePolygon;
-    private final EnObject s;
+    private final SealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
+    DebugValueFloat d;
 
     public MainRenderer() {
+        d = new DebugValueFloat(0, 1, "d (main renderer debug test)");
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         polygon = new Poligon(MainRedrawFunctions::redrawPolig, true, 0, this);
@@ -50,7 +54,7 @@ public class MainRenderer extends GamePageClass {
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
 
-        s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
+        s = new SealObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
         s.animRotation(0f, 0f, 90f, 3000, 1000, false);
@@ -95,7 +99,7 @@ public class MainRenderer extends GamePageClass {
     }
 
     private Void touchEndCallback(TouchPoint t) {
-        // OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
+        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
         return null;
     }
 }

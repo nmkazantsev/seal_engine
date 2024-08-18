@@ -24,6 +24,7 @@ import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.camera.Camera;
+import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.Material;
@@ -49,7 +50,7 @@ public class SecondRenderer extends GamePageClass {
     private final Material material;
 
     TouchProcessor touchProcessor;
-
+    DebugValueFloat camPos, lightIntesivity;
 
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());

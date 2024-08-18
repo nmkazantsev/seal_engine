@@ -4,8 +4,11 @@ import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.seal.gl_engine.engine.main.images.PImage;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,16 +21,20 @@ public class DebugValueFloat {
     public float value;
     protected float min;
     protected float max;
+    protected String name = "debug float";
 
     /**
      * Create a debug value.
      *
-     * @param min minimum on slider
-     * @param max maximum on slider
+     * @param min  minimum on slider
+     * @param max  maximum on slider
+     * @param name shown name of this value, unique not null
      */
-    public DebugValueFloat(float min, float max) {
+    public DebugValueFloat(float min, float max, @NotNull String name) {
         this.max = max;
         this.min = min;
+        this.name = name;
+        Debugger.addDebugValue(this);
     }
 
     protected PImage drawImage(List<Objects> params) {
