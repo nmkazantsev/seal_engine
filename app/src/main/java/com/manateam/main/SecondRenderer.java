@@ -5,6 +5,7 @@ import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
+import static com.seal.gl_engine.engine.main.debugger.Debugger.addDebugValueFloat;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.cos;
 import static com.seal.gl_engine.utils.Utils.map;
@@ -92,8 +93,8 @@ public class SecondRenderer extends GamePageClass {
             OpenGLRenderer.startNewPage(new MainRenderer());
             return null;
         }, null, null, this);
-        camPos = new DebugValueFloat(1, 7, "camera position");
-        lightInsensitivity = new DebugValueFloat(0, 10, "light brightness");
+        camPos = addDebugValueFloat(1, 7, "camera position");
+        lightInsensitivity = addDebugValueFloat(0, 10, "light brightness");
         lightInsensitivity.value = 0.5f;
         camPos.value = 3;
     }

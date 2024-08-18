@@ -29,6 +29,8 @@ import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,13 +147,25 @@ public class Debugger {
         return mainTP;
     }
 
-    protected static void addDebugValue(DebugValueFloat d) {
+    /**
+     * Create a debug value.
+     *
+     * @param min  minimum on slider
+     * @param max  maximum on slider
+     * @param name shown name of this value, unique not null
+     * @return new (or already created in case of repeated call) debug value
+     */
+    public static DebugValueFloat addDebugValueFloat(float min, float max, @NotNull String name) {
         //check for duplicate
-        DebugValueFloat debugValueFloat = debugValues.getOrDefault(d.name, null);
+        DebugValueFloat debugValueFloat = debugValues.getOrDefault(name, null);
         if (debugValueFloat == null) {//not a duplicate
+            DebugValueFloat d = new DebugValueFloat(min, max, name);
             debugValues.put(d.name, d);
             debugList.add(d);
             totalValues++;
+            return d;
+        } else {
+            return debugValueFloat;
         }
     }
 

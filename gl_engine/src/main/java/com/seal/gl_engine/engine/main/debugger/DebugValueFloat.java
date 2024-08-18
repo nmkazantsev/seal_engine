@@ -22,18 +22,10 @@ public class DebugValueFloat {
     protected float max;
     protected String name;
 
-    /**
-     * Create a debug value.
-     *
-     * @param min  minimum on slider
-     * @param max  maximum on slider
-     * @param name shown name of this value, unique not null
-     */
-    public DebugValueFloat(float min, float max, @NotNull String name) {
+    protected DebugValueFloat(float min, float max, @NotNull String name) {
         this.max = max;
         this.min = min;
         this.name = name;
-        Debugger.addDebugValue(this);
     }
 
     protected PImage drawImage(List<Objects> params) {

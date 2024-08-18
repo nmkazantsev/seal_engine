@@ -20,6 +20,7 @@ import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
+import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -41,7 +42,7 @@ public class MainRenderer extends GamePageClass {
     DebugValueFloat d;
 
     public MainRenderer() {
-        d = new DebugValueFloat(0, 1, "d (main renderer debug test)");
+        d = Debugger.addDebugValueFloat(0, 1, "d (main renderer debug test)");
         d.value = 0;
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
