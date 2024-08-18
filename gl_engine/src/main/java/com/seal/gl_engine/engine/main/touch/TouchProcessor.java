@@ -152,7 +152,6 @@ public class TouchProcessor {
                     commandQueue.add(new Command(t.lastTouchPoint, t.touchStartedCallback, t));
                     //t.touchStartedCallback.apply(t.lastTouchPoint);
                 }
-                return;
             }
         }
     }
@@ -184,15 +183,8 @@ public class TouchProcessor {
         //clearing only through iterator, else concurrent modification error
         activeProcessors.clear();
         pageChanged = true;
-        Iterator<TouchProcessor> iterator2 = allProcessors.iterator();
-        while (iterator2.hasNext()) {
-            TouchProcessor e = iterator2.next();
-            if (!(e.creatorClassName == OpenGLRenderer.getPageClass()) && !(e.creatorClassName == null)) {
-                //do not call terminate here not to call touch ended
-                iterator2.remove();
-
-            }
-        }
+        //do not call terminate here not to call touch ended
+        allProcessors.removeIf(e -> !(e.creatorClassName == OpenGLRenderer.getPageClass()) && !(e.creatorClassName == null));
     }
 
     /**

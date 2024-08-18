@@ -22,7 +22,6 @@ import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
@@ -41,7 +40,7 @@ public class Debugger {
     private static float fps_x;
     private static float fps_y;
     private static TouchProcessor openMenu;
-    private static HashMap<String, DebugValueFloat> debugValues = new HashMap<>();//later will be replaced with abstract debug value
+    private static final HashMap<String, DebugValueFloat> debugValues = new HashMap<>();//later will be replaced with abstract debug value
     private static TouchProcessor mainTP;
 
     public static void debuggerInit() {
@@ -117,11 +116,11 @@ public class Debugger {
         int num = 0;
         int dispPage = 1;
         int maxNum = 10;
-        image.textSize(50 * kx);
+        image.textSize(45 * kx);
         image.textAlign(Paint.Align.CENTER);
         for (String name : debugValues.keySet()) {
             if (dispPage == page) {
-                image.text(name + ": " + String.valueOf(debugValues.get(name).value), x / 2, shift + enter * num);
+                image.text(name + ": " + debugValues.get(name).value, x / 2, shift + enter * num);
             }
             num++;
             if (num == maxNum) {

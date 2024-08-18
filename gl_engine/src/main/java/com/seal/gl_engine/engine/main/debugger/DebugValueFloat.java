@@ -4,7 +4,6 @@ import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.seal.gl_engine.engine.main.images.PImage;
 
@@ -21,7 +20,7 @@ public class DebugValueFloat {
     public float value;
     protected float min;
     protected float max;
-    protected String name = "debug float";
+    protected String name;
 
     /**
      * Create a debug value.
