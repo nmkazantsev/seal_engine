@@ -2,7 +2,6 @@ package com.seal.gl_engine.engine.main.touch;
 
 import static com.seal.gl_engine.utils.Utils.millis;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
