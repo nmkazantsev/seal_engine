@@ -10,6 +10,8 @@ import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
 
 
+import android.util.Log;
+
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
@@ -40,6 +42,7 @@ public class MainRenderer extends GamePageClass {
 
     public MainRenderer() {
         d = new DebugValueFloat(0, 1, "d (main renderer debug test)");
+        d.value = 0;
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         polygon = new Poligon(MainRedrawFunctions::redrawPolig, true, 0, this);

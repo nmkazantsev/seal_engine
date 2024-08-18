@@ -12,6 +12,9 @@ import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetT
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
+import static com.seal.gl_engine.utils.Utils.map;
+import static com.seal.gl_engine.utils.Utils.min;
+import static com.seal.gl_engine.utils.Utils.tg;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
@@ -26,8 +29,11 @@ import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.function.Function;
 
@@ -40,29 +46,59 @@ public class Debugger {
     private static int page = 0;//0 if no page, then numbers of pages from 1
     private static float fps_x;
     private static float fps_y;
-    private static TouchProcessor openMenu;
+    //list is for rendering in strict order, dict is for fast searching for duplicates
     private static final HashMap<String, DebugValueFloat> debugValues = new HashMap<>();//later will be replaced with abstract debug value
+    private static final List<DebugValueFloat> debugList = new ArrayList<>();
     private static TouchProcessor mainTP;
+    //menu rendering
+    private final static float shift = 300 * ky;
+    private final static float enter = 75 * ky;
+    private final static int maxNum = 10;
+    private static DebugValueFloat selectedValue = null;
+    private static int totalValues = 0;
 
     public static void debuggerInit() {
         fps_x = 100 * kx;
         fps_y = 100 * ky;
         //open menu button
-        openMenu = new TouchProcessor(
+        //no need in blocking openMenu. because it will not be processed (all touches will be blocked by debugger)
+        TouchProcessor openMenu = new TouchProcessor(
                 TouchPoint -> (TouchPoint.touchX < fps_x && TouchPoint.touchY < fps_y),
                 TouchPoint -> {
                     page = 1;
-                    openMenu.block();
-                    Log.e("open", "menu");
+                    mainTP.unblock();
+                    //no need in blocking openMenu. because it will not be processed (all touches will be blocked by debugger)
                     return null;
                 }, null, null, null
         );
         //main window touch
         mainTP = new TouchProcessor(
-                TouchPoint -> (TouchPoint.touchX < fps_x && TouchPoint.touchY < fps_y),
+                TouchPoint -> true,
                 TouchPoint -> {
-                    page = 0;
-                    openMenu.unblock();
+                    //shorter the code
+                    float tx = TouchPoint.touchX;
+                    float ty = TouchPoint.touchY;
+                    if (tx < fps_x && ty < fps_y) {
+                        page = 0;//exit
+                        selectedValue = null;
+                        mainTP.block();
+                    }
+                    if (selectedValue == null) {
+                        //processing menu
+                        Log.e("number", "" + "number");
+                        if (ty > shift && ty < shift + (maxNum + 1) * enter) {
+                            //select value zone
+                            ty -= shift;
+                            int number = (int) ty / (int) enter;
+                            number += (page - 1) * maxNum;
+                            Log.e("number", "" + number);
+                            if (number >= 0 && number < totalValues) {
+                                selectedValue = debugList.get(number);//choose value
+                            }
+                        }
+                    } else {
+                        //processing slider
+                    }
                     return null;
                 }, null, null, null
         );
@@ -80,7 +116,13 @@ public class Debugger {
     }
 
     protected static void addDebugValue(DebugValueFloat d) {
-        debugValues.put(d.name, d);
+        //check for duplicate
+        DebugValueFloat debugValueFloat = debugValues.getOrDefault(d.name, null);
+        if (debugValueFloat == null) {//not a duplicate
+            debugValues.put(d.name, d);
+            debugList.add(d);
+            totalValues++;
+        }
     }
 
     public static void draw() {
@@ -113,22 +155,30 @@ public class Debugger {
         image.textSize(26 * kx);
         image.fill(0);
         image.text((int) fps, 10, 10);
-        float shift = 100 * ky;
-        float enter = 25 * ky;
-        int num = 0;
-        int dispPage = 1;
-        int maxNum = 10;
         image.textSize(45 * kx);
         image.textAlign(Paint.Align.CENTER);
-        for (String name : debugValues.keySet()) {
-            if (dispPage == page) {
-                image.text(name + ": " + debugValues.get(name).value, x / 2, shift + enter * num);
+        if (selectedValue == null) {
+            for (int i = (int) Utils.max(0, (page - 1) * maxNum); i < min(page * maxNum, totalValues); i++) {
+                image.text(debugList.get(i).name + ": " + debugList.get(i).value, x / 2, shift + enter * (i - page + 1));
             }
-            num++;
-            if (num == maxNum) {
-                dispPage++;
-                num = 0;
-            }
+        } else {
+            image.textAlign(Paint.Align.CENTER);
+            image.text(selectedValue.name+":", x / 2, y / 3);
+            image.noStroke();
+            image.fill(255, 255, 255, 100);
+            image.roundRect(100 * kx, y / 2, x - 200 * kx, 50 * ky, 20 * kx, 25 * ky);
+            image.fill(100, 100, 100, 255);
+            image.strokeWeight(4 * kx);
+            image.stroke(0, 0, 0, 255);
+            image.roundRect(100 * kx, y / 2, x - map(selectedValue.value, selectedValue.max, selectedValue.min, 200 * kx, x - 40 * kx), 50 * ky, 20 * kx, 25 * ky);
+            image.fill(0, 0, 0, 255);
+            image.stroke(0, 0, 0, 255);
+            image.textAlign(Paint.Align.LEFT);
+            image.text(selectedValue.min, 20 * kx, y / 2 + 50 * ky);
+            image.textAlign(Paint.Align.RIGHT);
+            image.text(selectedValue.max, x - 20 * kx, y / 2 + 50 * ky);
+            image.textAlign(Paint.Align.CENTER);
+            image.text(selectedValue.value, x / 2, y / 2 - 70 * ky);
         }
         return image;
     };

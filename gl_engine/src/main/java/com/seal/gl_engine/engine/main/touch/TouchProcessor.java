@@ -145,7 +145,6 @@ public class TouchProcessor {
             //process full screen debugger
             //touch moves will not be processed if starts are not processed here (blocked by debugger)
             TouchProcessor t = Debugger.getMainPageTouchProcessor();
-            Log.e("sdf", "here");
             if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass() || t.creatorClassName == null) && !t.touchAlive && !t.blocked) { //not to start the same processor twice if 2 touches in 1 area
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));
