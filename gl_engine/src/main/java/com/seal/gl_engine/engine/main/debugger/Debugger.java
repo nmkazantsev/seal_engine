@@ -16,6 +16,7 @@ import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.example.gl_engine.R;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
@@ -52,6 +53,7 @@ public class Debugger {
                 TouchPoint -> {
                     page = 1;
                     openMenu.block();
+                    Log.e("open", "menu");
                     return null;
                 }, null, null, null
         );
@@ -60,7 +62,7 @@ public class Debugger {
                 TouchPoint -> (TouchPoint.touchX < fps_x && TouchPoint.touchY < fps_y),
                 TouchPoint -> {
                     page = 0;
-                    openMenu.block();
+                    openMenu.unblock();
                     return null;
                 }, null, null, null
         );

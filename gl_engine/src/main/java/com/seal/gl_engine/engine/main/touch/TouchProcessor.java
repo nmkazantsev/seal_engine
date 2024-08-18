@@ -2,6 +2,7 @@ package com.seal.gl_engine.engine.main.touch;
 
 import static com.seal.gl_engine.utils.Utils.millis;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -68,6 +69,7 @@ public class TouchProcessor {
      */
     public void block() {
         this.blocked = true;
+        this.terminate();
     }
 
     /**
@@ -141,7 +143,9 @@ public class TouchProcessor {
             }
         } else {
             //process full screen debugger
+            //touch moves will not be processed if starts are not processed here (blocked by debugger)
             TouchProcessor t = Debugger.getMainPageTouchProcessor();
+            Log.e("sdf", "here");
             if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass() || t.creatorClassName == null) && !t.touchAlive && !t.blocked) { //not to start the same processor twice if 2 touches in 1 area
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));

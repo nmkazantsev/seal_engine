@@ -43,7 +43,7 @@ public class SecondRenderer extends GamePageClass {
     private final Material material;
 
     TouchProcessor touchProcessor;
-    DebugValueFloat camPos, lightIntesivity;
+    DebugValueFloat camPos, lightInsensitivity;
 
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -92,6 +92,10 @@ public class SecondRenderer extends GamePageClass {
             OpenGLRenderer.startNewPage(new MainRenderer());
             return null;
         }, null, null, this);
+        camPos = new DebugValueFloat(1, 7, "camera position");
+        lightInsensitivity = new DebugValueFloat(0, 10, "light brightness");
+        lightInsensitivity.value = 0.5f;
+        camPos.value = 3;
     }
 
 
@@ -100,7 +104,10 @@ public class SecondRenderer extends GamePageClass {
         GLES30.glDisable(GL_BLEND);
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 0f;
-        camera.cameraSettings.eyeX = 5f;
+
+        camera.cameraSettings.eyeX = camPos.value;
+        sourceLight.specular = lightInsensitivity.value;
+
         float x = 3.5f * Utils.sin(millis() / 1000.0f);
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = x;
