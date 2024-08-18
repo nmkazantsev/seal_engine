@@ -13,6 +13,7 @@ import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
+import static com.seal.gl_engine.utils.Utils.max;
 import static com.seal.gl_engine.utils.Utils.min;
 import static com.seal.gl_engine.utils.Utils.tg;
 import static com.seal.gl_engine.utils.Utils.x;
@@ -85,22 +86,28 @@ public class Debugger {
                     }
                     if (selectedValue == null) {
                         //processing menu
-                        Log.e("number", "" + "number");
                         if (ty > shift && ty < shift + (maxNum + 1) * enter) {
                             //select value zone
                             ty -= shift;
                             int number = (int) ty / (int) enter;
                             number += (page - 1) * maxNum;
-                            Log.e("number", "" + number);
                             if (number >= 0 && number < totalValues) {
                                 selectedValue = debugList.get(number);//choose value
+                                mainTP.terminate();//not for process slider in this touch
                             }
                         }
                     } else {
                         //processing slider
+                        selectSlider(tx);
                     }
                     return null;
-                }, null, null, null
+                },
+                touchPoint -> {
+                    if (selectedValue != null) {
+                        selectSlider(touchPoint.touchX);
+                    }
+                    return null;
+                }, null, null
         );
         enabled = true;
         debuggerCamera = new Camera(x, y);
@@ -109,6 +116,11 @@ public class Debugger {
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, null, new MainShaderAdaptor());
         fpsPolygon = new SimplePoligon(redrawFps, true, 0, null);
         matrix = resetTranslateMatrix(matrix);
+    }
+
+    private static void selectSlider(float tx) {
+        //convert position to value and mean borders
+        selectedValue.value = max(selectedValue.min, min(selectedValue.max, map(tx, 100 * kx, x - 100 * kx, selectedValue.min, selectedValue.max)));
     }
 
     public static TouchProcessor getMainPageTouchProcessor() {
@@ -158,12 +170,12 @@ public class Debugger {
         image.textSize(45 * kx);
         image.textAlign(Paint.Align.CENTER);
         if (selectedValue == null) {
-            for (int i = (int) Utils.max(0, (page - 1) * maxNum); i < min(page * maxNum, totalValues); i++) {
+            for (int i = (int) max(0, (page - 1) * maxNum); i < min(page * maxNum, totalValues); i++) {
                 image.text(debugList.get(i).name + ": " + debugList.get(i).value, x / 2, shift + enter * (i - page + 1));
             }
         } else {
             image.textAlign(Paint.Align.CENTER);
-            image.text(selectedValue.name+":", x / 2, y / 3);
+            image.text(selectedValue.name + ":", x / 2, y / 3);
             image.noStroke();
             image.fill(255, 255, 255, 100);
             image.roundRect(100 * kx, y / 2, x - 200 * kx, 50 * ky, 20 * kx, 25 * ky);
