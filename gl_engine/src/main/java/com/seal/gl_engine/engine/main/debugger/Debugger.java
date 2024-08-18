@@ -50,7 +50,7 @@ public class Debugger {
     //menu rendering
     private final static float shift = 300 * ky;
     private final static float enter = 75 * ky;
-    private final static int maxNum = 10;
+    private final static int maxNum = 5;
     private static DebugValueFloat selectedValue = null;
     private static int totalValues = 0;
 
@@ -76,12 +76,24 @@ public class Debugger {
                     float tx = TouchPoint.touchX;
                     float ty = TouchPoint.touchY;
                     //process quit
-                    if (tx < fps_x && ty < fps_y || ty > y - 100 * ky) {
+                    if (tx < fps_x && ty < fps_y || (ty > y - 100 * ky) && (tx > x / 2 - 100 * kx && tx < x / 2 + 100 * kx)) {
                         page = 0;//exit
                         selectedValue = null;
                         mainTP.terminate();
                         mainTP.block();
                         return null;
+                    }
+
+                    //<<
+                    if (tx < 200 * kx && ty > y - 100 * ky) {
+                        if (page > 1) {
+                            page--;
+                        }
+                    }
+                    if (tx > x - 200 * kx && ty > y - 100 * ky) {
+                        if (page < totalValues / maxNum + (totalValues % maxNum > 0 ? 1 : 0)) {
+                            page++;
+                        }
                     }
                     if (selectedValue == null) {
                         //processing menu
@@ -114,6 +126,7 @@ public class Debugger {
                     return null;
                 }, null, null
         );
+        mainTP.block();
         enabled = true;
         debuggerCamera = new Camera(x, y);
         debuggerCamera.resetFor2d();
@@ -201,6 +214,14 @@ public class Debugger {
         //navigation
         image.textAlign(Paint.Align.CENTER);
         image.text("X quit", x / 2, y - 100 * ky);
+        if (page > 1) {
+            image.textAlign(Paint.Align.LEFT);
+            image.text("<<", 20 * kx, y - 100 * ky);
+        }
+        if (page < totalValues / maxNum + (totalValues % maxNum > 0 ? 1 : 0)) {
+            image.textAlign(Paint.Align.RIGHT);
+            image.text(">>", x - 20 * kx, y - 100 * ky);
+        }
         return image;
     };
 
