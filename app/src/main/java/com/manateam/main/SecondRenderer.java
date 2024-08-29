@@ -2,14 +2,12 @@ package com.manateam.main;
 
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.glClearColor;
-import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
+import static com.seal.gl_engine.engine.main.debugger.Debugger.addDebugValueFloat;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.cos;
-import static com.seal.gl_engine.utils.Utils.kx;
-import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.millis;
 import static com.seal.gl_engine.utils.Utils.radians;
@@ -17,29 +15,25 @@ import static com.seal.gl_engine.utils.Utils.radians;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 
-import com.example.gl_engine_3_1.R;
 import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
-import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.camera.Camera;
+import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SkyBox;
-import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {
-    private final Poligon fpsPoligon;
     private final Shader shader, lightShader, skyBoxShader;
     Camera camera;
     private final Shape s;
@@ -50,12 +44,11 @@ public class SecondRenderer extends GamePageClass {
     private final Material material;
 
     TouchProcessor touchProcessor;
-
+    DebugValueFloat camPos, lightInsensitivity;
 
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
@@ -100,6 +93,10 @@ public class SecondRenderer extends GamePageClass {
             OpenGLRenderer.startNewPage(new MainRenderer());
             return null;
         }, null, null, this);
+        camPos = addDebugValueFloat(1, 7, "camera position");
+        lightInsensitivity = addDebugValueFloat(0, 10, "light brightness");
+        lightInsensitivity.value = 0.5f;
+        camPos.value = 3;
     }
 
 
@@ -108,7 +105,10 @@ public class SecondRenderer extends GamePageClass {
         GLES30.glDisable(GL_BLEND);
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 0f;
-        camera.cameraSettings.eyeX = 5f;
+
+        camera.cameraSettings.eyeX = camPos.value;
+        sourceLight.specular = lightInsensitivity.value;
+
         float x = 3.5f * Utils.sin(millis() / 1000.0f);
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = x;
@@ -126,17 +126,13 @@ public class SecondRenderer extends GamePageClass {
         applyMatrix(mMatrix);
         //FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-       // FrameBufferUtils.connectDefaultFrameBuffer();
+        // FrameBufferUtils.connectDefaultFrameBuffer();
 
         applyShader(shader);
-        fpsPoligon.setRedrawNeeded(true);
         camera.resetFor2d();
-       camera.apply();
+        camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
-        fpsPoligon.redrawNow();
-        fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         //frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(Utils.x, y, 1));
     }
 }

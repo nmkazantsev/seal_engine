@@ -1,14 +1,11 @@
 package com.seal.gl_engine.engine.main.images;
 
-import static com.seal.gl_engine.utils.Utils.parseInt;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.os.Build;
 
 import com.seal.gl_engine.utils.Utils;
 
@@ -30,7 +27,7 @@ public class PImage {
     }
 
     public PImage(Bitmap b) {
-        bitmap = Bitmap.createBitmap((int) b.getWidth(), (int) b.getHeight(), Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(b.getWidth(), b.getHeight(), Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint();
         stroke = new Paint();
@@ -89,16 +86,8 @@ public class PImage {
     public void roundRect(float x, float y, float a, float b, float rx, float ry) {
         a = x + a;
         b = y + b;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawRoundRect(x, y, a, b, rx, ry, stroke);
-        } else {
-            rect(x, y, a, b);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawRoundRect(x, y, a, b, rx, ry, paint);
-        }
-
-        //Log.i("rect",String.valueOf(x)+", "+String.valueOf(y)+", "+String.valueOf(a)+", "+String.valueOf(b)+", ");
+         canvas.drawRoundRect(x, y, a, b, rx, ry, paint);
+        canvas.drawRoundRect(x, y, a, b, rx, ry, stroke);
     }
 
     public void rect(float x, float y, float a, float b) {
@@ -206,7 +195,7 @@ public class PImage {
 
     public void image(PImage img, float x, float y) {
         //Paint paintImg = new Paint();
-        canvas.drawBitmap(img.bitmap, x - img.bitmap.getWidth() / 2, y - img.bitmap.getHeight() / 2, paintImg);
+        canvas.drawBitmap(img.bitmap, x - (float) img.bitmap.getWidth() / 2, y - (float) img.bitmap.getHeight() / 2, paintImg);
     }
 
     public void image(PImage img, float x, float y, float a, float b) {
@@ -215,7 +204,7 @@ public class PImage {
         float ikx, iky;
         ikx = a / img.width;
         iky = b / img.height;
-        matrixImg.preTranslate(x / ikx - img.bitmap.getWidth() / (2), y / iky - img.bitmap.getHeight() / (2));
+        matrixImg.preTranslate(x / ikx - (float) img.bitmap.getWidth() / (2), y / iky - (float) img.bitmap.getHeight() / (2));
         matrixImg.postScale(ikx, iky);
         //  Paint paintImg = new Paint();
         canvas.drawBitmap(img.bitmap, matrixImg, paintImg);
@@ -225,7 +214,7 @@ public class PImage {
 
         Matrix matrixImg = new Matrix();
         matrixImg.postScale(scale, scale);
-        matrixImg.preTranslate(x / scale - img.bitmap.getWidth() / (2), y / scale - img.bitmap.getHeight() / (2));
+        matrixImg.preTranslate(x / scale - (float) img.bitmap.getWidth() / (2), y / scale - (float) img.bitmap.getHeight() / (2));
         // Paint paintImg = new Paint();
         canvas.drawBitmap(img.bitmap, matrixImg, paintImg);
 
@@ -235,7 +224,7 @@ public class PImage {
     public void rotImage(PImage img, float x, float y, float scale, float rot) {
         Matrix matrixImg = new Matrix();
         matrixImg.postScale(scale, scale);
-        matrixImg.preTranslate(x / scale - img.bitmap.getWidth() / (2), y / scale - img.bitmap.getHeight() / (2));
+        matrixImg.preTranslate(x / scale - (float) img.bitmap.getWidth() / (2), y / scale - (float) img.bitmap.getHeight() / (2));
         Paint paintImg = new Paint();
         canvas.rotate(degrees(rot), x, y);
         canvas.drawBitmap(img.bitmap, matrixImg, paintImg);

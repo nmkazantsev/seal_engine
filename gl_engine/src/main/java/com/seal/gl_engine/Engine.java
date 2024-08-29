@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
+import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.utils.Utils;
 
 import java.util.function.Function;
@@ -31,7 +32,7 @@ public class Engine {
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
 
-    public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape) {
+    public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape, boolean debug) {
         Engine.getStartPage = getStartPage;
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -65,7 +66,9 @@ public class Engine {
         } else {
             glSurfaceView.setRenderer(new OpenGLRenderer(context, widthPixels, heightPixels));
         }
-
+        if(debug) {
+            Debugger.debuggerInit();
+        }
         return glSurfaceView;
     }
 
