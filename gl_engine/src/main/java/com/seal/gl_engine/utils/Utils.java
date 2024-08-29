@@ -441,7 +441,7 @@ public class Utils {
         return out;
     }
 
-    private static long prevFrame;
+   public static long prevFrame;
 
     /**
      * Get timing coefficient for physics

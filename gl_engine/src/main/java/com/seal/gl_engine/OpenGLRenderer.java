@@ -94,6 +94,7 @@ public class OpenGLRenderer implements Renderer {
         draw();
         VectriesShapesManager.redrawAll();
         TouchProcessor.processMotions();
+        Utils.prevFrame = Utils.millis();
     }
 
     private void draw() {
