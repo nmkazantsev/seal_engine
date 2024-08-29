@@ -6,6 +6,7 @@ import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
+import static com.seal.gl_engine.Engine.version;
 import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
@@ -205,6 +206,10 @@ public class Debugger {
             for (int i = (int) max(0, (page - 1) * maxNum); i < min(page * maxNum, totalValues); i++) {
                 image.text(debugList.get(i).name + ": " + debugList.get(i).value, x / 2, shift + enter * (i - page + 1));
             }
+            image.textSize(30 * kx);
+            image.textAlign(Paint.Align.RIGHT);
+            image.fill(50);
+            image.text("version: " + version, x - 10 * kx, 0 * ky);
         } else {
             image.textAlign(Paint.Align.CENTER);
             image.text(selectedValue.name + ":", x / 2, y / 3);

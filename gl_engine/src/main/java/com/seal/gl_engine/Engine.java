@@ -16,6 +16,8 @@ import com.seal.gl_engine.utils.Utils;
 import java.util.function.Function;
 
 public class Engine {
+    public static final String version = "3.0.3";
+
     public static class touch {
         public float x;
         public float y;
@@ -40,6 +42,7 @@ public class Engine {
         Log.e("version", String.valueOf(Double.parseDouble(configurationInfo.getGlEsVersion())));
         Log.e("version", String.valueOf(configurationInfo.reqGlEsVersion >= 0x30000));
         Log.e("version", String.format("%X", configurationInfo.reqGlEsVersion));
+        Log.e("engine version", version);
         context = c;
         MainConfigurationFunctions.context = context;
         Utils.context = context;
@@ -91,7 +94,6 @@ public class Engine {
     public static void StartNewPage(GamePageClass pageInterface) {
         OpenGLRenderer.startNewPage(pageInterface);
     }
-
 
 
     public void onPause() {
