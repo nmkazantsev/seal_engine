@@ -441,5 +441,16 @@ public class Utils {
         return out;
     }
 
+    private static long prevFrame;
+
+    /**
+     * Get timing coefficient for physics
+     *
+     * @return 120/current fps
+     */
+    public static float getTimeK() {
+        float currentFps = 1000.0f / (float) (millis() - prevFrame);
+        return 120.0f / currentFps;
+    }
 
 }
