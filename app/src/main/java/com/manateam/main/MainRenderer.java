@@ -11,14 +11,15 @@ import static com.seal.gl_engine.utils.Utils.x;
 
 
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
+
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
-import com.seal.gl_engine.OpenGLRenderer;
-
+import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.debugger.Debugger;
+import com.seal.gl_engine.engine.main.engine_object.sealObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -54,7 +55,6 @@ public class MainRenderer extends GamePageClass {
 
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
-
         s = new SealObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
