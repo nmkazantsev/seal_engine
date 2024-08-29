@@ -1,6 +1,7 @@
 package com.seal.gl_engine.utils;
 
 
+import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static java.lang.Float.parseFloat;
 import static java.lang.Thread.sleep;
 
@@ -441,7 +442,7 @@ public class Utils {
         return out;
     }
 
-   public static long prevFrame;
+    private static float timeK;
 
     /**
      * Get timing coefficient for physics
@@ -449,8 +450,15 @@ public class Utils {
      * @return 120/current fps
      */
     public static float getTimeK() {
-        float currentFps = 1000.0f / (float) (millis() - prevFrame);
-        return 120.0f / currentFps;
+        return timeK;
+    }
+
+    public static void findTimeK() {
+        if (fps == 0) {
+            timeK = 1;
+            return;
+        }
+        timeK = 120.0f / fps;
     }
 
 }

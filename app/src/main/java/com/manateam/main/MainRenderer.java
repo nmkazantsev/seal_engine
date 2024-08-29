@@ -9,16 +9,12 @@ import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
 
-
-import com.example.gl_engine_3_1.R;
-import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
-import com.seal.gl_engine.OpenGLRenderer;
-
+import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
-import com.seal.gl_engine.engine.main.engine_object.EnObject;
+import com.seal.gl_engine.engine.main.engine_object.sealObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -33,7 +29,7 @@ public class MainRenderer extends GamePageClass {
     private final Shader shader;
     private final Camera camera;
     private static SimplePoligon simplePolygon;
-    private final EnObject s;
+    private final sealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
 
@@ -52,7 +48,7 @@ public class MainRenderer extends GamePageClass {
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
 
-        s = new EnObject(new Shape("building_big.obj", "box.jpg", this));
+        s = new sealObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
         s.animRotation(0f, 0f, 90f, 3000, 1000, false);

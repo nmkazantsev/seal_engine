@@ -89,12 +89,12 @@ public class OpenGLRenderer implements Renderer {
             prevFps = Utils.millis();
             cadrs = 0;
         }
+        Utils.findTimeK();
         cadrs++;
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         draw();
         VectriesShapesManager.redrawAll();
         TouchProcessor.processMotions();
-        Utils.prevFrame = Utils.millis();
     }
 
     private void draw() {
