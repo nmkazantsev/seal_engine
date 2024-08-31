@@ -31,12 +31,13 @@ public class Engine {
     private GLSurfaceView glSurfaceView;
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
+    public final static String version = "3.0.3";
 
     public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape, boolean debug) {
         Engine.getStartPage = getStartPage;
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
-
+        Log.e("engine version ", version);
         Log.e("version", String.valueOf(Double.parseDouble(configurationInfo.getGlEsVersion())));
         Log.e("version", String.valueOf(configurationInfo.reqGlEsVersion >= 0x30000));
         Log.e("version", String.format("%X", configurationInfo.reqGlEsVersion));
@@ -66,7 +67,7 @@ public class Engine {
         } else {
             glSurfaceView.setRenderer(new OpenGLRenderer(context, widthPixels, heightPixels));
         }
-        if(debug) {
+        if (debug) {
             Debugger.debuggerInit();
         }
         return glSurfaceView;
@@ -91,7 +92,6 @@ public class Engine {
     public static void StartNewPage(GamePageClass pageInterface) {
         OpenGLRenderer.startNewPage(pageInterface);
     }
-
 
 
     public void onPause() {

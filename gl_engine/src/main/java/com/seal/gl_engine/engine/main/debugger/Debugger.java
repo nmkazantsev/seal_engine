@@ -6,6 +6,7 @@ import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
+import static com.seal.gl_engine.Engine.version;
 import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
@@ -196,6 +197,10 @@ public class Debugger {
     private static final Function<List<Object>, PImage> drawMianPage = objects -> {
         PImage image = new PImage(x, y);
         image.background(255, 255, 255, 140);
+        image.textSize(30 * kx);
+        image.textAlign(Paint.Align.RIGHT);
+        image.fill(50);
+        image.text("version: " + version, x - 10 * kx, 0 * ky);
         image.textSize(26 * kx);
         image.fill(0);
         image.text((int) fps, 10, 10);
