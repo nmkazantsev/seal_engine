@@ -9,17 +9,15 @@ import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
 
-
-import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
-
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
+import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.debugger.Debugger;
-import com.seal.gl_engine.engine.main.engine_object.sealObject;
+import com.seal.gl_engine.engine.main.engine_object.SealObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -27,7 +25,6 @@ import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
-import com.seal.gl_engine.engine.main.engine_object.SealObject;
 
 
 public class MainRenderer extends GamePageClass {
