@@ -171,36 +171,6 @@ public class Utils {
         return img;
     }
 
-    //todo: delete
-    public static PImage deleteBackground(PImage img) {
-                /*
-                if (img == null) {
-                    return (null);
-                } else {
-                    int colors[] = new int[img.bitmap.getWidth() * img.bitmap.getHeight()];
-                    int src[] = new int[img.bitmap.getWidth() * img.bitmap.getHeight()];
-                    int width = img.bitmap.getWidth();
-                    int height = img.bitmap.getHeight();
-                    img.bitmap.getPixels(src, 0, width, 0, 0, width, height);
-                    for (int x = 0; x < width * height; x++) {
-
-                        if (src[x] > Color.rgb(170, 170, 170)) {
-                            //img.bitmap.setPixel(x,y,0);
-                            colors[x] = Color.argb(0, 0, 0, 0);
-                        } else {
-                            //  colors[x] = src[x];
-                            colors[x] = Color.rgb(10, 10, 10);
-                        }
-                    }
-                    img.bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
-                }
-
-                 */
-        return (img);
-
-
-    }
-
     public static PImage convertTo(PImage img, int red, int green, int blue) {
         if (img != null) {
             int[] colors = new int[img.bitmap.getWidth() * img.bitmap.getHeight()];
