@@ -1,7 +1,9 @@
 package com.seal.gl_engine.engine.main.frameBuffers;
 
+import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TRIANGLES;
+import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteFramebuffers;
 import static android.opengl.GLES20.glDeleteRenderbuffers;
@@ -105,6 +107,7 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
                 new Point(0, 0, 1));
         Shader.getActiveShader().getAdaptor().bindData(new Face[]{face1, face2});
         //place texture to target 2D of unit 0
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }

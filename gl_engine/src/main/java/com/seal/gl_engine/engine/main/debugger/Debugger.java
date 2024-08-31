@@ -56,6 +56,7 @@ public class Debugger {
     private final static int maxNum = 5;
     private static DebugValueFloat selectedValue = null;
     private static int totalValues = 0;
+    private static boolean redrawNeeded = true;
 
     public static void debuggerInit() {
         fps_x = 100 * kx;
@@ -75,6 +76,7 @@ public class Debugger {
         mainTP = new TouchProcessor(
                 TouchPoint -> true,
                 TouchPoint -> {
+                    redrawNeeded=true;
                     //shorter the code
                     float tx = TouchPoint.touchX;
                     float ty = TouchPoint.touchY;
@@ -124,6 +126,7 @@ public class Debugger {
                 },
                 touchPoint -> {
                     if (selectedValue != null) {
+                        redrawNeeded=true;
                         selectSlider(touchPoint.touchX);
                     }
                     return null;
@@ -182,8 +185,11 @@ public class Debugger {
             } else {
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 glEnable(GL_BLEND);
-                debuggerPage.setRedrawNeeded(true);
-                debuggerPage.redrawNow();
+                if(redrawNeeded) {
+                    debuggerPage.setRedrawNeeded(true);
+                    debuggerPage.redrawNow();
+                    redrawNeeded=false;
+                }
                 debuggerPage.prepareAndDraw(0, 0, 0, x, y, 9);
                 glDisable(GL_BLEND);
             }
@@ -203,6 +209,7 @@ public class Debugger {
         image.text("version: " + version, x - 10 * kx, 0 * ky);
         image.textSize(26 * kx);
         image.fill(0);
+        image.textAlign(Paint.Align.LEFT);
         image.text((int) fps, 10, 10);
         image.textSize(45 * kx);
         image.textAlign(Paint.Align.CENTER);
