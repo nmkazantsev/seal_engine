@@ -11,6 +11,7 @@ import static com.seal.gl_engine.utils.Utils.x;
 
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
+import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
@@ -97,7 +98,7 @@ public class MainRenderer extends GamePageClass {
     }
 
     private Void touchEndCallback(TouchPoint t) {
-        // OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
+        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
         return null;
     }
 }
