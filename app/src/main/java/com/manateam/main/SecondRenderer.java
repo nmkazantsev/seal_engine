@@ -6,21 +6,26 @@ import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.seal.gl_engine.engine.main.debugger.Debugger.addDebugValueFloat;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.cos;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.millis;
 import static com.seal.gl_engine.utils.Utils.radians;
+import static com.seal.gl_engine.utils.Utils.x;
+import static com.seal.gl_engine.utils.Utils.y;
 
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 
-import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
-import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
+import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.Material;
@@ -29,6 +34,7 @@ import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SkyBox;
+import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
@@ -42,6 +48,7 @@ public class SecondRenderer extends GamePageClass {
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
+    private FrameBuffer frameBuffer;
 
     TouchProcessor touchProcessor;
     DebugValueFloat camPos, lightInsensitivity;
@@ -97,6 +104,7 @@ public class SecondRenderer extends GamePageClass {
         lightInsensitivity = addDebugValueFloat(0, 10, "light brightness");
         lightInsensitivity.value = 0.5f;
         camPos.value = 3;
+        frameBuffer = createFrameBuffer((int) x, (int) y, this);
     }
 
 
@@ -112,10 +120,10 @@ public class SecondRenderer extends GamePageClass {
         float x = 3.5f * Utils.sin(millis() / 1000.0f);
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = x;
-        applyShader(skyBoxShader);
+        // applyShader(skyBoxShader);
         camera.apply();
-        skyBox.prepareAndDraw();
-        applyShader(lightShader);
+        //skyBox.prepareAndDraw();
+        applyShader(shader);
         material.apply();
         glClearColor(1f, 1, 1, 1);
         camera.apply();
@@ -124,15 +132,15 @@ public class SecondRenderer extends GamePageClass {
         Matrix.translateM(mMatrix, 0, 0, -0f, 0);
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
-        //FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
+        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-        // FrameBufferUtils.connectDefaultFrameBuffer();
-
+        FrameBufferUtils.connectDefaultFrameBuffer();
+        s.prepareAndDraw();
         applyShader(shader);
         camera.resetFor2d();
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        //frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(Utils.x, y, 1));
+        frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x / 2, 0, 1), new Point(0, y / 2, 1));
     }
 }

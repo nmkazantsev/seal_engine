@@ -17,6 +17,15 @@ import java.util.function.Function;
 
 public class Engine {
     public static final String version = "3.0.3";
+    private static boolean shadowsPass = false;
+
+    public static boolean getShadowPass() {
+        return shadowsPass;
+    }
+
+    protected static void setShadowsPass(boolean shadowPass) {
+        shadowsPass = shadowPass;
+    }
 
     public static class touch {
         public float x;
@@ -69,7 +78,7 @@ public class Engine {
         } else {
             glSurfaceView.setRenderer(new OpenGLRenderer(context, widthPixels, heightPixels));
         }
-        if(debug) {
+        if (debug) {
             Debugger.debuggerInit();
         }
         return glSurfaceView;
