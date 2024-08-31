@@ -112,6 +112,7 @@ public class SecondRenderer extends GamePageClass {
     @Override
     public void draw() {
         GLES30.glDisable(GL_BLEND);
+        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 0f;
         camera.cameraSettings.eyeX = 5f;
@@ -130,7 +131,6 @@ public class SecondRenderer extends GamePageClass {
         Matrix.translateM(mMatrix, 0, 0, -0f, 0);
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
-        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
         FrameBufferUtils.connectDefaultFrameBuffer();
 
