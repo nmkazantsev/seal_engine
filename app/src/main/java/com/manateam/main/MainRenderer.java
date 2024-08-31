@@ -4,10 +4,14 @@ import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.OpenGLRenderer.pageMillis;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
+import static com.seal.gl_engine.utils.Utils.y;
 
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
@@ -16,6 +20,7 @@ import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.engine_object.sealObject;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -23,6 +28,7 @@ import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.utils.Utils;
 
 public class MainRenderer extends GamePageClass {
     private final Poligon fpsPolygon;
@@ -33,6 +39,7 @@ public class MainRenderer extends GamePageClass {
     private final sealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
+    private FrameBuffer frameBuffer;
 
     public MainRenderer() {
         Animator.initialize();
@@ -56,6 +63,7 @@ public class MainRenderer extends GamePageClass {
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        frameBuffer = createFrameBuffer((int) x, (int) y, this);
     }
 
 
@@ -71,7 +79,9 @@ public class MainRenderer extends GamePageClass {
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 5;
         camera.apply();
+        connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
+        connectDefaultFrameBuffer();
         fpsPolygon.setRedrawNeeded(true);
         camera.resetFor2d();
         camera.apply(false);
@@ -83,6 +93,8 @@ public class MainRenderer extends GamePageClass {
         if (touchProcessor.getTouchAlive()) {
             simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }
+        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+
     }
 
     private Boolean touchProcHitbox(TouchPoint event) {
