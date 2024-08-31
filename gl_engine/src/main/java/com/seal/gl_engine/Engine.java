@@ -31,7 +31,7 @@ public class Engine {
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
 
-    public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape) {
+    public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape, boolean debug) {
         Engine.getStartPage = getStartPage;
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
