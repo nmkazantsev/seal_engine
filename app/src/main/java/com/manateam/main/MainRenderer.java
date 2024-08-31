@@ -39,7 +39,7 @@ public class MainRenderer extends GamePageClass {
     private final sealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
-    private FrameBuffer frameBuffer;
+    private final FrameBuffer frameBuffer;
 
     public MainRenderer() {
         Animator.initialize();
