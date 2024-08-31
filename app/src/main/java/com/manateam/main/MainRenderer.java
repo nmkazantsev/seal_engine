@@ -4,10 +4,14 @@ import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.OpenGLRenderer.pageMillis;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
+import static com.seal.gl_engine.utils.Utils.y;
 
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
@@ -16,6 +20,7 @@ import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.engine_object.sealObject;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -23,9 +28,9 @@ import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
 import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.utils.Utils;
 
 public class MainRenderer extends GamePageClass {
-    private final Poligon fpsPolygon;
     private final Poligon polygon;
     private final Shader shader;
     private final Camera camera;
@@ -33,11 +38,11 @@ public class MainRenderer extends GamePageClass {
     private final sealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
+    private final FrameBuffer frameBuffer;
 
     public MainRenderer() {
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
-        fpsPolygon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
         polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
         polygon.redrawNow();
         camera = new Camera();
@@ -56,6 +61,7 @@ public class MainRenderer extends GamePageClass {
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        frameBuffer = createFrameBuffer((int) x, (int) y, this);
     }
 
 
@@ -71,18 +77,18 @@ public class MainRenderer extends GamePageClass {
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 5;
         camera.apply();
+        connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-        fpsPolygon.setRedrawNeeded(true);
+        connectDefaultFrameBuffer();
         camera.resetFor2d();
         camera.apply(false);
         applyMatrix(mMatrix);
-        fpsPolygon.redrawParams.set(0, String.valueOf(pageMillis()));
-        fpsPolygon.redrawNow();
-        fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         if (touchProcessor.getTouchAlive()) {
             simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }
+        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+
     }
 
     private Boolean touchProcHitbox(TouchPoint event) {

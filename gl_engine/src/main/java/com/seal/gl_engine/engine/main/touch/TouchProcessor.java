@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
+import com.seal.gl_engine.engine.main.debugger.Debugger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,9 +50,12 @@ public class TouchProcessor {
                           Function<TouchPoint, Void> touchStartedCallback,
                           Function<TouchPoint, Void> touchMovedCallback,
 
-     Function<TouchPoint, Void> touchEndedCallback, GamePageClass creatorPage) {
-
-        this.creatorClassName = creatorPage.getClass();
+                          Function<TouchPoint, Void> touchEndedCallback, GamePageClass creatorPage) {
+        if (creatorPage != null) {
+            this.creatorClassName = creatorPage.getClass();
+        } else {
+            this.creatorClassName = null;
+        }
         this.checkHitboxCallback = checkHitboxCallback;
         this.touchStartedCallback = touchStartedCallback;
         this.touchMovedCallback = touchMovedCallback;
@@ -64,6 +68,7 @@ public class TouchProcessor {
      */
     public void block() {
         this.blocked = true;
+        this.terminate();
     }
 
     /**
@@ -85,7 +90,7 @@ public class TouchProcessor {
         synchronized (commandQueue) {
             TouchProcessor t = activeProcessors.getOrDefault(event.getPointerId(event.getActionIndex()), null);
             if (t != null && !t.blocked) {
-                if (t.creatorClassName == OpenGLRenderer.getPageClass()) {
+                if (t.creatorClassName == OpenGLRenderer.getPageClass() || t.creatorClassName == null) {
                     if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
                         touchMoved(event);
                     }
@@ -120,8 +125,26 @@ public class TouchProcessor {
     }
 
     private static void touchStarted(MotionEvent event) {
-        for (TouchProcessor t : allProcessors) {
-            if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass()) && !t.touchAlive && !t.blocked) { //not to start the same processor twice if 2 touches in 1 area
+        if (Debugger.getPage() == 0) { //do not process touches when debugger available
+            for (TouchProcessor t : allProcessors) {
+                if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass() || t.creatorClassName == null) && !t.touchAlive && !t.blocked) { //not to start the same processor twice if 2 touches in 1 area
+                    activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
+                    t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));
+                    t.touchAlive = true;
+                    t.touchId = event.getPointerId(event.getActionIndex());
+                    t.startTime = millis();
+                    if (t.touchStartedCallback != null) {
+                        commandQueue.add(new Command(t.lastTouchPoint, t.touchStartedCallback, t));
+                        //t.touchStartedCallback.apply(t.lastTouchPoint);
+                    }
+                    return;
+                }
+            }
+        } else {
+            //process full screen debugger
+            //touch moves will not be processed if starts are not processed here (blocked by debugger)
+            TouchProcessor t = Debugger.getMainPageTouchProcessor();
+            if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass() || t.creatorClassName == null) && !t.touchAlive && !t.blocked) { //not to start the same processor twice if 2 touches in 1 area
                 activeProcessors.put(event.getPointerId(event.getActionIndex()), t);
                 t.lastTouchPoint = new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()));
                 t.touchAlive = true;
@@ -131,7 +154,6 @@ public class TouchProcessor {
                     commandQueue.add(new Command(t.lastTouchPoint, t.touchStartedCallback, t));
                     //t.touchStartedCallback.apply(t.lastTouchPoint);
                 }
-                return;
             }
         }
     }
@@ -163,16 +185,8 @@ public class TouchProcessor {
         //clearing only through iterator, else concurrent modification error
         activeProcessors.clear();
         pageChanged = true;
-        Iterator<TouchProcessor> iterator2 = allProcessors.iterator();
-        while (iterator2.hasNext()) {
-            TouchProcessor e = iterator2.next();
-            if (e.creatorClassName != null) {
-                if (!(e.creatorClassName == OpenGLRenderer.getPageClass())) {
-                    //do not call terminate here not to call touch ended
-                    iterator2.remove();
-                }
-            }
-        }
+        //do not call terminate here not to call touch ended
+        allProcessors.removeIf(e -> !(e.creatorClassName == OpenGLRenderer.getPageClass()) && !(e.creatorClassName == null));
     }
 
     /**
