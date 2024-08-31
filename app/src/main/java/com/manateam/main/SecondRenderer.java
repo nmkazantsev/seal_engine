@@ -9,8 +9,6 @@ import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetT
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.cos;
-import static com.seal.gl_engine.utils.Utils.kx;
-import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.map;
 import static com.seal.gl_engine.utils.Utils.millis;
 import static com.seal.gl_engine.utils.Utils.radians;
@@ -148,7 +146,7 @@ public class SecondRenderer extends GamePageClass {
         applyMatrix(mMatrix);
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
         fpsPoligon.redrawNow();
-      //  fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
+        //  fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
     }
 }
