@@ -29,7 +29,7 @@
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);
+        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false,false); //второй параметр - ориентация LandScape, третий - использовать ли встроенный дебаггер.
         setContentView(v);
         assert v != null;
         v.setOnTouchListener(this);
@@ -446,6 +446,308 @@ GamePageInterface является центральной сущностью д�
 `float OpenGLRenderer.fps` - текущее значение фпс
 
 `OpenGLRenderer.pageMillis()` - время в миллисекундах с момента открытия текущей страницы
+
+
+# Debugger
+Класс позволяет на лету, без останоки исполнения с помощью графического интерфейса просмаотривать и изменять значения переменных
+**отрисовка интерфейса не оптимизирована, не используйте этот механимз в продакшене и не пугайтесь просадкам фпс**
+Для использования дебагера измеените третий параметр строки 
+`GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false,false); //второй параметр - ориентация LandScape, третий - использовать ли встроенный дебаггер.`
+в MainActivity на true.
+В левом верхнем углу появится табличка с фпс.
+Для добавления переменных нужно создать несколько (сколько угодно) экземпляров переменных для отладки 
+## Отладка
+Каждой переменной соотносится объект класса DebugValueFloat. Другие типы данных пока не поддерживаются.
+У класса есть публичное поле value, с которым следует обращаться как с обычной переменной. Его можно свободно читать и свободно туда писать, все изменнеия мометально отобрзятся в пользовательском интерфейсе. Все вносимые пользователем изменения в переменную моментально попадают в value.
+
+Для создания переменной используйте метод класса Debugger
+`DebugValueFloat Debugger.addDebugValueFloat(float min, float max, @NotNull String name)`, где min и max - границы, в которых пользователь может изменять значения переменной, name - отображаемое в интерфейсе имя переменной.
+
+## использование
+Окно отладчика открывается нажатием на поле с fps в левом верхнем углу, закрывается либо повтороным нажатием в то же место, либо с помощью креста внизу по центру.
+Стрелки --> и <-- позволяют перемещаться по списку переменных, если они не поместились на 1 экран.
+**При выключенном режиме отладки отладчик не инициализован и не занимает память. При вклюении он занимает некоторую доп. память для отрисовки интерфейса, а также имеет наивысший приоритет обработки касаний. Если окно свернуто, то наивысший приоритет только у таблички с фпс.**
+
+При развернутом окне отладчика в правом верхнем углу отображаетс версия движка, в левом верхнем - текущие фпс.
+
+Окно отладчика намеренно сделано полупрозрачным, *это не баг, а фича.*
+
+При нажатии на переменную появится возможность отрегулировать ее значение с помощью слайдера, вернуться в главное меняю можно с помощью кнопки под слайдером.
+
+# Примеры
+## Пример простейшего класса страницы с отрисовкой 3д
+```
+package com.manateam.main;
+
+import static android.opengl.GLES20.GL_BLEND;
+import static android.opengl.GLES20.glClearColor;
+import static com.seal.gl_engine.OpenGLRenderer.fps;
+import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
+import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
+import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
+import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
+import static com.seal.gl_engine.utils.Utils.cos;
+import static com.seal.gl_engine.utils.Utils.map;
+import static com.seal.gl_engine.utils.Utils.millis;
+import static com.seal.gl_engine.utils.Utils.radians;
+import static com.seal.gl_engine.utils.Utils.x;
+import static com.seal.gl_engine.utils.Utils.y;
+
+import android.opengl.GLES30;
+import android.opengl.Matrix;
+
+import com.manateam.main.redrawFunctions.MainRedrawFunctions;
+import com.seal.gl_engine.GamePageClass;
+import com.seal.gl_engine.OpenGLRenderer;
+import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
+import com.seal.gl_engine.engine.main.camera.Camera;
+import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
+import com.seal.gl_engine.engine.main.debugger.Debugger;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
+import com.seal.gl_engine.engine.main.light.AmbientLight;
+import com.seal.gl_engine.engine.main.light.DirectedLight;
+import com.seal.gl_engine.engine.main.light.Material;
+import com.seal.gl_engine.engine.main.light.SourceLight;
+import com.seal.gl_engine.engine.main.shaders.Shader;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
+import com.seal.gl_engine.engine.main.verticles.Poligon;
+import com.seal.gl_engine.engine.main.verticles.Shape;
+import com.seal.gl_engine.engine.main.verticles.SkyBox;
+import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
+import com.seal.gl_engine.utils.Utils;
+
+public class SecondRenderer extends GamePageClass {
+    private final Poligon fpsPoligon;
+    private final Shader shader, lightShader, skyBoxShader;
+    Camera camera;
+    private final Shape s;
+    private final SkyBox skyBox;
+    private final SourceLight sourceLight;
+    private final AmbientLight ambientLight;
+    private final DirectedLight directedLight1;
+    private final Material material;
+    private FrameBuffer frameBuffer;
+
+    TouchProcessor touchProcessor;
+
+    DebugValueFloat camPos;
+
+    public SecondRenderer() {
+        shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
+        lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
+        fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
+        camera = new Camera();
+        s = new Shape("ponchik.obj", "texture.png", this);
+        s.addNormalMap("noral_tex.png");
+
+        ambientLight = new AmbientLight(this);
+        // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
+
+        directedLight1 = new DirectedLight(this);
+        directedLight1.direction = new Vec3(-1, 0, 0);
+        directedLight1.color = new Vec3(0.9f);
+        directedLight1.diffuse = 0.2f;
+        directedLight1.specular = 0.8f;
+       /* directedLight2 = new DirectedLight(this);
+        directedLight2.direction = new Vec3(0, 1, 0);
+        directedLight2.color = new Vec3(0.6f);
+        directedLight2.diffuse = 0.9f;
+        directedLight2.specular = 0.8f;
+
+        */
+        sourceLight = new SourceLight(this);
+        sourceLight.diffuse = 0.8f;
+        sourceLight.specular = 0.9f;
+        sourceLight.constant = 1f;
+        sourceLight.linear = 0.01f;
+        sourceLight.quadratic = 0.01f;
+        sourceLight.color = new Vec3(0.5f);
+        sourceLight.position = new Vec3(2.7f, 0, 0);
+        sourceLight.direction = new Vec3(-0.3f, 0, 0);
+        sourceLight.outerCutOff = cos(radians(40));
+        sourceLight.cutOff = cos(radians(30f));
+
+        material = new Material(this);
+        material.ambient = new Vec3(1);
+        material.specular = new Vec3(1);
+        material.diffuse = new Vec3(1);
+        material.shininess = 1.1f;
+
+        skyBox = new SkyBox("skybox/", "jpg", this);
+        skyBoxShader = new Shader(com.example.gl_engine.R.raw.skybox_vertex, com.example.gl_engine.R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());
+
+        touchProcessor = new TouchProcessor(MotionEvent -> true, touchPoint -> {
+            OpenGLRenderer.startNewPage(new MainRenderer());
+            return null;
+        }, null, null, this);
+        frameBuffer = createFrameBuffer((int) x, (int) y, this);
+
+        camPos = Debugger.addDebugValueFloat(2, 5, "cam pos");
+        camPos.value = 4;
+    }
+
+
+    @Override
+    public void draw() {
+        GLES30.glDisable(GL_BLEND);
+        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
+        camera.resetFor3d();
+        camera.cameraSettings.eyeZ = 0f;
+        camera.cameraSettings.eyeX = camPos.value;
+        float x = 3.5f * Utils.sin(millis() / 1000.0f);
+        camera.cameraSettings.centerY = 0;
+        camera.cameraSettings.centerZ = x;
+        applyShader(skyBoxShader);
+        camera.apply();
+        skyBox.prepareAndDraw();
+        applyShader(lightShader);
+        material.apply();
+        glClearColor(1f, 1, 1, 1);
+        camera.apply();
+        mMatrix = resetTranslateMatrix(mMatrix);
+        Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
+        Matrix.translateM(mMatrix, 0, 0, -0f, 0);
+        Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
+        applyMatrix(mMatrix);
+        s.prepareAndDraw();
+        FrameBufferUtils.connectDefaultFrameBuffer();
+
+        applyShader(shader);
+        fpsPoligon.setRedrawNeeded(true);
+        camera.resetFor2d();
+        camera.apply();
+        mMatrix = resetTranslateMatrix(mMatrix);
+        applyMatrix(mMatrix);
+        fpsPoligon.redrawParams.set(0, String.valueOf(fps));
+        fpsPoligon.redrawNow();
+        //  fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
+        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+    }
+}
+
+
+```
+
+## пример работы в режиме 2д и использования класса анимаций
+```
+package com.manateam.main;
+
+import static android.opengl.GLES20.glClearColor;
+import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
+import static com.seal.gl_engine.OpenGLRenderer.pageMillis;
+import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
+import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
+import static com.seal.gl_engine.utils.Utils.kx;
+import static com.seal.gl_engine.utils.Utils.ky;
+import static com.seal.gl_engine.utils.Utils.x;
+import static com.seal.gl_engine.utils.Utils.y;
+
+import com.manateam.main.redrawFunctions.MainRedrawFunctions;
+import com.seal.gl_engine.GamePageClass;
+import com.seal.gl_engine.OpenGLRenderer;
+import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
+import com.seal.gl_engine.engine.main.animator.Animator;
+import com.seal.gl_engine.engine.main.camera.Camera;
+import com.seal.gl_engine.engine.main.engine_object.sealObject;
+import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
+import com.seal.gl_engine.engine.main.shaders.Shader;
+import com.seal.gl_engine.engine.main.touch.TouchPoint;
+import com.seal.gl_engine.engine.main.touch.TouchProcessor;
+import com.seal.gl_engine.engine.main.verticles.Poligon;
+import com.seal.gl_engine.engine.main.verticles.Shape;
+import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
+import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.utils.Utils;
+
+public class MainRenderer extends GamePageClass {
+    private final Poligon polygon;
+    private final Shader shader;
+    private final Camera camera;
+    private static SimplePoligon simplePolygon;
+    private final sealObject s;
+    boolean f = true;
+    private final TouchProcessor touchProcessor;
+    private final FrameBuffer frameBuffer;
+
+    public MainRenderer() {
+        Animator.initialize();
+        shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
+        polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
+        polygon.redrawNow();
+        camera = new Camera();
+        if (simplePolygon == null) {
+            simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
+            simplePolygon.redrawNow();
+        }
+
+        touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+
+        s = new sealObject(new Shape("building_big.obj", "box.jpg", this));
+        s.setObjScale(0.2f);
+        s.animMotion(1f, 0f, -6f, 1000, 1000, false);
+        s.animRotation(0f, 0f, 90f, 3000, 1000, false);
+        s.animRotation(90f, 0, 0, 1000, 3000, false);
+        s.animMotion(1f, 0, 0, 500, 6000, true);
+        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        frameBuffer = createFrameBuffer((int) x, (int) y, this);
+    }
+
+
+    @Override
+    public void draw() {
+        if (f && pageMillis() >= 500) {
+            s.stopAnimations();
+            f = false;
+        }
+        if (pageMillis() >= 1500) s.continueAnimations();
+        applyShader(shader);
+        glClearColor(1f, 1f, 1f, 1);
+        camera.resetFor3d();
+        camera.cameraSettings.eyeZ = 5;
+        camera.apply();
+        connectFrameBuffer(frameBuffer.getFrameBuffer());
+        s.prepareAndDraw();
+        connectDefaultFrameBuffer();
+        camera.resetFor2d();
+        camera.apply(false);
+        applyMatrix(mMatrix);
+        polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
+        if (touchProcessor.getTouchAlive()) {
+            simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
+        }
+        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+
+    }
+
+    private Boolean touchProcHitbox(TouchPoint event) {
+        return event.touchX < x / 2;
+    }
+
+    private Void touchStartedCallback(TouchPoint p) {
+        return null;
+    }
+
+    private Void touchMovedCallback(TouchPoint p) {
+        return null;
+    }
+
+    private Void touchEndCallback(TouchPoint t) {
+        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе
+        return null;
+    }
+}
+
+
+```
 
 
 
