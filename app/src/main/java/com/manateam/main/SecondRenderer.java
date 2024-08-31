@@ -26,6 +26,8 @@ import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
+import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
+import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
@@ -56,6 +58,7 @@ public class SecondRenderer extends GamePageClass {
 
     TouchProcessor touchProcessor;
 
+    DebugValueFloat camPos;
 
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -106,6 +109,9 @@ public class SecondRenderer extends GamePageClass {
             return null;
         }, null, null, this);
         frameBuffer = createFrameBuffer((int) x, (int) y, this);
+
+        camPos = Debugger.addDebugValueFloat(2, 5, "cam pos");
+        camPos.value = 4;
     }
 
 
@@ -115,7 +121,7 @@ public class SecondRenderer extends GamePageClass {
         FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 0f;
-        camera.cameraSettings.eyeX = 5f;
+        camera.cameraSettings.eyeX = camPos.value;
         float x = 3.5f * Utils.sin(millis() / 1000.0f);
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = x;
@@ -143,6 +149,6 @@ public class SecondRenderer extends GamePageClass {
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
         fpsPoligon.redrawNow();
         fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
-        frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(Utils.x, y, 1));
+        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
     }
 }

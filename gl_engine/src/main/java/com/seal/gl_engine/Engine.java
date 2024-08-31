@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.seal.gl_engine.engine.config.MainConfigurationFunctions;
+import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.utils.Utils;
 
 import java.util.function.Function;
@@ -65,7 +66,9 @@ public class Engine {
         } else {
             glSurfaceView.setRenderer(new OpenGLRenderer(context, widthPixels, heightPixels));
         }
-
+        if(debug) {
+            Debugger.debuggerInit();
+        }
         return glSurfaceView;
     }
 
