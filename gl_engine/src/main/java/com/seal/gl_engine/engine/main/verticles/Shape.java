@@ -168,6 +168,7 @@ public class Shape implements VerticleSet, DrawableShape {
             glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, normalImage.bitmap, 0);
             normalImage.delete();
+            glActiveTexture(GL_TEXTURE0);
         }
     }
 
