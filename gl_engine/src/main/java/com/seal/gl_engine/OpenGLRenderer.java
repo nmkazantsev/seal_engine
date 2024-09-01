@@ -107,6 +107,7 @@ public class OpenGLRenderer implements Renderer {
     }
 
     public static void startNewPage(GamePageClass newPage) {
+        Utils.unfreezeMillis();
         gamePage = null;
         System.gc();
         gamePage = newPage;

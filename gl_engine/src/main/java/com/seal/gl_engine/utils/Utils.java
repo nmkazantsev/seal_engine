@@ -372,8 +372,37 @@ public class Utils {
         return output;
     }
 
+    private static long millisBuffer = 0;
+    private static long freezeMillisStart = 0;
+    private static boolean millisFrozen = false;
+
     public static long millis() {
-        return (System.currentTimeMillis() - programStartTime);
+        if (millisFrozen) {
+            return freezeMillisStart;
+        }
+        return (System.currentTimeMillis() - programStartTime - millisBuffer);
+    }
+
+    public static void freezeMillis() {
+        if (!millisFrozen) {
+            freezeMillisStart = millis();
+            millisFrozen = true;
+        }
+    }
+
+    public static void unfreezeMillis() {
+        if (millisFrozen) {
+            millisBuffer = System.currentTimeMillis() - freezeMillisStart - programStartTime;
+            millisFrozen = false;
+        }
+    }
+
+    public static long absoluteMillis() {
+        return System.currentTimeMillis() - programStartTime;
+    }
+
+    public static boolean getMillisFrozen() {
+        return millisFrozen;
     }
 
     public static String loadFile(String fileName) {

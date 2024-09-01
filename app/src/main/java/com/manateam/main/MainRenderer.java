@@ -8,8 +8,11 @@ import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.conne
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
+import static com.seal.gl_engine.utils.Utils.freezeMillis;
+import static com.seal.gl_engine.utils.Utils.getMillisFrozen;
 import static com.seal.gl_engine.utils.Utils.kx;
 import static com.seal.gl_engine.utils.Utils.ky;
+import static com.seal.gl_engine.utils.Utils.unfreezeMillis;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
@@ -52,6 +55,14 @@ public class MainRenderer extends GamePageClass {
         }
 
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        new TouchProcessor(TouchPoint -> TouchPoint.touchX > x / 2, TouchPoint -> {
+            if (!getMillisFrozen()) {
+                freezeMillis();
+            } else {
+                unfreezeMillis();
+            }
+            return null;
+        }, null, null, this);
         TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
 
         s = new sealObject(new Shape("building_big.obj", "box.jpg", this));

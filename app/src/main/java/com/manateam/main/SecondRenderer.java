@@ -139,6 +139,10 @@ public class SecondRenderer extends GamePageClass {
         FrameBufferUtils.connectDefaultFrameBuffer();
 
         applyShader(shader);
+        camera.apply();
+        applyMatrix(mMatrix);
+        s.prepareAndDraw();
+
         fpsPoligon.setRedrawNeeded(true);
         camera.resetFor2d();
         camera.apply();
@@ -146,7 +150,6 @@ public class SecondRenderer extends GamePageClass {
         applyMatrix(mMatrix);
         fpsPoligon.redrawParams.set(0, String.valueOf(fps));
         fpsPoligon.redrawNow();
-        //  fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
-        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+        frameBuffer.drawTexture(new Point(Utils.x/2, Utils.y/2, 1), new Point(0, y/2, 1), new Point(Utils.x/2, 0, 1));
     }
 }
