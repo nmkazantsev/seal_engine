@@ -449,6 +449,9 @@ public class Utils {
      * @return 120/current fps
      */
     public static float getTimeK() {
+        if (millisFrozen) {
+            return 0;
+        }
         return timeK;
     }
 
