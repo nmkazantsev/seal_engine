@@ -42,7 +42,6 @@ public class Engine {
     private GLSurfaceView glSurfaceView;
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
-    public final static String version = "3.0.3";
 
     public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape, boolean debug) {
         Engine.getStartPage = getStartPage;
