@@ -31,7 +31,9 @@ public class VectriesShapesManager {
     //called every frame to check if shape is loaded
     public static void onFrameBegin() {
         for (WeakReference<VerticleSet> i : allShapes) {
-            i.get().onFrameBegin();
+            if (i.get() != null) {
+                i.get().onFrameBegin();
+            }
         }
     }
 
