@@ -40,16 +40,15 @@ import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {
-    private final Shader shader, lightShader, skyBoxShader;
+    private final Shader shader, lightShader, skyBoxShader, shadowShader;
     Camera camera;
-    private final Shape s;
+    private final Shape s, s2;
     private final SkyBox skyBox;
     private final SourceLight sourceLight;
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
     private FrameBuffer frameBuffer;
-
     TouchProcessor touchProcessor;
 
     DebugValueFloat camPos;
@@ -57,8 +56,10 @@ public class SecondRenderer extends GamePageClass {
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
+        shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_shadow, com.example.gl_engine.R.raw.fragment_shadow, this, new LightShaderAdaptor());
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
+        s2 = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
 
         ambientLight = new AmbientLight(this);
@@ -121,7 +122,7 @@ public class SecondRenderer extends GamePageClass {
         applyShader(skyBoxShader);
         camera.apply();
         skyBox.prepareAndDraw();
-        applyShader(lightShader);
+        applyShader(shadowShader);
         material.apply();
         glClearColor(1f, 1, 1, 1);
         camera.apply();
@@ -131,8 +132,10 @@ public class SecondRenderer extends GamePageClass {
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
+        //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
-        applyShader(shader);
+        applyShader(lightShader);
+        material.apply();
         camera.apply();
         applyMatrix(mMatrix);
         s.prepareAndDraw();

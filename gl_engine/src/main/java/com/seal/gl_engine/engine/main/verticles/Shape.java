@@ -122,43 +122,45 @@ public class Shape implements VerticleSet, DrawableShape {
         return Utils.loadImage(textureFileName);
     }
 
+    private boolean textureEnabled = true;
 
     public void bindData() {
         if (!vboLoaded) {
             vertexBuffer = new VertexBuffer(5, creator); //5 because 5 types of coordinates so we need 5 buffers
-            Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
-            vboLoaded = true;
         }
+        Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer, vboLoaded);
+        vboLoaded = true;
+        if (textureEnabled) {
+            // place texture in target 2D unit 0
+            glActiveTexture(GL_TEXTURE0);
+            if (!postToGlNeeded) {
+                glBindTexture(GL_TEXTURE_2D, texture.getId());
+            }
+            if (postToGlNeeded) {
+                postToGl();
+            }
+            // texture unit
+            glUniform1i(Shader.getActiveShader().getAdaptor().getTextureLocation(), 0);
 
-        // place texture in target 2D unit 0
-        glActiveTexture(GL_TEXTURE0);
-        if (!postToGlNeeded) {
-            glBindTexture(GL_TEXTURE_2D, texture.getId());
-        }
-        if (postToGlNeeded) {
-            postToGl();
-        }
-        // texture unit
-        glUniform1i(Shader.getActiveShader().getAdaptor().getTextureLocation(), 0);
+            //  place texture in target 2D unit 0
+            glActiveTexture(GL_TEXTURE1);
+            if (!postToGlNeeded && normalTexture != null) {
+                glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
+            }
+            if (postToGlNeeded) {
+                postToGlNormals();
+            }
+            //texture unit
+            glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
 
-        //  place texture in target 2D unit 0
-        glActiveTexture(GL_TEXTURE1);
-        if (!postToGlNeeded && normalTexture != null) {
-            glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
+            //enable or disable normal map in shader
+            if (normalTexture != null) {
+                GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
+            } else {
+                GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 0);
+            }
+            postToGlNeeded = false;
         }
-        if (postToGlNeeded) {
-            postToGlNormals();
-        }
-        //texture unit
-        glUniform1i(Shader.getActiveShader().getAdaptor().getNormalTextureLocation(), 1);
-
-        //enable or disable normal map in shader
-        if (normalTexture != null) {
-            GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
-        } else {
-            GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 0);
-        }
-        postToGlNeeded = false;
     }
 
     private void postToGl() {
@@ -189,6 +191,19 @@ public class Shape implements VerticleSet, DrawableShape {
         }
     }
 
+    public void prepareAndDraw(boolean textureEnabled) {
+        this.textureEnabled = textureEnabled;
+        if (globalLoaded) {
+            bindData();
+            vertexBuffer.bindVao();
+            glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
+            glDrawArrays(GL_TRIANGLES, 0, object.getNumFaces() * 3);
+            glDisable(GL_CULL_FACE);
+            vertexBuffer.bindDefaultVao();
+        }
+        this.textureEnabled = true;
+    }
+
     @Override
     public void onRedrawSetup() {
         setRedrawNeeded(true);
@@ -203,6 +218,10 @@ public class Shape implements VerticleSet, DrawableShape {
             VectriesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
         }
         vboLoaded = false;
+    }
+
+    public void setPostToGlNeeded() {
+        this.postToGlNeeded = true;
     }
 
     @Override
