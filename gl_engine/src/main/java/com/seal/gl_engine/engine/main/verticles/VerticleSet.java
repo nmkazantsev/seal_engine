@@ -16,5 +16,7 @@ public interface VerticleSet {
 
      String getCreatorClassName();
 
+     void onFrameBegin();
+
      void delete();
 }

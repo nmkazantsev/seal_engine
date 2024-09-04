@@ -56,6 +56,7 @@ public class Debugger {
     private final static int maxNum = 5;
     private static DebugValueFloat selectedValue = null;
     private static int totalValues = 0;
+    private static boolean redrawNeeded = true;
 
     public static void debuggerInit() {
         fps_x = 100 * kx;
@@ -75,6 +76,7 @@ public class Debugger {
         mainTP = new TouchProcessor(
                 TouchPoint -> true,
                 TouchPoint -> {
+                    redrawNeeded=true;
                     //shorter the code
                     float tx = TouchPoint.touchX;
                     float ty = TouchPoint.touchY;
@@ -124,6 +126,7 @@ public class Debugger {
                 },
                 touchPoint -> {
                     if (selectedValue != null) {
+                        redrawNeeded=true;
                         selectSlider(touchPoint.touchX);
                     }
                     return null;
@@ -175,18 +178,21 @@ public class Debugger {
             applyShader(shader);
             debuggerCamera.apply();
             applyMatrix(matrix);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
             if (page == 0) {
                 fpsPolygon.setRedrawNeeded(true);
                 fpsPolygon.redrawNow();
-                fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(fps_x, 0, 1), new Point(0 * kx, fps_y, 1));
+                fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 10), new Point(fps_x, 0, 10), new Point(0 * kx, fps_y, 10));
             } else {
-                debuggerPage.setRedrawNeeded(true);
-                debuggerPage.redrawNow();
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
+                if(redrawNeeded) {
+                    debuggerPage.setRedrawNeeded(true);
+                    debuggerPage.redrawNow();
+                    redrawNeeded=false;
+                }
                 debuggerPage.prepareAndDraw(0, 0, 0, x, y, 9);
+                glDisable(GL_BLEND);
             }
-            glDisable(GL_BLEND);
         }
     }
 
@@ -197,8 +203,13 @@ public class Debugger {
     private static final Function<List<Object>, PImage> drawMianPage = objects -> {
         PImage image = new PImage(x, y);
         image.background(255, 255, 255, 140);
+        image.textSize(30 * kx);
+        image.textAlign(Paint.Align.RIGHT);
+        image.fill(50);
+        image.text("version: " + version, x - 10 * kx, 0 * ky);
         image.textSize(26 * kx);
         image.fill(0);
+        image.textAlign(Paint.Align.LEFT);
         image.text((int) fps, 10, 10);
         image.textSize(45 * kx);
         image.textAlign(Paint.Align.CENTER);
@@ -206,10 +217,6 @@ public class Debugger {
             for (int i = (int) max(0, (page - 1) * maxNum); i < min(page * maxNum, totalValues); i++) {
                 image.text(debugList.get(i).name + ": " + debugList.get(i).value, x / 2, shift + enter * (i - page + 1));
             }
-            image.textSize(30 * kx);
-            image.textAlign(Paint.Align.RIGHT);
-            image.fill(50);
-            image.text("version: " + version, x - 10 * kx, 0 * ky);
         } else {
             image.textAlign(Paint.Align.CENTER);
             image.text(selectedValue.name + ":", x / 2, y / 3);

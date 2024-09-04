@@ -36,7 +36,7 @@ import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
 public class Shape implements VerticleSet, DrawableShape {
-    private boolean isLoaded = false;
+    private boolean isVertexLoaded = false, globalLoaded = false;
 
     private final Texture texture;
     private Texture normalTexture;
@@ -97,12 +97,17 @@ public class Shape implements VerticleSet, DrawableShape {
                                 object.getNormal(object.getFace(i).getNormalIndex(0)).getZ()
                         ));
             }
-            isLoaded = true;
+            isVertexLoaded = true;
         }).start();
         onRedrawSetup();
         redrawNow();
     }
 
+    public void onFrameBegin() {
+        if (isVertexLoaded) {
+            globalLoaded = true;
+        }
+    }
 
     public void addNormalMap(String normalMapFileName) {
         this.normalMapFileName = normalMapFileName;
@@ -168,12 +173,13 @@ public class Shape implements VerticleSet, DrawableShape {
             glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, normalImage.bitmap, 0);
             normalImage.delete();
+            glActiveTexture(GL_TEXTURE0);
         }
     }
 
 
     public void prepareAndDraw() {
-        if (isLoaded) {
+        if (globalLoaded) {
             bindData();
             vertexBuffer.bindVao();
             glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization

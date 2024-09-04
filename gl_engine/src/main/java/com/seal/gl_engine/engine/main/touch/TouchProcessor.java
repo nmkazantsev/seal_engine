@@ -85,6 +85,45 @@ public class TouchProcessor {
         return millis() - startTime;
     }
 
+    /**
+     * A function that stops tracking current touch. May be called any time you wish.
+     * Also called when touch ends.
+     */
+    public void terminate() {
+        //the same as usual terminate(event), but call callback ot once, because we are already in main thread and editing command queue will crash the app
+        touchAlive = false;
+        touchEndProcessed = true;
+        activeProcessors.remove(touchId);
+        touchId = -1;
+        if (touchEndedCallback != null) {
+            touchEndedCallback.apply(null);
+        }
+    }
+
+    private void terminate(MotionEvent event) {
+        touchAlive = false;
+        touchEndProcessed = false;
+        activeProcessors.remove(touchId);
+        touchId = -1;
+        if (touchEndedCallback != null) {
+            Command c = new Command(lastTouchPoint, touchEndedCallback, this);
+            c.isTouchEnded = true;
+            commandQueue.add(c);
+        }
+    }
+
+    private boolean checkHitbox(TouchPoint event) {
+        return checkHitboxCallback.apply(event);
+    }
+
+    /**
+     * Get if touch is pressed at the moment of calling this.
+     *
+     * @return true if finger is pressing, false if finger is released and this touch object is ready to capture new touch.
+     */
+    public boolean getTouchAlive() {
+        return touchAlive;
+    }
     //**********STATIC METHODS********************
     public static boolean onTouch(View v, MotionEvent event) {
         synchronized (commandQueue) {
@@ -187,46 +226,6 @@ public class TouchProcessor {
         pageChanged = true;
         //do not call terminate here not to call touch ended
         allProcessors.removeIf(e -> !(e.creatorClassName == OpenGLRenderer.getPageClass()) && !(e.creatorClassName == null));
-    }
-
-    /**
-     * A function that stops tracking current touch. May be called any time you wish.
-     * Also called when touch ends.
-     */
-    public void terminate() {
-        //the same as usual terminate(event), but call callback ot once, because we are already in main thread and editing command queue will crash the app
-        touchAlive = false;
-        touchEndProcessed = true;
-        activeProcessors.remove(touchId);
-        touchId = -1;
-        if (touchEndedCallback != null) {
-            touchEndedCallback.apply(null);
-        }
-    }
-
-    private void terminate(MotionEvent event) {
-        touchAlive = false;
-        touchEndProcessed = false;
-        activeProcessors.remove(touchId);
-        touchId = -1;
-        if (touchEndedCallback != null) {
-            Command c = new Command(lastTouchPoint, touchEndedCallback, this);
-            c.isTouchEnded = true;
-            commandQueue.add(c);
-        }
-    }
-
-    private boolean checkHitbox(TouchPoint event) {
-        return checkHitboxCallback.apply(event);
-    }
-
-    /**
-     * Get if touch is pressed at the moment of calling this.
-     *
-     * @return true if finger is pressing, false if finger is released and this touch object is ready to capture new touch.
-     */
-    public boolean getTouchAlive() {
-        return touchAlive;
     }
 
     //a class for queue of postponed (in nearest frame) callback (not all callbacks are allowed in touch thread, problems with openGL context)

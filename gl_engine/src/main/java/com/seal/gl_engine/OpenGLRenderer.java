@@ -102,6 +102,7 @@ public class OpenGLRenderer implements Renderer {
         if (gamePage == null) {
             startNewPage(Engine.getStartPage.apply(null));
         }
+        VectriesShapesManager.onFrameBegin();
         gamePage.draw();
         Debugger.draw();
     }
