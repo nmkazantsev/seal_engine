@@ -217,6 +217,11 @@ public class Poligon implements VerticleSet, DrawableShape {
     }
 
     @Override
+    public void onFrameBegin() {
+
+    }
+
+    @Override
     public void delete() {
         image.delete();
     }
