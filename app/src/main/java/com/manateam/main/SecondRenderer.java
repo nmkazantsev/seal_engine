@@ -134,7 +134,7 @@ public class SecondRenderer extends GamePageClass {
         s.prepareAndDraw();
         //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
-        applyShader(lightShader);
+        applyShader(shader);
         material.apply();
         camera.apply();
         applyMatrix(mMatrix);
