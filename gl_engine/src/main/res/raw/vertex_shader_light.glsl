@@ -30,6 +30,7 @@ out struct Data {
     vec2 TexCoord;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
+    vec4 lightSpacePos;
 } data;
 out vec3 pLightPos[pnumber];
 out vec3 dLightDir[dnumber];
@@ -83,6 +84,8 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform vec3 viewPos;
+uniform mat4 lightProjectionMatrix;
+uniform mat4 lightViewMatrix;
 void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
@@ -90,6 +93,7 @@ void main()
     data.TexCoord = vec2(aTexCoord.x, aTexCoord.y);
     data.normal = normalize(normalVec);
     data.model2 = model;
+    data.lightSpacePos =lightProjectionMatrix * lightViewMatrix * model * vec4(aPos, 1.0f);
     mat3 normalMatrix = transpose(inverse(mat3(model)));
     vec3 T = normalize(normalMatrix * aT);
     vec3 N = normalize(normalMatrix * data.normal);

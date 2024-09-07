@@ -41,7 +41,7 @@ import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {
     private final Shader shader, lightShader, skyBoxShader, shadowShader;
-    Camera camera;
+    Camera camera, lightCamera;
     private final Shape s, s2;
     private final SkyBox skyBox;
     private final SourceLight sourceLight;
@@ -58,6 +58,7 @@ public class SecondRenderer extends GamePageClass {
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
         shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_shadow, com.example.gl_engine.R.raw.fragment_shadow, this, new LightShaderAdaptor());
         camera = new Camera();
+        lightCamera = new Camera(x, y);
         s = new Shape("ponchik.obj", "texture.png", this);
         s2 = new Shape("cube.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
@@ -106,6 +107,10 @@ public class SecondRenderer extends GamePageClass {
 
         camPos = Debugger.addDebugValueFloat(2, 5, "cam pos");
         camPos.value = 4;
+        lightCamera.resetFor3d();
+        lightCamera.cameraSettings.eyeX = 4/2.0f;
+        lightCamera.cameraSettings.eyeZ = 3/2.0f;
+        lightCamera.cameraSettings.eyeY=6/2.0f;
     }
 
 
@@ -120,13 +125,15 @@ public class SecondRenderer extends GamePageClass {
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = x;
         applyShader(shadowShader);
+        lightCamera.apply(false);
         drawScene();
         //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
         applyShader(skyBoxShader);
         camera.apply();
         skyBox.prepareAndDraw();
-        applyShader(lightShader);
+        applyShader(shadowShader);
+        camera.apply();
         drawScene();
         applyShader(shader);
         camera.resetFor2d();
@@ -139,7 +146,6 @@ public class SecondRenderer extends GamePageClass {
     private void drawScene() {
         material.apply();
         glClearColor(1f, 1, 1, 1);
-        camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.translateM(mMatrix, 0, 0, -3, 0);
         Matrix.scaleM(mMatrix, 0, 6, 0.1f, 6);

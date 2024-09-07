@@ -2,9 +2,9 @@
 precision mediump float;
 precision mediump int;
 //max snuber of lights of each type
-#define  snumber 1 //spot number
-#define  dnumber 1 //direct number
-#define  pnumber 1 //point number
+#define  snumber 1//spot number
+#define  dnumber 1//direct number
+#define  pnumber 1//point number
 out vec4 FragColor;
 uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
@@ -68,6 +68,7 @@ in struct Data {
     vec2 TexCoord;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
+    vec4 lightSpacePos;
 } data;
 
 in vec3 pLightPos[pnumber];
@@ -135,6 +136,22 @@ vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 
     return (ambient + diffuse + specular)*color*light.color;
 }
 
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / 1.0;//fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+}
+
 uniform int normalMapEnable;
 void main()
 {
@@ -149,7 +166,9 @@ void main()
     vec3 result = applyAmbient(color);
 
     for (int i = 0; i < dLightNum; i++) {
-        result += applyDirectedLight(color, norm, viewDir, i);
+        if (ShadowCalculation(data.lightSpacePos)==1.0){
+            result += applyDirectedLight(color, norm, viewDir, i);
+        }
     }
     for (int i = 0;i < pLightNum; i++) {
         result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
