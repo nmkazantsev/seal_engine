@@ -59,16 +59,16 @@ public class SecondRenderer extends GamePageClass {
         shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_shadow, com.example.gl_engine.R.raw.fragment_shadow, this, new LightShaderAdaptor());
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
-        s2 = new Shape("ponchik.obj", "texture.png", this);
+        s2 = new Shape("cube.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
 
         ambientLight = new AmbientLight(this);
         // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
         directedLight1 = new DirectedLight(this);
-        directedLight1.direction = new Vec3(-1, 0, 0);
+        directedLight1.direction = new Vec3(-1, -1, 0);
         directedLight1.color = new Vec3(0.9f);
-        directedLight1.diffuse = 0.2f;
+        directedLight1.diffuse = 0.5f;
         directedLight1.specular = 0.8f;
        /* directedLight2 = new DirectedLight(this);
         directedLight2.direction = new Vec3(0, 1, 0);
@@ -116,33 +116,40 @@ public class SecondRenderer extends GamePageClass {
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 0f;
         camera.cameraSettings.eyeX = camPos.value;
-        float x = 3.5f * Utils.sin(millis() / 1000.0f);
+        float x = 2.5f * Utils.sin(millis() / 1000.0f);
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = x;
+        applyShader(shadowShader);
+        drawScene();
+        //s.setRedrawNeeded(false);
+        FrameBufferUtils.connectDefaultFrameBuffer();
         applyShader(skyBoxShader);
         camera.apply();
         skyBox.prepareAndDraw();
-        applyShader(shadowShader);
+        applyShader(lightShader);
+        drawScene();
+        applyShader(shader);
+        camera.resetFor2d();
+        camera.apply();
+        mMatrix = resetTranslateMatrix(mMatrix);
+        applyMatrix(mMatrix);
+        frameBuffer.drawTexture(new Point(Utils.x / 2, Utils.y / 2, 1), new Point(0, y / 2, 1), new Point(Utils.x / 2, 0, 1));
+    }
+
+    private void drawScene() {
         material.apply();
         glClearColor(1f, 1, 1, 1);
         camera.apply();
+        mMatrix = resetTranslateMatrix(mMatrix);
+        Matrix.translateM(mMatrix, 0, 0, -3, 0);
+        Matrix.scaleM(mMatrix, 0, 6, 0.1f, 6);
+        applyMatrix(mMatrix);
+        s2.prepareAndDraw();
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
         Matrix.translateM(mMatrix, 0, 0, -0f, 0);
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
-        //s.setRedrawNeeded(false);
-        FrameBufferUtils.connectDefaultFrameBuffer();
-        applyShader(shader);
-        material.apply();
-        camera.apply();
-        applyMatrix(mMatrix);
-        s.prepareAndDraw();
-        camera.resetFor2d();
-        camera.apply();
-        mMatrix = resetTranslateMatrix(mMatrix);
-        applyMatrix(mMatrix);
-        frameBuffer.drawTexture(new Point(Utils.x / 2, Utils.y / 2, 1), new Point(0, y / 2, 1), new Point(Utils.x / 2, 0, 1));
     }
 }
