@@ -1,11 +1,13 @@
 package com.seal.gl_engine.engine.main.frameBuffers;
 
+import static android.opengl.GLES20.GL_COLOR_ATTACHMENT0;
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES30.glDrawBuffers;
 
 import android.opengl.GLES20;
 
@@ -14,8 +16,10 @@ import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.verticles.Face;
 import com.seal.gl_engine.maths.Point;
 
+import java.nio.IntBuffer;
+
 public class GBuffer extends FrameBuffer {
-    private int[] textures;
+    private final int[] textures;
 
     public GBuffer(float width, float height, int texturesCount, GamePageClass page) {
         super(width, height, page);
@@ -29,8 +33,8 @@ public class GBuffer extends FrameBuffer {
 
         frameBuffer = frameBuffers[0];
 
-
         GLES20.glGenTextures(textures.length, textures, 0);
+        int[] attachments = new int[textures.length];
         for (int i = 0; i < textures.length; i++) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[i]);
             GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
@@ -41,10 +45,13 @@ public class GBuffer extends FrameBuffer {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                     GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, this.getFrameBuffer());
-            GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0 + i,
+            GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
                     GLES20.GL_TEXTURE_2D, textures[i], 0);
+
+            attachments[i] = GL_COLOR_ATTACHMENT0 + i;
         }
 
+        glDrawBuffers(3, IntBuffer.wrap(attachments));
 
         int[] depthBuffer = new int[1];
         GLES20.glGenRenderbuffers(1, depthBuffer, 0);
@@ -54,6 +61,11 @@ public class GBuffer extends FrameBuffer {
 
     }
 
+
+    @Override
+    public void drawTexture(Point a, Point b, Point d) {
+        this.drawTexture(0, a, b, d);
+    }
 
     public void drawTexture(int textNum, Point a, Point b, Point d) {
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);

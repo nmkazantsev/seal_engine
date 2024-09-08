@@ -5,7 +5,7 @@ import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
-import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createGBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.cos;
 import static com.seal.gl_engine.utils.Utils.map;
@@ -24,8 +24,8 @@ import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.debugger.Debugger;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
+import com.seal.gl_engine.engine.main.frameBuffers.GBuffer;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.Material;
@@ -48,7 +48,7 @@ public class SecondRenderer extends GamePageClass {
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
-    private FrameBuffer frameBuffer;
+    private GBuffer frameBuffer;
     TouchProcessor touchProcessor;
 
     DebugValueFloat camPos;
@@ -103,14 +103,14 @@ public class SecondRenderer extends GamePageClass {
             OpenGLRenderer.startNewPage(new MainRenderer());
             return null;
         }, null, null, this);
-        frameBuffer = createFrameBuffer((int) x, (int) y, this);
+        frameBuffer = createGBuffer(3, x, y, this);
 
         camPos = Debugger.addDebugValueFloat(2, 5, "cam pos");
         camPos.value = 4;
         lightCamera.resetFor3d();
-        lightCamera.cameraSettings.eyeX = 4/2.0f;
-        lightCamera.cameraSettings.eyeZ = 3/2.0f;
-        lightCamera.cameraSettings.eyeY=6/2.0f;
+        lightCamera.cameraSettings.eyeX = 4 / 2.0f;
+        lightCamera.cameraSettings.eyeZ = 3 / 2.0f;
+        lightCamera.cameraSettings.eyeY = 6 / 2.0f;
     }
 
 
@@ -140,7 +140,7 @@ public class SecondRenderer extends GamePageClass {
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(new Point(Utils.x / 2, Utils.y / 2, 1), new Point(0, y / 2, 1), new Point(Utils.x / 2, 0, 1));
+        frameBuffer.drawTexture(0,new Point(Utils.x / 2, Utils.y / 2, 1), new Point(0, y / 2, 1), new Point(Utils.x / 2, 0, 1));
     }
 
     private void drawScene() {

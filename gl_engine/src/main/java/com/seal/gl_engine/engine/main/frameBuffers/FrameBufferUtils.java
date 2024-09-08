@@ -10,11 +10,15 @@ import com.seal.gl_engine.GamePageClass;
 
 public class FrameBufferUtils {
     // https://www.programcreek.com/java-api-examples/?class=android.opengl.GLES20&method=glBindFramebuffer
-    public static FrameBuffer createFrameBuffer(int width, int height, GamePageClass page) {
+    public static FrameBuffer createFrameBuffer(float width, float height, GamePageClass page) {
         FrameBuffer f = new FrameBuffer(width, height, page);
         f.onRedrawSetup();
         return f;
-
+    }
+    public static GBuffer createGBuffer(int textureCount, float width, float height, GamePageClass page) {
+        GBuffer f = new GBuffer(width, height, textureCount, page);
+        f.onRedrawSetup();
+        return f;
     }
 
     public static void connectFrameBuffer(int frameBuffer) {
