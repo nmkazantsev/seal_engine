@@ -21,13 +21,13 @@ public class FrameBufferUtils {
         return f;
     }
 
-    public static void connectFrameBuffer(int frameBuffer) {
+    protected static void connectFrameBuffer(int frameBuffer) {
         // switch to the buffer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffer);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void connectFramebuffer(FrameBuffer fb) {
+    protected void connectFramebuffer(FrameBuffer fb) {
         connectFrameBuffer(fb.getFrameBuffer());
     }
 

@@ -5,7 +5,6 @@ import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.OpenGLRenderer.pageMillis;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;
-import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.x;
@@ -71,7 +70,7 @@ public class MainRenderer extends GamePageClass {
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 5;
         camera.apply();
-        connectFrameBuffer(frameBuffer.getFrameBuffer());
+        frameBuffer.apply();
         s.prepareAndDraw();
         connectDefaultFrameBuffer();
         camera.resetFor2d();

@@ -20,6 +20,7 @@ import java.nio.IntBuffer;
 
 public class GBuffer extends FrameBuffer {
     private final int[] textures;
+    private static final int START_TEXTURE = 10;
 
     public GBuffer(float width, float height, int texturesCount, GamePageClass page) {
         super(width, height, page);
@@ -51,16 +52,19 @@ public class GBuffer extends FrameBuffer {
             attachments[i] = GL_COLOR_ATTACHMENT0 + i;
         }
 
-        glDrawBuffers(3, IntBuffer.wrap(attachments));
-
         int[] depthBuffer = new int[1];
         GLES20.glGenRenderbuffers(1, depthBuffer, 0);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthBuffer[0]);
         GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, w, h);
         GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT, GLES20.GL_RENDERBUFFER, depthBuffer[0]);
+        glDrawBuffers(textures.length, IntBuffer.wrap(attachments));
 
     }
 
+    @Override
+    public void apply() {
+        FrameBufferUtils.connectFrameBuffer(getFrameBuffer());
+    }
 
     @Override
     public void drawTexture(Point a, Point b, Point d) {
