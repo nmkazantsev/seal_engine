@@ -136,7 +136,7 @@ vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 
     return (ambient + diffuse + specular)*color*light.color;
 }
 
-float ShadowCalculation(vec4 fragPosLightSpace)
+/*float ShadowCalculation(vec4 fragPosLightSpace)
 {
     // perform perspective divide
     vec3 projCoords = fragPosLightSpace.xyz / 1.0;//fragPosLightSpace.w;
@@ -150,7 +150,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
 
     return shadow;
-}
+}*/
 
 uniform int normalMapEnable;
 void main()
@@ -166,9 +166,9 @@ void main()
     vec3 result = applyAmbient(color);
 
     for (int i = 0; i < dLightNum; i++) {
-        if (ShadowCalculation(data.lightSpacePos)==1.0){
+      //  if (ShadowCalculation(data.lightSpacePos)==1.0){
             result += applyDirectedLight(color, norm, viewDir, i);
-        }
+      //  }
     }
     for (int i = 0;i < pLightNum; i++) {
         result += applyPointLight(color, i, data.TangentFragPos, norm, viewDir);
