@@ -40,7 +40,7 @@ import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {
-    private final Shader shader, lightShader, skyBoxShader, shadowShader;
+    private final Shader shader, lightShader, skyBoxShader, firstPassDefredShader, renderPassDeferedShader;
     Camera camera, lightCamera;
     private final Shape s, s2;
     private final SkyBox skyBox;
@@ -56,7 +56,8 @@ public class SecondRenderer extends GamePageClass {
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_deffered_geometry, com.example.gl_engine.R.raw.fragment_deferred_geometry_shader, this, new LightShaderAdaptor());
+        firstPassDefredShader = new Shader(com.example.gl_engine.R.raw.vertex_deffered_geometry_shader, com.example.gl_engine.R.raw.fragment_deferred_geometry_shader, this, new LightShaderAdaptor());
+        renderPassDeferedShader= new Shader(com.example.gl_engine.R.raw.vertex_deffered_render_shader, com.example.gl_engine.R.raw.fragment_deffered_render_shader, this, new LightShaderAdaptor());
         camera = new Camera();
         lightCamera = new Camera(x, y);
         s = new Shape("ponchik.obj", "texture.png", this);
@@ -125,24 +126,30 @@ public class SecondRenderer extends GamePageClass {
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = 0;
         camera.cameraSettings.centerX=0;
-        applyShader(shadowShader);
+        applyShader(firstPassDefredShader);
        // lightCamera.apply(false);
         camera.apply();
         drawScene();
         //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
-        applyShader(skyBoxShader);
-        camera.apply();
-        skyBox.prepareAndDraw();
-        applyShader(lightShader);
-        camera.apply();
-        //drawScene();
-        applyShader(shader);
+        //applyShader(skyBoxShader);
+        //camera.apply();
+       // skyBox.prepareAndDraw();
+        applyShader(renderPassDeferedShader);
+        //camera.apply();
+       // drawScene();
+        applyShader(renderPassDeferedShader);
         camera.resetFor2d();
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
+        //replace with second render pass
         frameBuffer.drawTexture(1, new Point(Utils.x, Utils.y, 1), new Point(0, y , 1), new Point(Utils.x , 0, 1));
+
+        applyShader(shader);
+        camera.apply();
+        applyMatrix(mMatrix);
+        frameBuffer.drawTexture(1, new Point(Utils.x/3, Utils.y/3, 2), new Point(0, y/3 , 2), new Point(Utils.x/3 , 0, 2));
     }
 
     private void drawScene() {

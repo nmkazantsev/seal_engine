@@ -22,8 +22,8 @@ void main()
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
     TexCoord = vec2(aTexCoord.x, aTexCoord.y);
     mat3 normalMatrix = inverse(mat3(model));
-      normal = normalize(normalVec*normalMatrix);
-      aTv = normalize(aT*normalMatrix);
-      aTv = normalize(aTv - dot(aTv, normal) * normal);
-      aBv = normalize(cross(normal, aTv));
+    normal = normalize(normalVec*normalMatrix);
+    aTv = normalize(aT*normalMatrix);
+    aTv = normalize(aTv - dot(aTv, normal) * normal);
+    aBv = normalize(cross(normal, aTv));
 }
