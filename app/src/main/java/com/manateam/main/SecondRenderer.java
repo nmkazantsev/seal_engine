@@ -51,12 +51,12 @@ public class SecondRenderer extends GamePageClass {
     private GBuffer frameBuffer;
     TouchProcessor touchProcessor;
 
-    DebugValueFloat camPos;
+    DebugValueFloat camPos, turn;
 
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_shadow, com.example.gl_engine.R.raw.fragment_depth_shader, this, new LightShaderAdaptor());
+        shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_deffered_geometry, com.example.gl_engine.R.raw.fragment_deferred_geometry_shader, this, new LightShaderAdaptor());
         camera = new Camera();
         lightCamera = new Camera(x, y);
         s = new Shape("ponchik.obj", "texture.png", this);
@@ -105,12 +105,11 @@ public class SecondRenderer extends GamePageClass {
         }, null, null, this);
         frameBuffer = createGBuffer(3, x, y, this);
 
-        camPos = Debugger.addDebugValueFloat(2, 5, "cam pos");
-        camPos.value = 4;
+        camPos = Debugger.addDebugValueFloat(1, 5, "cam pos");
+        camPos.value = 2;
+        turn = Debugger.addDebugValueFloat(0,360,"turn");
+        turn.value=0;
         lightCamera.resetFor3d();
-        lightCamera.cameraSettings.eyeX = 4 / 2.0f;
-        lightCamera.cameraSettings.eyeZ = 3 / 2.0f;
-        lightCamera.cameraSettings.eyeY = 6 / 2.0f;
     }
 
 
@@ -119,13 +118,16 @@ public class SecondRenderer extends GamePageClass {
         GLES30.glDisable(GL_BLEND);
         frameBuffer.apply();
         camera.resetFor3d();
-        camera.cameraSettings.eyeZ = 0f;
-        camera.cameraSettings.eyeX = camPos.value;
-        float x = 2.5f * Utils.sin(millis() / 1000.0f);
+        camera.cameraSettings.eyeY= camPos.value;
+        camera.cameraSettings.eyeZ=0f;
+        camera.cameraSettings.eyeX = 1.5f;
+        float x = 2.5f * Utils.sin(millis() / 1000.0f)*0;
         camera.cameraSettings.centerY = 0;
-        camera.cameraSettings.centerZ = x;
+        camera.cameraSettings.centerZ = 0;
+        camera.cameraSettings.centerX=0;
         applyShader(shadowShader);
-        lightCamera.apply(false);
+       // lightCamera.apply(false);
+        camera.apply();
         drawScene();
         //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
@@ -134,13 +136,13 @@ public class SecondRenderer extends GamePageClass {
         skyBox.prepareAndDraw();
         applyShader(lightShader);
         camera.apply();
-        drawScene();
+        //drawScene();
         applyShader(shader);
         camera.resetFor2d();
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(2, new Point(Utils.x / 2, Utils.y / 2, 1), new Point(0, y / 2, 1), new Point(Utils.x / 2, 0, 1));
+        frameBuffer.drawTexture(1, new Point(Utils.x, Utils.y, 1), new Point(0, y , 1), new Point(Utils.x , 0, 1));
     }
 
     private void drawScene() {
@@ -152,7 +154,7 @@ public class SecondRenderer extends GamePageClass {
         applyMatrix(mMatrix);
         s2.prepareAndDraw();
         mMatrix = resetTranslateMatrix(mMatrix);
-        Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
+        Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, turn.value, turn.value), 1, 1, 0);
         Matrix.translateM(mMatrix, 0, 0, -0f, 0);
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
