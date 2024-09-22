@@ -180,4 +180,9 @@ public class MainShaderAdaptor extends Adaptor {
     public int getCameraPosLlocation() {
         return -1;
     }
+
+    @Override
+    public int getTextureNumberNlocation(int n) {
+        return 0;
+    }
 }

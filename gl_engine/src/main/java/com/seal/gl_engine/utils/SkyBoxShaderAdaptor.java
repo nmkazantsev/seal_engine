@@ -97,6 +97,11 @@ public class SkyBoxShaderAdaptor extends Adaptor {
     public int getCameraPosLlocation() {
         return viewMatrixLocation;
     }
+
+    @Override
+    public int getTextureNumberNlocation(int n) {
+        return 0;
+    }
 }
 
 

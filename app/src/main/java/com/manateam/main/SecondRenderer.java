@@ -144,13 +144,13 @@ public class SecondRenderer extends GamePageClass {
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        //replace with second render pass
-        frameBuffer.drawTexture(1, new Point(Utils.x, y),  new Point(0, y, 1), new Point(Utils.x,  1));
+        //pass contents to shader
+        frameBuffer.drawAllTextures( new Point(Utils.x, y),  new Point(0, y, 1), new Point(Utils.x,  1));
 
         applyShader(shader);
         camera.apply();
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(1, new Point(0,0, 2),  new Point(Utils.x / 3, 0, 2), new Point(0, y / 3, 2));
+        frameBuffer.drawTexture(2, new Point(0,0, 2),  new Point(Utils.x / 3, 0, 2), new Point(0, y / 3, 2));
     }
 
     private void drawScene() {

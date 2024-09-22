@@ -31,6 +31,8 @@ public class LightShaderAdaptor extends Adaptor {
     private int modelMtrixLocation;
     private int normalLocation, normalMapLocation;
     private int tangetntLocation, bitangentLocation, cameraPosLocation;
+    private final int[] deffered_texturesLoactions = new int[3];
+    private final String[] defferedTextureNames = {"position_tex", "normal_tex", "albedo_tex"};
 
     private final static int POSITION_COUNT = 3;
     private static final int TEXTURE_COUNT = 2;
@@ -193,6 +195,11 @@ public class LightShaderAdaptor extends Adaptor {
         modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
         cameraPosLocation = GLES30.glGetUniformLocation(programId, "viewPos");
         normalMapEnableLocation = GLES30.glGetUniformLocation(programId, "normalMapEnable");
+        deffered_texturesLoactions[0] = GLES30.glGetUniformLocation(programId, "albedo");
+        //only for post processing
+        for (int i = 0; i < defferedTextureNames.length; i++) {
+            deffered_texturesLoactions[i] = glGetUniformLocation(programId, defferedTextureNames[i]);
+        }
     }
 
     @Override
@@ -228,5 +235,10 @@ public class LightShaderAdaptor extends Adaptor {
     @Override
     public int getCameraPosLlocation() {
         return cameraPosLocation;
+    }
+
+    @Override
+    public int getTextureNumberNlocation(int n) {
+        return deffered_texturesLoactions[n];
     }
 }

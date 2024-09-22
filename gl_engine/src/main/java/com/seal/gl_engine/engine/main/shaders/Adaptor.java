@@ -65,4 +65,6 @@ public abstract class Adaptor {
     public abstract int getNormalMapEnableLocation();
 
     public abstract int getCameraPosLlocation();
+
+    public abstract int getTextureNumberNlocation(int n);
 }

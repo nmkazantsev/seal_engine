@@ -12,6 +12,7 @@ in vec3 aBv;
 uniform int normalMapEnable;
 uniform sampler2D textureSamp;
 uniform sampler2D normalMap;
+
 void main()
 {
    vec3 norm=normalize(normal);
