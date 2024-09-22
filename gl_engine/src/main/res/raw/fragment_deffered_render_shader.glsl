@@ -2,11 +2,11 @@
 precision mediump float;
 in vec2 TexCoord;
 out vec4 FragColor;
-uniform sampler2D position_tex;
-uniform sampler2D normal_tex;
-uniform sampler2D albedo_tex;
+layout (location =0)uniform sampler2D N;
+layout (location =1)uniform sampler2D A;
+layout (location =2)uniform sampler2D P;
 void main()
 {
-    FragColor = vec4(texture(albedo_tex, TexCoord).rgb+texture(normal_tex, TexCoord).rgb+texture(position_tex, TexCoord).rgb,1.0);
+    FragColor = vec4(texture(A, TexCoord).rgb*0.0+texture(N, TexCoord).rgb+texture(P, TexCoord).rgb*0.0, 1.0);
     //FragColor = vec4(0.3);
 }

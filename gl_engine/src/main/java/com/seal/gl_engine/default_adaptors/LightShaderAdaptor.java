@@ -32,7 +32,7 @@ public class LightShaderAdaptor extends Adaptor {
     private int normalLocation, normalMapLocation;
     private int tangetntLocation, bitangentLocation, cameraPosLocation;
     private final int[] deffered_texturesLoactions = new int[3];
-    private final String[] defferedTextureNames = {"position_tex", "normal_tex", "albedo_tex"};
+    private final String[] defferedTextureNames = {"P", "N", "A"};
 
     private final static int POSITION_COUNT = 3;
     private static final int TEXTURE_COUNT = 2;

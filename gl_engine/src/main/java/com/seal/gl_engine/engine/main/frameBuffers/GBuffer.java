@@ -7,8 +7,8 @@ import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES30.glDrawBuffers;
-import static android.opengl.GLES30.glUniform1ui;
 
 import android.opengl.GLES20;
 
@@ -173,7 +173,7 @@ public class GBuffer extends FrameBuffer {
         for (int i = 0; i < textures.length; i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             glBindTexture(GL_TEXTURE_2D, textures[i]);
-            glUniform1ui(Shader.getActiveShader().getAdaptor().getTextureNumberNlocation(i), i);
+            glUniform1i(Shader.getActiveShader().getAdaptor().getTextureNumberNlocation(i), i);
         }
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glActiveTexture(GL_TEXTURE0);
