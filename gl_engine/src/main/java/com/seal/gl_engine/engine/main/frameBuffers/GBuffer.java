@@ -72,6 +72,12 @@ public class GBuffer extends FrameBuffer {
     }
 
     public void drawTexture(int textNum, Point a, Point b, Point d) {
+         /*
+        a-----b
+        |     |
+        |     |
+        d-----c
+         */
         Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
         float[][] vertices = new float[][]{
                 {a.x, a.y, a.z},
@@ -81,10 +87,10 @@ public class GBuffer extends FrameBuffer {
         };
 
         float[][] textCoords = new float[][]{
-                {0, 0},
-                {0, 1},
+                {1, 1},
                 {1, 0},
-                {1, 1}
+                {0, 1},
+                {0, 0},
         };
         Face face1 = new Face(
                 new Point[]{

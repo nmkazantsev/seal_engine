@@ -51,13 +51,13 @@ public class SecondRenderer extends GamePageClass {
     private GBuffer frameBuffer;
     TouchProcessor touchProcessor;
 
-    DebugValueFloat camPos, turn;
+    DebugValueFloat camPos, turn, zShift;
 
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
         firstPassDefredShader = new Shader(com.example.gl_engine.R.raw.vertex_deffered_geometry_shader, com.example.gl_engine.R.raw.fragment_deferred_geometry_shader, this, new LightShaderAdaptor());
-        renderPassDeferedShader= new Shader(com.example.gl_engine.R.raw.vertex_deffered_render_shader, com.example.gl_engine.R.raw.fragment_deffered_render_shader, this, new LightShaderAdaptor());
+        renderPassDeferedShader = new Shader(com.example.gl_engine.R.raw.vertex_deffered_render_shader, com.example.gl_engine.R.raw.fragment_deffered_render_shader, this, new LightShaderAdaptor());
         camera = new Camera();
         lightCamera = new Camera(x, y);
         s = new Shape("ponchik.obj", "texture.png", this);
@@ -108,8 +108,10 @@ public class SecondRenderer extends GamePageClass {
 
         camPos = Debugger.addDebugValueFloat(1, 5, "cam pos");
         camPos.value = 2;
-        turn = Debugger.addDebugValueFloat(0,360,"turn");
-        turn.value=0;
+        turn = Debugger.addDebugValueFloat(0, 360, "turn");
+        turn.value = 0;
+        zShift = Debugger.addDebugValueFloat(0.5f, 4, "z shift");
+        zShift.value = 1;
         lightCamera.resetFor3d();
     }
 
@@ -119,37 +121,36 @@ public class SecondRenderer extends GamePageClass {
         GLES30.glDisable(GL_BLEND);
         frameBuffer.apply();
         camera.resetFor3d();
-        camera.cameraSettings.eyeY= camPos.value;
-        camera.cameraSettings.eyeZ=0f;
+        camera.cameraSettings.eyeY = camPos.value;
+        camera.cameraSettings.eyeZ = zShift.value;
         camera.cameraSettings.eyeX = 1.5f;
-        float x = 2.5f * Utils.sin(millis() / 1000.0f)*0;
+        float x = 2.5f * Utils.sin(millis() / 1000.0f) * 0;
         camera.cameraSettings.centerY = 0;
         camera.cameraSettings.centerZ = 0;
-        camera.cameraSettings.centerX=0;
+        camera.cameraSettings.centerX = 0;
         applyShader(firstPassDefredShader);
-       // lightCamera.apply(false);
+        // lightCamera.apply(false);
         camera.apply();
         drawScene();
         //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
         //applyShader(skyBoxShader);
         //camera.apply();
-       // skyBox.prepareAndDraw();
+        // skyBox.prepareAndDraw();
         applyShader(renderPassDeferedShader);
         //camera.apply();
-       // drawScene();
-        applyShader(renderPassDeferedShader);
+        // drawScene();
         camera.resetFor2d();
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         //replace with second render pass
-        frameBuffer.drawTexture(1, new Point(Utils.x, Utils.y, 1), new Point(0, y , 1), new Point(Utils.x , 0, 1));
+        frameBuffer.drawTexture(1, new Point(Utils.x, y),  new Point(0, y, 1), new Point(Utils.x,  1));
 
         applyShader(shader);
         camera.apply();
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(1, new Point(Utils.x/3, Utils.y/3, 2), new Point(0, y/3 , 2), new Point(Utils.x/3 , 0, 2));
+        frameBuffer.drawTexture(1, new Point(0,0, 2),  new Point(Utils.x / 3, 0, 2), new Point(0, y / 3, 2));
     }
 
     private void drawScene() {
