@@ -195,7 +195,7 @@ public class LightShaderAdaptor extends Adaptor {
         modelMtrixLocation = GLES30.glGetUniformLocation(programId, "model");
         cameraPosLocation = GLES30.glGetUniformLocation(programId, "viewPos");
         normalMapEnableLocation = GLES30.glGetUniformLocation(programId, "normalMapEnable");
-        deffered_texturesLoactions[0] = GLES30.glGetUniformLocation(programId, "albedo");
+        deffered_texturesLoactions[0] = GLES30.glGetUniformLocation(programId, "albedo_tex");
         //only for post processing
         for (int i = 0; i < defferedTextureNames.length; i++) {
             deffered_texturesLoactions[i] = glGetUniformLocation(programId, defferedTextureNames[i]);
