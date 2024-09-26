@@ -143,6 +143,7 @@ public class SecondRenderer extends GamePageClass {
         int i= GLES30.glGetUniformLocation(15, "normalMap");
         camera.resetFor2d();
         camera.apply();
+        material.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         //pass contents to shader

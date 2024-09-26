@@ -1,7 +1,6 @@
 #version 320 es
 precision mediump float;
 in vec2 TexCoord;
-in vec3 FragPos;
 out vec4 FragColor;
 layout (location =0)uniform sampler2D N;
 layout (location =1)uniform sampler2D A;
@@ -142,17 +141,17 @@ void main()
     vec3 color = texture(A, TexCoord).rgb;
     vec3 norm = texture(N, TexCoord).rgb;
     vec3 position = texture(P, TexCoord).rgb;
-    vec3 viewDir=vec3(1.0,0.0,0.0);
+    vec3 viewDir=normalize(viewPos-position);
     //FragColor = vec4(sLights[0].position.xyz,0.0)/2.0;//vec4(texture(P, TexCoord).rgb*0.1+texture(N, TexCoord).rgb*0.0+texture(P, TexCoord).rgb*0.0, 1.0);
     vec3 result = applyAmbient(color);
     for (int i = 0; i < dLightNum; i++) {
         result += applyDirectedLight(color, norm, viewDir, i);
     }
     for (int i = 0;i < pLightNum; i++) {
-        result += applyPointLight(color, i, FragPos, norm, viewDir);
+        result += applyPointLight(color, i, position, norm, viewDir);
     }
     for (int i = 0;i < sLightNum; i++) {
-        result += CalcSpotLight(color, sLights[i], norm, FragPos, viewDir, i);
+        result += CalcSpotLight(color, sLights[i], norm, position, viewDir, i);
     }
     FragColor = vec4(result, 0.0);
 }
