@@ -109,21 +109,21 @@ vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 view
     specular *= attenuation;
     return color *pLights[index].color* (diffuse + specular);
 }
-/*
+
 // calculates the color when using a spot light.
 vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int i)
 {
-    vec3 lightDir = normalize(sLightPos[i] - fragPos);
+    vec3 lightDir = normalize(sLights[i].position - fragPos);
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     // specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // attenuation
-    float distance = length(sLightPos[i] - fragPos);
+    float distance = length(sLights[i].position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     // spotlight intensity
-    float theta = dot(lightDir, normalize(-sLightDir[i]));
+    float theta = dot(lightDir, normalize(-sLights[i].direction));
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     // combine results
@@ -135,7 +135,7 @@ vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 
     specular *= attenuation * intensity;
     return (ambient + diffuse + specular)*color*light.color;
 }
-*/
+
 void main()
 {
     FragColor = vec4(sLights[0].position.xyz,0.0)/2.0;//vec4(texture(P, TexCoord).rgb*0.1+texture(N, TexCoord).rgb*0.0+texture(P, TexCoord).rgb*0.0, 1.0);
