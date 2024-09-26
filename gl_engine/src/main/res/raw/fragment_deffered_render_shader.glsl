@@ -90,16 +90,16 @@ vec3 applyDirectedLight(vec3 color, vec3 normal, vec3 viewDir, int index) {
     return color *dLights[index].color* (diffuse+specular);
 }
 
-/*
+
 vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 viewDir) {
-    vec3 lightDir = normalize(pLightPos[index] - fragPos);
+    vec3 lightDir = normalize(pLights[index].position - fragPos);
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     // specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // attenuation
-    float distance = length(pLightPos[index] - fragPos);
+    float distance = length(pLights[index].position - fragPos);
     float attenuation = 1.0 / (pLights[index].constant + pLights[index].linear * distance +
     pLights[index].quadratic * (distance * distance));
     // combine results
@@ -109,6 +109,7 @@ vec3 applyPointLight(vec3 color, int index, vec3 fragPos, vec3 normal, vec3 view
     specular *= attenuation;
     return color *pLights[index].color* (diffuse + specular);
 }
+/*
 // calculates the color when using a spot light.
 vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, int i)
 {
