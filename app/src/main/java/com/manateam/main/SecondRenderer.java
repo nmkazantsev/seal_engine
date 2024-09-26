@@ -44,9 +44,9 @@ public class SecondRenderer extends GamePageClass {
     Camera camera, lightCamera;
     private final Shape s, s2;
     private final SkyBox skyBox;
-    private  SourceLight sourceLight;
-    private  AmbientLight ambientLight;
-    private  DirectedLight directedLight1;
+    private SourceLight sourceLight;
+    private AmbientLight ambientLight;
+    private DirectedLight directedLight1;
     private final Material material;
     private GBuffer frameBuffer;
     TouchProcessor touchProcessor;
@@ -83,7 +83,7 @@ public class SecondRenderer extends GamePageClass {
         directedLight2.specular = 0.8f;
 
         */
-        for(int i=0;i<2;i++) {
+        for (int i = 0; i < 4; i++) {
             sourceLight = new SourceLight(this);
             sourceLight.diffuse = 0.8f;
             sourceLight.specular = 0.9f;
@@ -91,7 +91,7 @@ public class SecondRenderer extends GamePageClass {
             sourceLight.linear = 0.01f;
             sourceLight.quadratic = 0.01f;
             sourceLight.color = new Vec3(0.5f);
-            sourceLight.position = new Vec3(2.7f+i, 0, 0);
+            sourceLight.position = new Vec3(2.7f + i, 0, 0);
             sourceLight.direction = new Vec3(-0.3f, 0, 0);
             sourceLight.outerCutOff = cos(radians(40));
             sourceLight.cutOff = cos(radians(30f));
@@ -125,7 +125,6 @@ public class SecondRenderer extends GamePageClass {
     @Override
     public void draw() {
         GLES30.glDisable(GL_BLEND);
-        frameBuffer.apply();
         camera.resetFor3d();
         camera.cameraSettings.eyeY = camPos.value;
         camera.cameraSettings.eyeZ = zShift.value;
@@ -137,9 +136,12 @@ public class SecondRenderer extends GamePageClass {
         applyShader(firstPassDefredShader);
         // lightCamera.apply(false);
         camera.apply();
-        drawScene();
-        //s.setRedrawNeeded(false);
-        FrameBufferUtils.connectDefaultFrameBuffer();
+        for (int i = 0; i < 1; i++) {
+            frameBuffer.apply();
+            drawScene();
+            FrameBufferUtils.connectDefaultFrameBuffer();
+            //s.setRedrawNeeded(false);
+        }
         //applyShader(skyBoxShader);
         //camera.apply();
         // skyBox.prepareAndDraw();
@@ -152,12 +154,13 @@ public class SecondRenderer extends GamePageClass {
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         //pass contents to shader
-        frameBuffer.drawAllTextures( new Point(Utils.x, y),  new Point(0, y, 1), new Point(Utils.x,  0,1));
-
-        applyShader(shader);
+        frameBuffer.drawAllTextures(new Point(Utils.x, y), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+        /*applyShader(shader);
         camera.apply();
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(2, new Point(0,0, 2),  new Point(Utils.x / 3, 0, 2), new Point(0, y / 3, 2));
+        frameBuffer.drawTexture(0, new Point(0, 0, 2), new Point(Utils.x/3, 0, 2), new Point(0, y/3, 2));
+        */
+
     }
 
     private void drawScene() {

@@ -64,8 +64,8 @@ public class GBuffer extends FrameBuffer {
 
     @Override
     public void apply() {
-        GLES20.glViewport(0, 0, getWidth(), getHeight());
-        FrameBufferUtils.connectFrameBuffer(getFrameBuffer());
+        //GLES20.glViewport(0, 0, getWidth(), getHeight());
+        //FrameBufferUtils.connectFrameBuffer(getFrameBuffer());
     }
 
     @Override
@@ -172,7 +172,7 @@ public class GBuffer extends FrameBuffer {
                 new Point(0, 0, 1));
         Shader.getActiveShader().getAdaptor().bindData(new Face[]{face1, face2});
         //place texture to target 2D of unit 0
-        for (int i = 0; i < textures.length; i++) {
+       for (int i = 0; i < textures.length; i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             glBindTexture(GL_TEXTURE_2D, textures[i]);
             glUniform1i(Shader.getActiveShader().getAdaptor().getTextureNumberNlocation(i), i);

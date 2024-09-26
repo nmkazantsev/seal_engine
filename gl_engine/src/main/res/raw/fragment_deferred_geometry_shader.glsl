@@ -16,7 +16,7 @@ uniform sampler2D normalMap;
 void main()
 {
    vec3 norm=normalize(normal);
-    if(normalMapEnable==0){
+    if(normalMapEnable==0 ){
         gNormal = norm;
     }else{
         vec3 n = normalize(texture(normalMap, vec2(TexCoord.x,TexCoord.y)).rgb * 2.0 - 1.0);
