@@ -1,6 +1,7 @@
 #version 320 es
 precision mediump float;
 in vec2 TexCoord;
+in vec3 FragPos;
 out vec4 FragColor;
 layout (location =0)uniform sampler2D N;
 layout (location =1)uniform sampler2D A;
