@@ -10,11 +10,6 @@ layout (location =2)uniform sampler2D P;
 #define  dnumber 10//direct number
 #define  pnumber 10//point number
 
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec2 aTexCoord;
-layout (location = 2) in vec3 normalVec;
-layout (location = 3) in vec3 aT;//abs tangent
-layout (location = 4) in vec3 aB;//absolute bitangent
 
 struct PointLight {
     vec3 position;
@@ -142,7 +137,6 @@ void main()
     vec3 norm = texture(N, TexCoord).rgb;
     vec3 position = texture(P, TexCoord).rgb;
     vec3 viewDir=normalize(viewPos-position);
-    //FragColor = vec4(sLights[0].position.xyz,0.0)/2.0;//vec4(texture(P, TexCoord).rgb*0.1+texture(N, TexCoord).rgb*0.0+texture(P, TexCoord).rgb*0.0, 1.0);
     vec3 result = applyAmbient(color);
     for (int i = 0; i < dLightNum; i++) {
         result += applyDirectedLight(color, norm, viewDir, i);

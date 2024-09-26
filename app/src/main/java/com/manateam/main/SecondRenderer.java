@@ -45,8 +45,8 @@ public class SecondRenderer extends GamePageClass {
     private final Shape s, s2;
     private final SkyBox skyBox;
     private  SourceLight sourceLight;
-    private final AmbientLight ambientLight;
-    private final DirectedLight directedLight1;
+    private  AmbientLight ambientLight;
+    private  DirectedLight directedLight1;
     private final Material material;
     private GBuffer frameBuffer;
     TouchProcessor touchProcessor;
@@ -65,13 +65,17 @@ public class SecondRenderer extends GamePageClass {
         s.addNormalMap("noral_tex.png");
 
         ambientLight = new AmbientLight(this);
-        // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
+        ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
         directedLight1 = new DirectedLight(this);
         directedLight1.direction = new Vec3(1, 1, 0);
         directedLight1.color = new Vec3(0.9f);
         directedLight1.diffuse = 0.9f;
         directedLight1.specular = 0.8f;
+
+
+
+
        /* directedLight2 = new DirectedLight(this);
         directedLight2.direction = new Vec3(0, 1, 0);
         directedLight2.color = new Vec3(0.6f);
@@ -79,7 +83,7 @@ public class SecondRenderer extends GamePageClass {
         directedLight2.specular = 0.8f;
 
         */
-        for(int i=0;i<3;i++) {
+        for(int i=0;i<2;i++) {
             sourceLight = new SourceLight(this);
             sourceLight.diffuse = 0.8f;
             sourceLight.specular = 0.9f;
@@ -106,7 +110,7 @@ public class SecondRenderer extends GamePageClass {
             OpenGLRenderer.startNewPage(new MainRenderer());
             return null;
         }, null, null, this);
-        frameBuffer = createGBuffer(3, x/2, y/2, this);
+        frameBuffer = createGBuffer(3, x, y, this);
 
         camPos = Debugger.addDebugValueFloat(1, 5, "cam pos");
         camPos.value = 2;
@@ -142,14 +146,13 @@ public class SecondRenderer extends GamePageClass {
         applyShader(renderPassDeferedShader);
         //camera.apply();
         // drawScene();
-        int i= GLES30.glGetUniformLocation(15, "normalMap");
         camera.resetFor2d();
         camera.apply();
         material.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
         //pass contents to shader
-        frameBuffer.drawAllTextures( new Point(Utils.x, y),  new Point(0, y, 1), new Point(Utils.x,  1));
+        frameBuffer.drawAllTextures( new Point(Utils.x, y),  new Point(0, y, 1), new Point(Utils.x,  0,1));
 
         applyShader(shader);
         camera.apply();
