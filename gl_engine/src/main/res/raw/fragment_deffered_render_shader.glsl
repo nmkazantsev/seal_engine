@@ -138,6 +138,20 @@ vec3 CalcSpotLight(vec3 color, SpotLight light, vec3 normal, vec3 fragPos, vec3 
 
 void main()
 {
-    FragColor = vec4(sLights[0].position.xyz,0.0)/2.0;//vec4(texture(P, TexCoord).rgb*0.1+texture(N, TexCoord).rgb*0.0+texture(P, TexCoord).rgb*0.0, 1.0);
-    //FragColor = vec4(0.3);
+    vec3 color = texture(A, TexCoord).rgb;
+    vec3 norm = texture(N, TexCoord).rgb;
+    vec3 position = texture(P, TexCoord).rgb;
+    vec3 viewDir=vec3(1.0,0.0,0.0);
+    //FragColor = vec4(sLights[0].position.xyz,0.0)/2.0;//vec4(texture(P, TexCoord).rgb*0.1+texture(N, TexCoord).rgb*0.0+texture(P, TexCoord).rgb*0.0, 1.0);
+    vec3 result = applyAmbient(color);
+    for (int i = 0; i < dLightNum; i++) {
+        result += applyDirectedLight(color, norm, viewDir, i);
+    }
+    for (int i = 0;i < pLightNum; i++) {
+        result += applyPointLight(color, i, FragPos, norm, viewDir);
+    }
+    for (int i = 0;i < sLightNum; i++) {
+        result += CalcSpotLight(color, sLights[i], norm, FragPos, viewDir, i);
+    }
+    FragColor = vec4(result, 0.0);
 }
