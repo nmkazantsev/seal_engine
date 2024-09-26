@@ -1,4 +1,4 @@
-#version 300 es
+#version 320 es
 precision mediump float;
 layout (location = 0) out vec3 gPosition;
 layout (location = 1) out vec3 gNormal;

@@ -64,8 +64,8 @@ public class GBuffer extends FrameBuffer {
 
     @Override
     public void apply() {
-        //GLES20.glViewport(0, 0, getWidth(), getHeight());
-        //FrameBufferUtils.connectFrameBuffer(getFrameBuffer());
+        GLES20.glViewport(0, 0, getWidth(), getHeight());
+        FrameBufferUtils.connectFrameBuffer(getFrameBuffer());
     }
 
     @Override

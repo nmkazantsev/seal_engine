@@ -26,7 +26,7 @@ public class FrameBufferUtils {
     protected static void connectFrameBuffer(int frameBuffer) {
         // switch to the buffer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffer);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GLES20.GL_STENCIL_BUFFER_BIT);
     }
 
     protected void connectFramebuffer(FrameBuffer fb) {
@@ -38,6 +38,6 @@ public class FrameBufferUtils {
         // switch to the buffer
         GLES20.glViewport(0, 0,(int) Utils.x,(int) Utils.y);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GLES20.GL_STENCIL_BUFFER_BIT);
     }
 }
