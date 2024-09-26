@@ -149,6 +149,7 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
     }
 
     public void apply() {
+        GLES20.glViewport(0,0,getWidth(),getHeight());
         FrameBufferUtils.connectFrameBuffer(getFrameBuffer());
     }
 }

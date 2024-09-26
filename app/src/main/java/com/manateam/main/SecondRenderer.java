@@ -44,7 +44,7 @@ public class SecondRenderer extends GamePageClass {
     Camera camera, lightCamera;
     private final Shape s, s2;
     private final SkyBox skyBox;
-    private final SourceLight sourceLight;
+    private  SourceLight sourceLight;
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
@@ -68,9 +68,9 @@ public class SecondRenderer extends GamePageClass {
         // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
         directedLight1 = new DirectedLight(this);
-        directedLight1.direction = new Vec3(-1, -1, 0);
+        directedLight1.direction = new Vec3(1, 1, 0);
         directedLight1.color = new Vec3(0.9f);
-        directedLight1.diffuse = 0.5f;
+        directedLight1.diffuse = 0.9f;
         directedLight1.specular = 0.8f;
        /* directedLight2 = new DirectedLight(this);
         directedLight2.direction = new Vec3(0, 1, 0);
@@ -79,17 +79,19 @@ public class SecondRenderer extends GamePageClass {
         directedLight2.specular = 0.8f;
 
         */
-        sourceLight = new SourceLight(this);
-        sourceLight.diffuse = 0.8f;
-        sourceLight.specular = 0.9f;
-        sourceLight.constant = 1f;
-        sourceLight.linear = 0.01f;
-        sourceLight.quadratic = 0.01f;
-        sourceLight.color = new Vec3(0.5f);
-        sourceLight.position = new Vec3(2.7f, 0, 0);
-        sourceLight.direction = new Vec3(-0.3f, 0, 0);
-        sourceLight.outerCutOff = cos(radians(40));
-        sourceLight.cutOff = cos(radians(30f));
+        for(int i=0;i<3;i++) {
+            sourceLight = new SourceLight(this);
+            sourceLight.diffuse = 0.8f;
+            sourceLight.specular = 0.9f;
+            sourceLight.constant = 0.1f;
+            sourceLight.linear = 0.01f;
+            sourceLight.quadratic = 0.01f;
+            sourceLight.color = new Vec3(0.5f);
+            sourceLight.position = new Vec3(2.7f+i, 0, 0);
+            sourceLight.direction = new Vec3(-0.3f, 0, 0);
+            sourceLight.outerCutOff = cos(radians(40));
+            sourceLight.cutOff = cos(radians(30f));
+        }
 
         material = new Material(this);
         material.ambient = new Vec3(1);
@@ -104,7 +106,7 @@ public class SecondRenderer extends GamePageClass {
             OpenGLRenderer.startNewPage(new MainRenderer());
             return null;
         }, null, null, this);
-        frameBuffer = createGBuffer(3, x, y, this);
+        frameBuffer = createGBuffer(3, x/2, y/2, this);
 
         camPos = Debugger.addDebugValueFloat(1, 5, "cam pos");
         camPos.value = 2;

@@ -39,7 +39,7 @@ public class GBuffer extends FrameBuffer {
         int[] attachments = new int[textures.length];
         for (int i = 0; i < textures.length; i++) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[i]);
-            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0,  GL_RGBA16F,
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA16F,
                     w, h, 0,
                     GLES20.GL_RGBA, GLES20.GL_FLOAT, null);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
@@ -64,6 +64,7 @@ public class GBuffer extends FrameBuffer {
 
     @Override
     public void apply() {
+        GLES20.glViewport(0, 0, getWidth(), getHeight());
         FrameBufferUtils.connectFrameBuffer(getFrameBuffer());
     }
 

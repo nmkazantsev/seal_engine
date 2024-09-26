@@ -6,9 +6,9 @@ layout (location =0)uniform sampler2D N;
 layout (location =1)uniform sampler2D A;
 layout (location =2)uniform sampler2D P;
 
-#define  snumber 1//spot number
-#define  dnumber 1//direct number
-#define  pnumber 1//point number
+#define  snumber 10//spot number
+#define  dnumber 10//direct number
+#define  pnumber 10//point number
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
