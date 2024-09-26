@@ -8,6 +8,7 @@ import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES30.GL_RGBA16F;
 import static android.opengl.GLES30.glDrawBuffers;
 
 import android.opengl.GLES20;
@@ -38,9 +39,9 @@ public class GBuffer extends FrameBuffer {
         int[] attachments = new int[textures.length];
         for (int i = 0; i < textures.length; i++) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[i]);
-            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0,  GL_RGBA16F,
                     w, h, 0,
-                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+                    GLES20.GL_RGBA, GLES20.GL_FLOAT, null);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                     GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
