@@ -1,4 +1,4 @@
-package com.seal.gl_engine.engine.main.verticles;
+package com.seal.gl_engine.engine.main.vertices;
 
 import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE0;
@@ -26,7 +26,7 @@ import java.util.function.Function;
 /**
  * this is 3D glShape (glShape deleted in version 3.0.0)
  */
-public class Poligon implements VerticleSet, DrawableShape {
+public class Polygon implements VerticesSet, DrawableShape {
     private Face face1;
     private Face face2;
     private final boolean saveMemory;
@@ -41,9 +41,9 @@ public class Poligon implements VerticleSet, DrawableShape {
     private final Function<List<Object>, PImage> redrawFunction;
 
 
-    public Poligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page) {
+    public Polygon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page) {
         this.redrawFunction = redrawFunction;
-        VectriesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
+        VerticesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
         texture = new Texture(page);
         for (int i = 0; i < paramSize; i++) {
             redrawParams.add("");

@@ -34,16 +34,16 @@ import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.verticles.Poligon;
-import com.seal.gl_engine.engine.main.verticles.Shape;
-import com.seal.gl_engine.engine.main.verticles.SkyBox;
+import com.seal.gl_engine.engine.main.vertices.Polygon;
+import com.seal.gl_engine.engine.main.vertices.Shape;
+import com.seal.gl_engine.engine.main.vertices.SkyBox;
 import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {
-    private final Poligon fpsPoligon;
+    private final Polygon fpsPoligon;
     private final Shader shader, lightShader, skyBoxShader;
     Camera camera;
     private final Shape s;
@@ -61,7 +61,7 @@ public class SecondRenderer extends GamePageClass {
     public SecondRenderer() {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
+        fpsPoligon = new Polygon(MainRedrawFunctions::redrawFps, true, 1, this);
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");

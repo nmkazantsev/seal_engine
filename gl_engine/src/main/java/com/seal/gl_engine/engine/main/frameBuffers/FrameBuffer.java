@@ -14,8 +14,8 @@ import android.opengl.GLES20;
 
 import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.engine.main.verticles.DrawableShape;
-import com.seal.gl_engine.engine.main.verticles.Face;
+import com.seal.gl_engine.engine.main.vertices.DrawableShape;
+import com.seal.gl_engine.engine.main.vertices.Face;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.maths.Point;
 

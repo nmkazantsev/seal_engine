@@ -7,7 +7,7 @@ import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetT
 import android.opengl.Matrix;
 
 import com.seal.gl_engine.engine.main.animator.Animator;
-import com.seal.gl_engine.engine.main.verticles.Shape;
+import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.utils.Utils;
 
 import java.util.Arrays;
