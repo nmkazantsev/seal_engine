@@ -74,50 +74,52 @@ public class MainShaderAdaptor extends Adaptor {
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
         vertexData.put(vertices);//4 байта на флоат
+        vertexBuffer.bindVao();
         vertexBuffer.bindVbo(bufferIndex);//vertex coords
         vertexData.position(0);
         glBufferData(GL_ARRAY_BUFFER, vertices.length * 4, vertexData, GL_STATIC_DRAW);
     }
 
     @Override
-    public int bindData(Face[] faces, VertexBuffer vertexBuffer) {
-        //set up positions
-        float[] vertices = new float[faces.length * faces[0].vertices.length * 3];//3 because 3angle
-        for (int i = 0; i < faces.length; i++) {
-            vertices[i * 9] = faces[i].vertices[0].x;
-            vertices[i * 9 + 1] = faces[i].vertices[0].y;
-            vertices[i * 9 + 2] = faces[i].vertices[0].z;
-            vertices[i * 9 + 3] = faces[i].vertices[1].x;
-            vertices[i * 9 + 4] = faces[i].vertices[1].y;
-            vertices[i * 9 + 5] = faces[i].vertices[1].z;
-            vertices[i * 9 + 6] = faces[i].vertices[2].x;
-            vertices[i * 9 + 7] = faces[i].vertices[2].y;
-            vertices[i * 9 + 8] = faces[i].vertices[2].z;
+    public int bindData(Face[] faces, VertexBuffer vertexBuffer, boolean vboLoaded) {
+        if (!vboLoaded) {
+            //set up positions
+            float[] vertices = new float[faces.length * faces[0].vertices.length * 3];//3 because 3angle
+            for (int i = 0; i < faces.length; i++) {
+                vertices[i * 9] = faces[i].vertices[0].x;
+                vertices[i * 9 + 1] = faces[i].vertices[0].y;
+                vertices[i * 9 + 2] = faces[i].vertices[0].z;
+                vertices[i * 9 + 3] = faces[i].vertices[1].x;
+                vertices[i * 9 + 4] = faces[i].vertices[1].y;
+                vertices[i * 9 + 5] = faces[i].vertices[1].z;
+                vertices[i * 9 + 6] = faces[i].vertices[2].x;
+                vertices[i * 9 + 7] = faces[i].vertices[2].y;
+                vertices[i * 9 + 8] = faces[i].vertices[2].z;
+            }
+            loadDataToBuffer(vertices, 0, vertexBuffer);
+
+            //set up uv
+            vertices = new float[faces.length * 2 * 3];//3 because 3angle
+            for (int i = 0; i < faces.length; i++) {
+                vertices[i * 6] = faces[i].textureCoordinates[0].x;
+                vertices[i * 6 + 1] = 1 - faces[i].textureCoordinates[0].y;
+                vertices[i * 6 + 2] = faces[i].textureCoordinates[1].x;
+                vertices[i * 6 + 3] = 1 - faces[i].textureCoordinates[1].y;
+                vertices[i * 6 + 4] = faces[i].textureCoordinates[2].x;
+                vertices[i * 6 + 5] = 1 - faces[i].textureCoordinates[2].y;
+            }
+            loadDataToBuffer(vertices, 1, vertexBuffer);
+
+            //set up normals
+            vertices = new float[faces.length * 3];//3 because 3 coords in normal
+            for (int i = 0; i < faces.length; i++) {
+                vertices[i * faces[i].vertices.length] = faces[i].normal.x;
+                vertices[i * faces[i].vertices.length + 1] = faces[i].normal.y;
+                vertices[i * faces[i].vertices.length + 2] = faces[i].normal.z;
+
+            }
+            loadDataToBuffer(vertices, 2, vertexBuffer);
         }
-        loadDataToBuffer(vertices, 0, vertexBuffer);
-
-        //set up uv
-        vertices = new float[faces.length * 2 * 3];//3 because 3angle
-        for (int i = 0; i < faces.length; i++) {
-            vertices[i * 6] = faces[i].textureCoordinates[0].x;
-            vertices[i * 6 + 1] = 1 - faces[i].textureCoordinates[0].y;
-            vertices[i * 6 + 2] = faces[i].textureCoordinates[1].x;
-            vertices[i * 6 + 3] = 1 - faces[i].textureCoordinates[1].y;
-            vertices[i * 6 + 4] = faces[i].textureCoordinates[2].x;
-            vertices[i * 6 + 5] = 1 - faces[i].textureCoordinates[2].y;
-        }
-        loadDataToBuffer(vertices, 1, vertexBuffer);
-
-        //set up normals
-        vertices = new float[faces.length * 3];//3 because 3 coords in normal
-        for (int i = 0; i < faces.length; i++) {
-            vertices[i * faces[i].vertices.length] = faces[i].normal.x;
-            vertices[i * faces[i].vertices.length + 1] = faces[i].normal.y;
-            vertices[i * faces[i].vertices.length + 2] = faces[i].normal.z;
-
-        }
-        loadDataToBuffer(vertices, 2, vertexBuffer);
-
         vertexBuffer.bindVao();
         glEnableVertexAttribArray(aPositionLocation);
         glEnableVertexAttribArray(aTextureLocation);

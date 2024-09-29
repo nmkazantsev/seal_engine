@@ -50,7 +50,7 @@ public class SkyBoxShaderAdaptor extends Adaptor {
     }
 
     @Override
-    public int bindData(Face[] faces, VertexBuffer vertexBuffer) {
+    public int bindData(Face[] faces, VertexBuffer vertexBuffer, boolean vboLoaded) {
         //todo here
         return 0;
     }
