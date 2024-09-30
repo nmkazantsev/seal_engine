@@ -17,7 +17,6 @@ import static com.seal.gl_engine.utils.Utils.y;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 
-import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
@@ -34,7 +33,6 @@ import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SkyBox;
 import com.seal.gl_engine.maths.Point;
@@ -43,16 +41,16 @@ import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {
-    private final Poligon fpsPoligon;
     private final Shader shader, lightShader, skyBoxShader, expositonShader;
     Camera camera;
-    private final Shape s;
+    private final Shape s, s2;
     private final SkyBox skyBox;
     private final SourceLight sourceLight;
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
     private FrameBuffer frameBuffer;
+
     private ExpouseSettings expouseSettings;
 
     TouchProcessor touchProcessor;
@@ -63,9 +61,10 @@ public class SecondRenderer extends GamePageClass {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         expositonShader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.exposition_fragment, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);
+        shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_shadow, com.example.gl_engine.R.raw.fragment_shadow, this, new LightShaderAdaptor());
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
+        s2 = new Shape("ponchik.obj", "texture.png", this);
         s.addNormalMap("noral_tex.png");
 
         ambientLight = new AmbientLight(this);
@@ -135,7 +134,7 @@ public class SecondRenderer extends GamePageClass {
         applyShader(skyBoxShader);
         camera.apply();
         skyBox.prepareAndDraw();
-        applyShader(lightShader);
+        applyShader(shadowShader);
         material.apply();
         glClearColor(1f, 1, 1, 1);
         camera.apply();
@@ -145,10 +144,18 @@ public class SecondRenderer extends GamePageClass {
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
+        //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
 
         applyShader(expositonShader);
-        fpsPoligon.setRedrawNeeded(true);
+       
+
+       
+        material.apply();
+        camera.apply();
+        applyMatrix(mMatrix);
+        s.prepareAndDraw();
+
         camera.resetFor2d();
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);

@@ -48,7 +48,7 @@ public abstract class Adaptor {
 
     public abstract int bindData(Face faces[]);
 
-    public abstract int bindData(Face faces[], VertexBuffer vertexBuffer);
+    public abstract int bindData(Face faces[], VertexBuffer vertexBuffer, boolean vboLoaded);
 
     public abstract void updateLocations();
 

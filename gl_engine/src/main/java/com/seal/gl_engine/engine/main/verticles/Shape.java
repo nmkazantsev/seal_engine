@@ -36,7 +36,7 @@ import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
 public class Shape implements VerticleSet, DrawableShape {
-    private boolean isLoaded = false;
+    private boolean isVertexLoaded = false, globalLoaded = false;
 
     private final Texture texture;
     private Texture normalTexture;
@@ -97,12 +97,17 @@ public class Shape implements VerticleSet, DrawableShape {
                                 object.getNormal(object.getFace(i).getNormalIndex(0)).getZ()
                         ));
             }
-            isLoaded = true;
+            isVertexLoaded = true;
         }).start();
         onRedrawSetup();
         redrawNow();
     }
 
+    public void onFrameBegin() {
+        if (isVertexLoaded) {
+            globalLoaded = true;
+        }
+    }
 
     public void addNormalMap(String normalMapFileName) {
         this.normalMapFileName = normalMapFileName;
@@ -121,10 +126,9 @@ public class Shape implements VerticleSet, DrawableShape {
     public void bindData() {
         if (!vboLoaded) {
             vertexBuffer = new VertexBuffer(5, creator); //5 because 5 types of coordinates so we need 5 buffers
-            Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
-            vboLoaded = true;
         }
-
+        Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer, vboLoaded);
+        vboLoaded = true;
         // place texture in target 2D unit 0
         glActiveTexture(GL_TEXTURE0);
         if (!postToGlNeeded) {
@@ -174,7 +178,7 @@ public class Shape implements VerticleSet, DrawableShape {
 
 
     public void prepareAndDraw() {
-        if (isLoaded) {
+        if (globalLoaded) {
             bindData();
             vertexBuffer.bindVao();
             glEnable(GL_CULL_FACE); //i dont know what is it, it should be optimization
@@ -193,11 +197,11 @@ public class Shape implements VerticleSet, DrawableShape {
     @Override
     public void setRedrawNeeded(boolean redrawNeeded) {
         this.redrawNeeded = redrawNeeded;
-        postToGlNeeded = true;
         if (redrawNeeded) {
+            postToGlNeeded = true;
             VectriesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+            vboLoaded = false;
         }
-        vboLoaded = false;
     }
 
     @Override
