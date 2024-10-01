@@ -189,6 +189,11 @@ public class SkyBox implements VerticleSet {
     }
 
     @Override
+    public void onFrameBegin() {
+
+    }
+
+    @Override
     public void delete() {
         //everything is already deleted
     }

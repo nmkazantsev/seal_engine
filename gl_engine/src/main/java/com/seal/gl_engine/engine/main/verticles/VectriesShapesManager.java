@@ -28,6 +28,15 @@ public class VectriesShapesManager {
         }
     }
 
+    //called every frame to check if shape is loaded
+    public static void onFrameBegin() {
+        for (WeakReference<VerticleSet> i : allShapes) {
+            if (i.get() != null) {
+                i.get().onFrameBegin();
+            }
+        }
+    }
+
     //called after every draw loop is completed and redraws only that was asked to redraw
     public static void redrawAll() {
         for (int i = 0; i < allShapesToRedraw.size(); i++) {
