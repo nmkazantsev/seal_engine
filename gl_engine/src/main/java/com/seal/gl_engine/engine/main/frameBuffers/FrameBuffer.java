@@ -14,8 +14,8 @@ import android.opengl.GLES20;
 
 import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.engine.main.verticles.DrawableShape;
-import com.seal.gl_engine.engine.main.verticles.Face;
+import com.seal.gl_engine.engine.main.vertices.DrawableShape;
+import com.seal.gl_engine.engine.main.vertices.Face;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.maths.Point;
 
@@ -45,7 +45,7 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, frameBufferTextures[0]);
             GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
                     w, h, 0,
-                    GLES20.GL_RGBA, GLES20.GL_FLOAT, null);
+                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                     GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,

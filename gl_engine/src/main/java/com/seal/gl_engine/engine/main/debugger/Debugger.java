@@ -27,7 +27,7 @@ import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
+import com.seal.gl_engine.engine.main.vertices.SimplePolygon;
 import com.seal.gl_engine.maths.Point;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ import java.util.function.Function;
 public class Debugger {
     private static boolean enabled = false;
     private static Camera debuggerCamera;
-    private static SimplePoligon debuggerPage, fpsPolygon;
+    private static SimplePolygon debuggerPage, fpsPolygon;
     private static Shader shader;
     private static float[] matrix = new float[16];
     private static int page = 0;//0 if no page, then numbers of pages from 1
@@ -136,9 +136,9 @@ public class Debugger {
         enabled = true;
         debuggerCamera = new Camera(x, y);
         debuggerCamera.resetFor2d();
-        debuggerPage = new SimplePoligon(drawMianPage, true, 0, null);
+        debuggerPage = new SimplePolygon(drawMianPage, true, 0, null);
         shader = new Shader(R.raw.vertex_shader, R.raw.fragment_shader, null, new MainShaderAdaptor());
-        fpsPolygon = new SimplePoligon(redrawFps, true, 0, null);
+        fpsPolygon = new SimplePolygon(redrawFps, true, 0, null);
         matrix = resetTranslateMatrix(matrix);
     }
 

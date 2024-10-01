@@ -1,4 +1,4 @@
-package com.seal.gl_engine.engine.main.verticles;
+package com.seal.gl_engine.engine.main.vertices;
 
 import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.utils.Utils;
@@ -8,8 +8,8 @@ import com.seal.gl_engine.engine.main.images.PImage;
 import java.util.List;
 import java.util.function.Function;
 
-public class SimplePoligon extends Poligon {
-    public SimplePoligon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page) {
+public class SimplePolygon extends Polygon {
+    public SimplePolygon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page) {
         super(redrawFunction, saveMemory, paramSize, page);
     }
 

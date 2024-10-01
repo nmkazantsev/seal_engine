@@ -33,8 +33,9 @@ import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.verticles.Shape;
-import com.seal.gl_engine.engine.main.verticles.SkyBox;
+import com.seal.gl_engine.engine.main.vertices.Polygon;
+import com.seal.gl_engine.engine.main.vertices.Shape;
+import com.seal.gl_engine.engine.main.vertices.SkyBox;
 import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
@@ -61,7 +62,6 @@ public class SecondRenderer extends GamePageClass {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         expositonShader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.exposition_fragment, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_shadow, com.example.gl_engine.R.raw.fragment_shadow, this, new LightShaderAdaptor());
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
         s2 = new Shape("ponchik.obj", "texture.png", this);
@@ -134,7 +134,7 @@ public class SecondRenderer extends GamePageClass {
         applyShader(skyBoxShader);
         camera.apply();
         skyBox.prepareAndDraw();
-        applyShader(shadowShader);
+        applyShader(lightShader);
         material.apply();
         glClearColor(1f, 1, 1, 1);
         camera.apply();
@@ -148,9 +148,9 @@ public class SecondRenderer extends GamePageClass {
         FrameBufferUtils.connectDefaultFrameBuffer();
 
         applyShader(expositonShader);
-       
 
-       
+
+
         material.apply();
         camera.apply();
         applyMatrix(mMatrix);
@@ -160,9 +160,6 @@ public class SecondRenderer extends GamePageClass {
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        // fpsPoligon.redrawParams.set(0, String.valueOf(fps));
-        // fpsPoligon.redrawNow();
-        //  fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));
         frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
     }
 }

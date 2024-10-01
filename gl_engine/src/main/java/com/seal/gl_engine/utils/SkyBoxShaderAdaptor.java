@@ -10,7 +10,7 @@ import android.opengl.GLES30;
 
 import com.seal.gl_engine.engine.main.shaders.Adaptor;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
-import com.seal.gl_engine.engine.main.verticles.Face;
+import com.seal.gl_engine.engine.main.vertices.Face;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

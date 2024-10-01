@@ -1,4 +1,4 @@
-package com.seal.gl_engine.engine.main.verticles;
+package com.seal.gl_engine.engine.main.vertices;
 
 import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;

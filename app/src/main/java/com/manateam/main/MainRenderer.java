@@ -22,15 +22,16 @@ import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.verticles.Shape;
-import com.seal.gl_engine.engine.main.verticles.SimplePoligon;
+import com.seal.gl_engine.engine.main.vertices.Polygon;
+import com.seal.gl_engine.engine.main.vertices.Shape;
+import com.seal.gl_engine.engine.main.vertices.SimplePolygon;
 import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.utils.Utils;
 
 public class MainRenderer extends GamePageClass {
     private final Shader shader;
     private final Camera camera;
-    private static SimplePoligon simplePolygon;
+    private static SimplePolygon simplePolygon;
     private final SealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
@@ -41,7 +42,7 @@ public class MainRenderer extends GamePageClass {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         camera = new Camera();
         if (simplePolygon == null) {
-            simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);
+            simplePolygon = new SimplePolygon(MainRedrawFunctions::redrawBox2, true, 0, null);
             simplePolygon.redrawNow();
         }
 
