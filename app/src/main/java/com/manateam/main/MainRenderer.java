@@ -8,8 +8,6 @@ import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.conne
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
-import static com.seal.gl_engine.utils.Utils.kx;
-import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
 
@@ -19,7 +17,7 @@ import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
-import com.seal.gl_engine.engine.main.engine_object.sealObject;
+import com.seal.gl_engine.engine.main.engine_object.SealObject;
 import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
@@ -35,7 +33,7 @@ public class MainRenderer extends GamePageClass {
     private final Shader shader;
     private final Camera camera;
     private static SimplePolygon simplePolygon;
-    private final sealObject s;
+    private final SealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
     private final FrameBuffer frameBuffer;
@@ -54,7 +52,7 @@ public class MainRenderer extends GamePageClass {
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
 
-        s = new sealObject(new Shape("building_big.obj", "box.jpg", this));
+        s = new SealObject(new Shape("building_big.obj", "box.jpg", this));
         s.setObjScale(0.2f);
         s.animMotion(1f, 0f, -6f, 1000, 1000, false);
         s.animRotation(0f, 0f, 90f, 3000, 1000, false);
@@ -83,7 +81,6 @@ public class MainRenderer extends GamePageClass {
         camera.resetFor2d();
         camera.apply(false);
         applyMatrix(mMatrix);
-        polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));
         if (touchProcessor.getTouchAlive()) {
             simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }

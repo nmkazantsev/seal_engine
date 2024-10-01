@@ -126,10 +126,9 @@ public class Shape implements VerticesSet, DrawableShape {
     public void bindData() {
         if (!vboLoaded) {
             vertexBuffer = new VertexBuffer(5, creator); //5 because 5 types of coordinates so we need 5 buffers
-            Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer);
-            vboLoaded = true;
         }
-
+        Shader.getActiveShader().getAdaptor().bindData(faces, vertexBuffer, vboLoaded);
+        vboLoaded = true;
         // place texture in target 2D unit 0
         glActiveTexture(GL_TEXTURE0);
         if (!postToGlNeeded) {
@@ -201,8 +200,11 @@ public class Shape implements VerticesSet, DrawableShape {
         postToGlNeeded = true;
         if (redrawNeeded) {
             VerticesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
-        }
         vboLoaded = false;
+            postToGlNeeded = true;
+        VerticesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+            vboLoaded = false;
+        }
     }
 
     @Override

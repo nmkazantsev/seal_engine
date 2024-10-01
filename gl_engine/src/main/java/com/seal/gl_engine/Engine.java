@@ -16,6 +16,17 @@ import com.seal.gl_engine.utils.Utils;
 import java.util.function.Function;
 
 public class Engine {
+    public static final String version = "3.0.3";
+    private static boolean shadowsPass = false;
+
+    public static boolean getShadowPass() {
+        return shadowsPass;
+    }
+
+    protected static void setShadowsPass(boolean shadowPass) {
+        shadowsPass = shadowPass;
+    }
+
     public static class touch {
         public float x;
         public float y;
@@ -31,7 +42,6 @@ public class Engine {
     private GLSurfaceView glSurfaceView;
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
-    public final static String version = "3.0.3";
 
     public GLSurfaceView onCreate(Context c, Function<Void, GamePageClass> getStartPage, boolean landscape, boolean debug) {
         Engine.getStartPage = getStartPage;
@@ -41,6 +51,7 @@ public class Engine {
         Log.e("version", String.valueOf(Double.parseDouble(configurationInfo.getGlEsVersion())));
         Log.e("version", String.valueOf(configurationInfo.reqGlEsVersion >= 0x30000));
         Log.e("version", String.format("%X", configurationInfo.reqGlEsVersion));
+        Log.e("engine version", version);
         context = c;
         MainConfigurationFunctions.context = context;
         Utils.context = context;
