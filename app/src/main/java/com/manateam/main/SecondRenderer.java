@@ -62,7 +62,6 @@ public class SecondRenderer extends GamePageClass {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         expositonShader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.exposition_fragment, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
-        shadowShader = new Shader(com.example.gl_engine.R.raw.vertex_shadow, com.example.gl_engine.R.raw.fragment_shadow, this, new LightShaderAdaptor());
         camera = new Camera();
         s = new Shape("ponchik.obj", "texture.png", this);
         s2 = new Shape("ponchik.obj", "texture.png", this);
@@ -135,7 +134,7 @@ public class SecondRenderer extends GamePageClass {
         applyShader(skyBoxShader);
         camera.apply();
         skyBox.prepareAndDraw();
-        applyShader(shadowShader);
+        applyShader(lightShader);
         material.apply();
         glClearColor(1f, 1, 1, 1);
         camera.apply();

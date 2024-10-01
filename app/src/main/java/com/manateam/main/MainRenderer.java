@@ -29,7 +29,6 @@ import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.utils.Utils;
 
 public class MainRenderer extends GamePageClass {
-    private final Polygon polygon;
     private final Shader shader;
     private final Camera camera;
     private static SimplePolygon simplePolygon;
@@ -41,8 +40,6 @@ public class MainRenderer extends GamePageClass {
     public MainRenderer() {
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
-        polygon = new Polygon(MainRedrawFunctions::redrawFps, true, 0, this);
-        polygon.redrawNow();
         camera = new Camera();
         if (simplePolygon == null) {
             simplePolygon = new SimplePolygon(MainRedrawFunctions::redrawBox2, true, 0, null);
