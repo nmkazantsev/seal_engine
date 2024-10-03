@@ -144,18 +144,8 @@ public class SecondRenderer extends GamePageClass {
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
-        //s.setRedrawNeeded(false);
         FrameBufferUtils.connectDefaultFrameBuffer();
-
         applyShader(expositonShader);
-
-
-
-        material.apply();
-        camera.apply();
-        applyMatrix(mMatrix);
-        s.prepareAndDraw();
-
         camera.resetFor2d();
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
