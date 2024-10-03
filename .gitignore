@@ -272,4 +272,3 @@ local.properties
 /seal_engine/build/intermediates/packaged_res/debug/raw/vertex_shader_depth.glsl
 /seal_engine/build/intermediates/packaged_res/debug/raw/vertex_shader_light.glsl
 /.idea/
-/.idea/
