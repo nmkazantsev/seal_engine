@@ -25,7 +25,7 @@ import com.seal.gl_engine.maths.Point;
 
 public class FrameBuffer extends VRAMobject implements DrawableShape {
     protected int texture;
-    private int depth;
+    protected int depth;
     protected int frameBuffer;
     protected int w;
     protected int h;

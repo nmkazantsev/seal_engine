@@ -23,11 +23,8 @@ import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.vertices.Polygon;
 import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.engine.main.vertices.SimplePolygon;
-import com.seal.gl_engine.maths.Point;
-import com.seal.gl_engine.utils.Utils;
 
 public class MainRenderer extends GamePageClass {
     private final Shader shader;
@@ -39,7 +36,6 @@ public class MainRenderer extends GamePageClass {
     private final FrameBuffer frameBuffer;
 
     public MainRenderer() {
-       // Engine.enMultisampling();
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         camera = new Camera();
@@ -83,7 +79,7 @@ public class MainRenderer extends GamePageClass {
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 5;
         camera.apply();
-       // connectFrameBuffer(frameBuffer.getFrameBuffer());
+        // connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
         //connectDefaultFrameBuffer();
         camera.resetFor2d();
@@ -92,7 +88,7 @@ public class MainRenderer extends GamePageClass {
         if (touchProcessor.getTouchAlive()) {
             simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }
-       // frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+        // frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
 
     }
 
