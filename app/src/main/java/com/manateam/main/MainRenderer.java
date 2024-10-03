@@ -4,14 +4,10 @@ import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.OpenGLRenderer.pageMillis;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
-import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;
-import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;
-import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer.connectDefaultFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.freezeMillis;
 import static com.seal.gl_engine.utils.Utils.getMillisFrozen;
-import static com.seal.gl_engine.utils.Utils.kx;
-import static com.seal.gl_engine.utils.Utils.ky;
 import static com.seal.gl_engine.utils.Utils.unfreezeMillis;
 import static com.seal.gl_engine.utils.Utils.x;
 import static com.seal.gl_engine.utils.Utils.y;
@@ -43,6 +39,7 @@ public class MainRenderer extends GamePageClass {
     private final FrameBuffer frameBuffer;
 
     public MainRenderer() {
+       // Engine.enMultisampling();
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         camera = new Camera();
@@ -69,12 +66,13 @@ public class MainRenderer extends GamePageClass {
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
-        frameBuffer = createFrameBuffer((int) x, (int) y, this);
+        frameBuffer = new FrameBuffer((int) x, (int) y, this);
     }
 
 
     @Override
     public void draw() {
+        connectDefaultFrameBuffer();
         if (f && pageMillis() >= 500) {
             s.stopAnimations();
             f = false;
@@ -85,16 +83,16 @@ public class MainRenderer extends GamePageClass {
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 5;
         camera.apply();
-        connectFrameBuffer(frameBuffer.getFrameBuffer());
+       // connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
-        connectDefaultFrameBuffer();
+        //connectDefaultFrameBuffer();
         camera.resetFor2d();
         camera.apply(false);
         applyMatrix(mMatrix);
         if (touchProcessor.getTouchAlive()) {
             simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }
-        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+       // frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
 
     }
 
