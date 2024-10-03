@@ -33,7 +33,6 @@ import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.vertices.Polygon;
 import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.engine.main.vertices.SkyBox;
 import com.seal.gl_engine.maths.Point;
@@ -50,9 +49,9 @@ public class SecondRenderer extends GamePageClass {
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
-    private FrameBuffer frameBuffer;
+    private final FrameBuffer frameBuffer;
 
-    private ExpouseSettings expouseSettings;
+    private final ExpouseSettings expouseSettings;
 
     TouchProcessor touchProcessor;
 
