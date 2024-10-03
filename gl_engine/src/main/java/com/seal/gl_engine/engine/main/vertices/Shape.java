@@ -1,4 +1,4 @@
-package com.seal.gl_engine.engine.main.verticles;
+package com.seal.gl_engine.engine.main.vertices;
 
 import static android.opengl.GLES10.GL_TRIANGLES;
 import static android.opengl.GLES10.glDisable;
@@ -35,7 +35,7 @@ import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
-public class Shape implements VerticleSet, DrawableShape {
+public class Shape implements VerticesSet, DrawableShape {
     private boolean isVertexLoaded = false, globalLoaded = false;
 
     private final Texture texture;
@@ -60,7 +60,7 @@ public class Shape implements VerticleSet, DrawableShape {
         creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
-        VectriesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+        VerticesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
         texture = new Texture(page);
         new Thread(() -> {
             InputStreamReader inputStream;
@@ -197,9 +197,12 @@ public class Shape implements VerticleSet, DrawableShape {
     @Override
     public void setRedrawNeeded(boolean redrawNeeded) {
         this.redrawNeeded = redrawNeeded;
+        postToGlNeeded = true;
         if (redrawNeeded) {
+            VerticesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+        vboLoaded = false;
             postToGlNeeded = true;
-            VectriesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+        VerticesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
             vboLoaded = false;
         }
     }

@@ -1,13 +1,13 @@
-package com.seal.gl_engine.engine.main.verticles;
+package com.seal.gl_engine.engine.main.vertices;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class VectriesShapesManager {
-    protected static List<WeakReference<VerticleSet>> allShapesToRedraw = new ArrayList<>();
-    protected static List<WeakReference<VerticleSet>> allShapes = new ArrayList<>();
+public class VerticesShapesManager {
+    protected static List<WeakReference<VerticesSet>> allShapesToRedraw = new ArrayList<>();
+    protected static List<WeakReference<VerticesSet>> allShapes = new ArrayList<>();
 
     //called only after setup and redraws all shapes
     public static void redrawAllSetup() {
@@ -19,9 +19,9 @@ public class VectriesShapesManager {
                 }
             }
         }
-        Iterator<WeakReference<VerticleSet>> iterator = allShapes.iterator();
+        Iterator<WeakReference<VerticesSet>> iterator = allShapes.iterator();
         while (iterator.hasNext()) {
-            WeakReference<VerticleSet> e = iterator.next();
+            WeakReference<VerticesSet> e = iterator.next();
             if (e.get() == null) {
                 iterator.remove();
             }
@@ -30,7 +30,7 @@ public class VectriesShapesManager {
 
     //called every frame to check if shape is loaded
     public static void onFrameBegin() {
-        for (WeakReference<VerticleSet> i : allShapes) {
+        for (WeakReference<VerticesSet> i : allShapes) {
             if (i.get() != null) {
                 i.get().onFrameBegin();
             }
@@ -57,9 +57,9 @@ public class VectriesShapesManager {
                 allShapes.get(i).get().onRedrawSetup();
             }
         }
-        Iterator<WeakReference<VerticleSet>> iterator = allShapes.iterator();
+        Iterator<WeakReference<VerticesSet>> iterator = allShapes.iterator();
         while (iterator.hasNext()) {
-            WeakReference<VerticleSet> e = iterator.next();
+            WeakReference<VerticesSet> e = iterator.next();
             if (e.get() == null) {
                 iterator.remove();
             }

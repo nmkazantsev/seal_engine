@@ -1,4 +1,4 @@
-package com.seal.gl_engine.engine.main.verticles;
+package com.seal.gl_engine.engine.main.vertices;
 
 import static android.opengl.GLES10.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_CLAMP_TO_EDGE;
@@ -33,7 +33,7 @@ import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
-public class SkyBox implements VerticleSet {
+public class SkyBox implements VerticesSet {
     private final CubeMap texture;
     private final String textureFileName, res;
     private Face[] faces;
@@ -50,7 +50,7 @@ public class SkyBox implements VerticleSet {
         this.res = res;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
-        VectriesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+        VerticesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
         texture = new CubeMap(page);
         try {
             createFaces();
@@ -166,7 +166,7 @@ public class SkyBox implements VerticleSet {
         this.redrawNeeded = redrawNeeded;
         postToGlNeeded = true;
         if (redrawNeeded) {
-            VectriesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+            VerticesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
         }
     }
 

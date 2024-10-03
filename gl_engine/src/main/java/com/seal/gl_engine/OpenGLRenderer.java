@@ -18,7 +18,7 @@ import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.verticles.VectriesShapesManager;
+import com.seal.gl_engine.engine.main.vertices.VerticesShapesManager;
 import com.seal.gl_engine.utils.Utils;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -63,7 +63,7 @@ public class OpenGLRenderer implements Renderer {
             Utils.programStartTime = System.currentTimeMillis();
             prevPageChangeTime = Utils.millis();
         }
-        VectriesShapesManager.redrawAllSetup();
+        VerticesShapesManager.redrawAllSetup();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class OpenGLRenderer implements Renderer {
     private void gaphicsSetup() {
         Shader.updateAllLocations();
         VRAMobject.onRedraw();
-        VectriesShapesManager.onRedrawSetup();
+        VerticesShapesManager.onRedrawSetup();
     }
 
     private void setup() {
@@ -94,7 +94,7 @@ public class OpenGLRenderer implements Renderer {
         cadrs++;
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         draw();
-        VectriesShapesManager.redrawAll();
+        VerticesShapesManager.redrawAll();
         TouchProcessor.processMotions();
     }
 
@@ -102,7 +102,7 @@ public class OpenGLRenderer implements Renderer {
         if (gamePage == null) {
             startNewPage(Engine.getStartPage.apply(null));
         }
-        VectriesShapesManager.onFrameBegin();
+        VerticesShapesManager.onFrameBegin();
         gamePage.draw();
         Debugger.draw();
     }
