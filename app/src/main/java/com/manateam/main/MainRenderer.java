@@ -33,7 +33,7 @@ public class MainRenderer extends GamePageClass {
     private final SealObject s;
     boolean f = true;
     private final TouchProcessor touchProcessor;
-    private final FrameBuffer frameBuffer;
+    //private final FrameBuffer frameBuffer;
 
     public MainRenderer() {
         Animator.initialize();
@@ -62,7 +62,7 @@ public class MainRenderer extends GamePageClass {
         s.animRotation(90f, 0, 0, 1000, 3000, false);
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
-        frameBuffer = new FrameBuffer((int) x, (int) y, this);
+       // frameBuffer = new FrameBuffer((int) x, (int) y, this);
     }
 
 
