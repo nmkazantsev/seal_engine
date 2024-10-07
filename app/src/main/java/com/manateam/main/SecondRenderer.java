@@ -48,9 +48,9 @@ public class SecondRenderer extends GamePageClass {
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
-    private FrameBuffer frameBuffer;
+    private final FrameBuffer frameBuffer;
 
-    private ExpouseSettings expouseSettings;
+    private final ExpouseSettings expouseSettings;
 
     TouchProcessor touchProcessor;
 
@@ -148,6 +148,6 @@ public class SecondRenderer extends GamePageClass {
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+        frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(0, y, 1));
     }
 }

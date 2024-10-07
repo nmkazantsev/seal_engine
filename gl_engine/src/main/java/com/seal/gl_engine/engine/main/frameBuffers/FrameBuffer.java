@@ -81,10 +81,10 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
         };
 
         float[][] textCoords = new float[][]{
-                {0, 0},
-                {0, 1},
+                {1, 1},
                 {1, 0},
-                {1, 1}
+                {0, 1},
+                {0, 0},
         };
         Face face1 = new Face(
                 new Point[]{
