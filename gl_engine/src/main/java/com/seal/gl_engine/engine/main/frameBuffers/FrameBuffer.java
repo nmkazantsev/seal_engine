@@ -1,14 +1,18 @@
 package com.seal.gl_engine.engine.main.frameBuffers;
 
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
+import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glDeleteFramebuffers;
 import static android.opengl.GLES20.glDeleteRenderbuffers;
 import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES30.GL_RGBA16F;
 
 import android.opengl.GLES20;
 
@@ -20,50 +24,51 @@ import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.maths.Point;
 
 public class FrameBuffer extends VRAMobject implements DrawableShape {
-    private int texture;
-    private final int depth;
-    private int frameBuffer;
-    private int w;
-    private int h;
+    protected int texture;
+    protected int depth;
+    protected int frameBuffer;
+    protected int w;
+    protected int h;
 
-    public FrameBuffer(int frameBuffer, int depth, int texture, GamePageClass page) {
+    // https://www.programcreek.com/java-api-examples/?class=android.opengl.GLES20&method=glBindFramebuffer
+    public FrameBuffer(int width, int height, GamePageClass page) {
         super(page);
-        this.frameBuffer = frameBuffer;
-        this.texture = texture;
-        this.depth = depth;
+        this.w = width;
+        this.h = height;
+        onRedrawSetup();
     }
 
     public void onRedrawSetup() {
         int[] frameBuffers = new int[1];
+        int[] frameBufferTextures = new int[1];
         GLES20.glGenFramebuffers(1, frameBuffers, 0);
 
-        this.frameBuffer = frameBuffers[0];
+        GLES20.glGenTextures(1, frameBufferTextures, 0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, frameBufferTextures[0]);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA16F,
+                w, h, 0,
+                GLES20.GL_RGBA, GLES20.GL_FLOAT, null);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffers[0]);
+        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
+                GLES20.GL_TEXTURE_2D, frameBufferTextures[0], 0);
 
-        int[] frameBufferTextures = new int[1];
-        if (this.texture != 0) {
-            GLES20.glGenTextures(1, frameBufferTextures, 0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, frameBufferTextures[0]);
-            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
-                    w, h, 0,
-                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                    GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                    GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, this.getFrameBuffer());
-            GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
-                    GLES20.GL_TEXTURE_2D, frameBufferTextures[0], 0);
-
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-        }
-
-        this.texture = frameBufferTextures[0];
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
         int[] depthBuffer = new int[1];
         GLES20.glGenRenderbuffers(1, depthBuffer, 0);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthBuffer[0]);
         GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, w, h);
         GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT, GLES20.GL_RENDERBUFFER, depthBuffer[0]);
+
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+        frameBuffer = frameBuffers[0];
+        depth = depthBuffer[0];
+        texture = frameBufferTextures[0];
     }
 
     public void drawTexture(Point a, Point b, Point d) {
@@ -149,5 +154,15 @@ public class FrameBuffer extends VRAMobject implements DrawableShape {
     @Override
     public void reload() {
         onRedrawSetup();
+    }
+
+    public void apply() {
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffer);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+    public static void connectDefaultFrameBuffer() {
+        // switch to the buffer
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 }
