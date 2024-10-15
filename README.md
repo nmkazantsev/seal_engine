@@ -29,7 +29,7 @@
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false,false); //второй параметр - ориентация LandScape, третий - использовать ли встроенный дебаггер.
+        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false,false,true); //второй параметр - ориентация LandScape, третий - использовать ли встроенный дебаггер, 4й - использовать ли 4xMSAA для экранного фрейм буфера
         setContentView(v);
         assert v != null;
         v.setOnTouchListener(this);
@@ -426,7 +426,16 @@ GamePageInterface является центральной сущностью д�
     public Vec3 specular;  - компонента блика
     public float shininess;  - компонента яркости блика
 ```
-
+## Экспозиция
+Достигается методом пост-обработки. Для этого есть встроенный шейдер exposition fragment, который используется вместе с vertex_shader:
+```
+	expositonShader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.exposition_fragment, this, new MainShaderAdaptor());
+```
+Содержимое сцены реднерится во фрейм буфер, далее подключется шейдер экспозиции, с помощью экземпеляра класса `ExpouseSettings` в него передаются значения и вызывается отрисовка.
+```
+ 		expouseSettings.expouse = expouse.value;
+        	expouseSettings.gamma = gamma.value;
+```
 
 
 # Обработка касаний
