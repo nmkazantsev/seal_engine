@@ -88,7 +88,7 @@ public class MainRenderer extends GamePageClass {
         if (touchProcessor.getTouchAlive()) {
             simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }
-        // frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+        // frameBuffer.drawTexture(new Vec3(Utils.x, Utils.y, 1), new Vec3(0, y, 1), new Vec3(Utils.x, 0, 1));
 
     }
 

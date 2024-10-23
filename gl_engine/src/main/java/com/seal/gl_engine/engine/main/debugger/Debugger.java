@@ -28,7 +28,7 @@ import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.vertices.SimplePolygon;
-import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.maths.Vec3;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -181,7 +181,7 @@ public class Debugger {
             if (page == 0) {
                 fpsPolygon.setRedrawNeeded(true);
                 fpsPolygon.redrawNow();
-                fpsPolygon.prepareAndDraw(new Point(0 * kx, 0, 10), new Point(fps_x, 0, 10), new Point(0 * kx, fps_y, 10));
+                fpsPolygon.prepareAndDraw(new Vec3(0 * kx, 0, 10), new Vec3(fps_x, 0, 10), new Vec3(0 * kx, fps_y, 10));
             } else {
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 glEnable(GL_BLEND);

@@ -29,7 +29,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 public class Engine {
     public static final String version = "3.1.1";
-    public static final String version = "3.1.1";
     private static boolean shadowsPass = false;
 
     public static boolean getShadowPass() {

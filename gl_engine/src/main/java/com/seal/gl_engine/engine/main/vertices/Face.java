@@ -1,24 +1,23 @@
 package com.seal.gl_engine.engine.main.vertices;
 
-import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.maths.Vec3;
 
 public class Face {
-    public final Point[] vertices;
-    public final Point[] textureCoordinates;
-    public final Point normal;
+    public final Vec3[] vertices;
+    public final Vec3[] textureCoordinates;
+    public final Vec3 normal;
     public Vec3 tangent, bitangent;//tangent, bitangent
     private final int SEGMENT_LENGTH = 14, SEGMENT_LENGTH_NO_TS = 14 - 6;
 
-    public Face(Point[] vertices, Point[] textureCoordinates, Point normal) {
+    public Face(Vec3[] vertices, Vec3[] textureCoordinates, Vec3 normal) {
         this.vertices = vertices;
         this.textureCoordinates = textureCoordinates;
         this.normal = normal;
         //calculate tangent space (https://learnopengl.com/Advanced-Lighting/Normal-Mapping)
-        Vec3 edge1 = (vertices[1].toVec3().sub(vertices[0].toVec3()));
-        Vec3 edge2 = (vertices[2].toVec3().sub(vertices[0].toVec3()));
-        Vec3 deltaUV1 = (textureCoordinates[1].toVec3().sub(textureCoordinates[0].toVec3()));
-        Vec3 deltaUV2 = (textureCoordinates[2].toVec3().sub(textureCoordinates[0].toVec3()));
+        Vec3 edge1 = Vec3.sub(vertices[1], vertices[0]);
+        Vec3 edge2 = Vec3.sub(vertices[2], vertices[0]);
+        Vec3 deltaUV1 = Vec3.sub(textureCoordinates[1], textureCoordinates[0]);
+        Vec3 deltaUV2 = Vec3.sub(textureCoordinates[2], textureCoordinates[0]);
         float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
 
         tangent = new Vec3();
