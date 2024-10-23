@@ -16,7 +16,7 @@ import com.seal.gl_engine.utils.Utils;
 import java.util.function.Function;
 
 public class Engine {
-    public static final String version = "3.0.3";
+    public static final String version = "3.1.1";
     private static boolean shadowsPass = false;
 
     public static boolean getShadowPass() {
