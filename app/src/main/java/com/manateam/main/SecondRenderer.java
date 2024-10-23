@@ -5,7 +5,7 @@ import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
-import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;
+import static com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer.connectDefaultFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.cos;
 import static com.seal.gl_engine.utils.Utils.map;
@@ -25,7 +25,6 @@ import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils;
 import com.seal.gl_engine.engine.main.light.AmbientLight;
 import com.seal.gl_engine.engine.main.light.DirectedLight;
 import com.seal.gl_engine.engine.main.light.ExpouseSettings;
@@ -33,7 +32,6 @@ import com.seal.gl_engine.engine.main.light.Material;
 import com.seal.gl_engine.engine.main.light.SourceLight;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.vertices.Polygon;
 import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.engine.main.vertices.SkyBox;
 import com.seal.gl_engine.maths.Point;
@@ -50,9 +48,9 @@ public class SecondRenderer extends GamePageClass {
     private final AmbientLight ambientLight;
     private final DirectedLight directedLight1;
     private final Material material;
-    private FrameBuffer frameBuffer;
+    private final FrameBuffer frameBuffer;
 
-    private ExpouseSettings expouseSettings;
+    private final ExpouseSettings expouseSettings;
 
     TouchProcessor touchProcessor;
 
@@ -107,7 +105,7 @@ public class SecondRenderer extends GamePageClass {
             OpenGLRenderer.startNewPage(new MainRenderer());
             return null;
         }, null, null, this);
-        frameBuffer = createFrameBuffer((int) x, (int) y, this);
+        frameBuffer = new FrameBuffer((int) x, (int) y, this);
 
         camPos = Debugger.addDebugValueFloat(2, 5, "cam pos");
         camPos.value = 4;
@@ -124,7 +122,7 @@ public class SecondRenderer extends GamePageClass {
         GLES30.glDisable(GL_BLEND);
         expouseSettings.expouse = expouse.value;
         expouseSettings.gamma = gamma.value;
-        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());
+        frameBuffer.apply();
         camera.resetFor3d();
         camera.cameraSettings.eyeZ = 0f;
         camera.cameraSettings.eyeX = camPos.value;
@@ -144,12 +142,12 @@ public class SecondRenderer extends GamePageClass {
         Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
-        FrameBufferUtils.connectDefaultFrameBuffer();
+        connectDefaultFrameBuffer();
         applyShader(expositonShader);
         camera.resetFor2d();
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));
+        frameBuffer.drawTexture(new Point(0, 0, 1), new Point(Utils.x, 0, 1), new Point(0, y, 1));
     }
 }
