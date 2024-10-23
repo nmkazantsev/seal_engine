@@ -1,7 +1,7 @@
 package com.seal.gl_engine.maths;
 
 public class Line {
-    private float a, b, c, p1, p2, p3;
+    private final float a, b, c, p1, p2, p3;
 
     public Line(Vec3 A, Vec3 B) {
         Vec3 v = new Vec3(A.x - B.x, A.y - B.y, A.z - B.z);
