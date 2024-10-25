@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
+import com.seal.gl_engine.maths.Line;
 import com.seal.gl_engine.utils.Utils;
 
 public class PImage {
@@ -86,7 +87,7 @@ public class PImage {
     public void roundRect(float x, float y, float a, float b, float rx, float ry) {
         a = x + a;
         b = y + b;
-         canvas.drawRoundRect(x, y, a, b, rx, ry, paint);
+        canvas.drawRoundRect(x, y, a, b, rx, ry, paint);
         canvas.drawRoundRect(x, y, a, b, rx, ry, stroke);
     }
 
@@ -250,6 +251,10 @@ public class PImage {
 
     public void line(float x1, float y1, float x2, float y2) {
         canvas.drawLine(x1, y1, x2, y2, stroke);
+    }
+
+    public void line(Line line) {
+        canvas.drawLine(line.getBaseVector().x, line.getBaseVector().y, line.getBaseVector().x + line.getDirectionVector().x, line.getBaseVector().y + line.getDirectionVector().y, stroke);
     }
 
     public void noStroke() {

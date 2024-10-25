@@ -1,17 +1,22 @@
 package com.seal.gl_engine.maths;
 
+import static com.seal.gl_engine.utils.Utils.abs;
+
+import android.opengl.Matrix;
+
 public class Line {
     private final float a, b, c, p1, p2, p3;
 
+
     public Line(Vec3 A, Vec3 B) {
         Vec3 v = new Vec3(A.x - B.x, A.y - B.y, A.z - B.z);
-        a = -A.x;
-        b = -A.y;
-        c = -A.z;
-        float[] f = v.getArray();
-        p1 = f[0];
-        p2 = f[1];
-        p3 = f[2];
+        a = A.x;
+        b = A.y;
+        c = A.z;
+        // float[] f = v.getArray();
+        p1 = -v.x;
+        p2 = -v.y;
+        p3 = -v.z;
     }
 
     Vec3 crossWithPlane(Plane p) {
@@ -30,12 +35,13 @@ public class Line {
     }
 
     public Vec3 getDirectionVector() {
-        return new Vec3(a, b, c);
+        return new Vec3(p1, p2, p3);
     }
 
     public Vec3 getBaseVector() {
-        return new Vec3(p1, p2, p3);
+        return new Vec3(a, b, c);
     }
+
 
     public Vec3 findCross(Line n) {
         Vec3 a, b, c, d;
@@ -50,23 +56,17 @@ public class Line {
         if (det < 10e-9) {
             return null;
         }
-        //mat[0] = a.x;
-        //mat[2] = c.x;
-        float detx = a.x * c.x - mat[1] * mat[3];
-        float k1 = detx / det;
-        /*mat[0] = d1.x;
-        mat[2] = d1.y;
-        mat[1] = a.y;
-        mat[3] = c.y;
-        float dety = mat[0] * mat[2] - mat[1] * mat[3];
-        float k2 = dety/det;
-        if(k1*)
-         */
-        Vec3 point = a.mul(k1).add(b);
-        if (b.z * k1 + a.z == point.z) {
-            return point;
-        } else {
-            return null;
+        float[] mat_inv = new float[4];
+        Matrix.invertM(mat_inv, 0, mat, 0);
+        float[] vector_awns = new float[]{c.x + d.x - (a.x + b.x), c.y + d.y - (a.y + b.y)};
+        float[] result = new float[2];
+        Matrix.multiplyMV(result, 0, mat_inv, 0, vector_awns, 0); //find k1 and k2
+        if (result[0] < 0 || result[0] > 1 || result[1] < 0 || result[1] > 1) {
+            return null;//out of bounds
         }
+        if (abs(a.z + b.z * result[0] - (c.z + d.z * result[1])) > 109 - 9) {
+            return null;// check z
+        }
+        return a.add(b.mul(result[1]));
     }
 }
