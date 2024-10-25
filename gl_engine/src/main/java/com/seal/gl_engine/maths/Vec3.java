@@ -68,6 +68,10 @@ public class Vec3 {
         return Utils.sqrt(Utils.sq(x) + Utils.sq(y) + Utils.sq(z));
     }
 
+    public static float length(Vec3 v) {
+        return v.length();
+    }
+
     public Vec3 add(Vec3 v) {
         this.x += v.x;
         this.y += v.y;
@@ -106,6 +110,11 @@ public class Vec3 {
         return new Vec3(v.y * u.z - v.z * u.y, v.z * u.x - v.x * u.z, v.x * u.y - v.y * u.x);
     }
 
+    public void cross(Vec3 u) {
+        this.x = this.y * u.z - this.z * u.y;
+        this.y = this.z * u.x - this.x * u.z;
+        this.z = this.x * u.y - this.y * u.x;
+    }
 
     public Vec3 div(float i) {
         this.x /= i;
