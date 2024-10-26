@@ -2,8 +2,6 @@ package com.seal.gl_engine.maths;
 
 import static com.seal.gl_engine.utils.Utils.abs;
 
-import android.opengl.Matrix;
-
 public class Line {
     private final float a, b, c, p1, p2, p3;
 
@@ -42,6 +40,15 @@ public class Line {
         return new Vec3(a, b, c);
     }
 
+    //inverse 2x2 matrix
+    private float[] invertMat(float[] mat, float det) {
+        return new float[]{mat[3] / det, -mat[1] / det, -mat[2] / det, mat[0] / det};
+    }
+
+    //mat 2x2 * vec 2
+    private float[] multiply_MV(float[] mat, float[] vec) {
+        return new float[]{mat[0] * vec[0] + mat[1] * vec[1], mat[2] * vec[0] + mat[3] * vec[1]};
+    }
 
     public Vec3 findCross(Line n) {
         Vec3 a, b, c, d;
@@ -56,11 +63,11 @@ public class Line {
         if (det < 10e-9) {
             return null;
         }
-        float[] mat_inv = new float[4];
-        Matrix.invertM(mat_inv, 0, mat, 0);
+        float[] mat_inv;
+        mat_inv = invertMat(mat, det);
         float[] vector_awns = new float[]{c.x + d.x - (a.x + b.x), c.y + d.y - (a.y + b.y)};
-        float[] result = new float[2];
-        Matrix.multiplyMV(result, 0, mat_inv, 0, vector_awns, 0); //find k1 and k2
+        float[] result;
+        result = multiply_MV(mat_inv, vector_awns); //find k1 and k2
         if (result[0] < 0 || result[0] > 1 || result[1] < 0 || result[1] > 1) {
             return null;//out of bounds
         }
