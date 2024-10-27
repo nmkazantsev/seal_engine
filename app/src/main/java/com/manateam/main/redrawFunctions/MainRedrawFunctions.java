@@ -33,13 +33,13 @@ public class MainRedrawFunctions {
         //image.ellipse(100, 100, 50, 50);
         image.strokeWeight(5);
         image.stroke(255);
-        Line line = new Line(new Vec3(0,0, 0), new Vec3(150, 50, 50));
-        Line line2 = new Line(new Vec3(140, 20, 0), new Vec3(0, 110, 0));
+        Line line = new Line(new Vec3(0,0, 0), new Vec3(150, 150, 50));
+        Line line2 = new Line(new Vec3(140, 120, 0), new Vec3(0, 110, 0));
         image.line(line);
         image.line(line2);
         Vec3 p = line.findCross(line2);
         if(p!=null) {
-            image.ellipse(p.x, p.y, 10, 10);
+            image.ellipse(p.x, p.y, 5, 5);
         }
         return image;
     }
