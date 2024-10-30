@@ -6,7 +6,7 @@ import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glGenTextures;
-
+import static android.opengl.GLES20.glGenerateMipmap;
 
 import android.opengl.GLES20;
 
@@ -16,10 +16,17 @@ import com.seal.gl_engine.engine.main.VRAMobject;
 
 public class Texture extends VRAMobject {
     private int id;
+    private boolean mipMap = false;
 
     public Texture(GamePageClass creator) {
         super(creator);
         id = createTexture();
+    }
+
+    public Texture(GamePageClass creator, boolean mipMap) {
+        super(creator);
+        id = createTexture();
+        this.mipMap = mipMap;
     }
 
     @Override
@@ -39,8 +46,13 @@ public class Texture extends VRAMobject {
         // настройка объекта текстуры
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureIds[0]);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        if (!mipMap) {
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        } else {
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        }
 
         // сброс target
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -54,5 +66,9 @@ public class Texture extends VRAMobject {
 
     public int getId() {
         return id;
+    }
+
+    public boolean hasMinMaps() {
+        return mipMap;
     }
 }

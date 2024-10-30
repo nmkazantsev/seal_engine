@@ -7,6 +7,7 @@ import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glGenerateMipmap;
 import static android.opengl.GLES20.glUniform1i;
 
 import android.opengl.GLES20;
@@ -40,11 +41,26 @@ public class Polygon implements VerticesSet, DrawableShape {
 
     private final Function<List<Object>, PImage> redrawFunction;
 
-
     public Polygon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page) {
         this.redrawFunction = redrawFunction;
         VerticesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
         texture = new Texture(page);
+        for (int i = 0; i < paramSize; i++) {
+            redrawParams.add("");
+        }
+        this.saveMemory = saveMemory;
+        redrawNow();
+        if (page == null) {
+            creatorClassName = null;
+        } else {
+            creatorClassName = page.getClass().getName();
+        }
+    }
+
+    public Polygon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page, boolean mipMap) {
+        this.redrawFunction = redrawFunction;
+        VerticesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
+        texture = new Texture(page, mipMap);
         for (int i = 0; i < paramSize; i++) {
             redrawParams.add("");
         }
@@ -168,6 +184,9 @@ public class Polygon implements VerticesSet, DrawableShape {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.getId());
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, 0);
+        if (texture.hasMinMaps()) {
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
         if (saveMemory) {
             image.delete();
         }
