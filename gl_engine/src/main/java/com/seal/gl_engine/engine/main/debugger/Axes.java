@@ -1,5 +1,6 @@
 package com.seal.gl_engine.engine.main.debugger;
 
+import static android.opengl.GLES10.glLineWidth;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;

@@ -1,7 +1,6 @@
 package com.manateam.main;
 
 import static android.opengl.GLES20.GL_BLEND;
-import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
