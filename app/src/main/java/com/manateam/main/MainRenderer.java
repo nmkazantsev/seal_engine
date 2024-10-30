@@ -14,6 +14,7 @@ import static com.seal.gl_engine.utils.Utils.x;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
+import com.seal.gl_engine.default_adaptors.LineShaderAdaptor;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
@@ -21,8 +22,11 @@ import com.seal.gl_engine.engine.main.engine_object.SealObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
+import com.seal.gl_engine.engine.main.vertices.LinePolygon;
 import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.engine.main.vertices.SimplePolygon;
+import com.seal.gl_engine.maths.Line;
+import com.seal.gl_engine.maths.Vec3;
 
 public class MainRenderer extends GamePageClass {
     private final Shader shader;
@@ -32,6 +36,8 @@ public class MainRenderer extends GamePageClass {
     boolean f = true;
     private final TouchProcessor touchProcessor;
     //private final FrameBuffer frameBuffer;
+    private LinePolygon linePolygon;
+    private Shader lineShader;
 
     public MainRenderer() {
         Animator.initialize();
@@ -61,6 +67,8 @@ public class MainRenderer extends GamePageClass {
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         // frameBuffer = new FrameBuffer((int) x, (int) y, this);
+        lineShader = new Shader(com.example.gl_engine.R.raw.line_vertex, com.example.gl_engine.R.raw.line_fragmant, this, new LineShaderAdaptor());
+        linePolygon = new LinePolygon(this);
     }
 
 
@@ -79,6 +87,8 @@ public class MainRenderer extends GamePageClass {
         camera.apply();
         // connectFrameBuffer(frameBuffer.getFrameBuffer());
         s.prepareAndDraw();
+        linePolygon.setColor(new Vec3(1, 0, 0));
+        linePolygon.draw(new Line(new Vec3(0, 0, 0), new Vec3(1, 1, 1)));
         //connectDefaultFrameBuffer();
         camera.resetFor2d();
         camera.apply(false);
@@ -86,7 +96,7 @@ public class MainRenderer extends GamePageClass {
         if (touchProcessor.getTouchAlive()) {
             simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);
         }
-        simplePolygon.prepareAndDraw(0,500,500, 300, 300, 0.01f);
+        simplePolygon.prepareAndDraw(0, 500, 500, 300, 300, 0.01f);
         // frameBuffer.drawTexture(new Vec3(Utils.x, Utils.y, 1), new Vec3(0, y, 1), new Vec3(Utils.x, 0, 1));
 
     }

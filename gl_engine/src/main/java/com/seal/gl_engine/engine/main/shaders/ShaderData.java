@@ -7,7 +7,7 @@ public abstract class ShaderData {
 
     protected ShaderData(GamePageClass gamePageClass) {
         this.gamePageClass = gamePageClass;
-        Shader.getActiveShader().getAdaptor().addLightAdaptor(this);
+        Adaptor.addLightAdaptor(this);
     }
 
 
