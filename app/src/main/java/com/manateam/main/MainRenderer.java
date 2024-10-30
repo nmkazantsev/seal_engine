@@ -10,7 +10,6 @@ import static com.seal.gl_engine.utils.Utils.freezeMillis;
 import static com.seal.gl_engine.utils.Utils.getMillisFrozen;
 import static com.seal.gl_engine.utils.Utils.unfreezeMillis;
 import static com.seal.gl_engine.utils.Utils.x;
-import static com.seal.gl_engine.utils.Utils.y;
 
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
@@ -19,7 +18,6 @@ import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.engine_object.SealObject;
-import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
@@ -40,7 +38,7 @@ public class MainRenderer extends GamePageClass {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         camera = new Camera();
         if (simplePolygon == null) {
-            simplePolygon = new SimplePolygon(MainRedrawFunctions::redrawBox2, true, 0, null);
+            simplePolygon = new SimplePolygon(MainRedrawFunctions::redrawBox2, true, 0, null, true);
             simplePolygon.redrawNow();
         }
 
