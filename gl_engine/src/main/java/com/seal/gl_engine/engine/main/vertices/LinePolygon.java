@@ -22,12 +22,13 @@ public class LinePolygon implements VerticesSet {
     private final String creatorClassName;
     private Vec3 color = new Vec3(1);
     ShaderData lineColorData;
+
     public LinePolygon(@NonNull GamePageClass page) {
         VerticesShapesManager.allShapes.add(new WeakReference<>(this));//add link to this object
 
         creatorClassName = page.getClass().getName();
 
-        ShaderData lineColorData = new ShaderData(page) {
+        lineColorData = new ShaderData(page) {
             private int colorLoc;
 
             @Override
@@ -53,6 +54,7 @@ public class LinePolygon implements VerticesSet {
     }
 
     public void draw(Line line) {
+        lineColorData.forwardNow();
         bindData(line);
         glDrawArrays(GL_LINES, 0, 2);
     }

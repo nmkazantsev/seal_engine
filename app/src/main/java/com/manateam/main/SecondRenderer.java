@@ -22,6 +22,7 @@ import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.default_adaptors.LightShaderAdaptor;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
+import com.seal.gl_engine.engine.main.debugger.Axes;
 import com.seal.gl_engine.engine.main.debugger.DebugValueFloat;
 import com.seal.gl_engine.engine.main.debugger.Debugger;
 import com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer;
@@ -54,8 +55,10 @@ public class SecondRenderer extends GamePageClass {
     TouchProcessor touchProcessor;
 
     DebugValueFloat camPos, expouse, gamma;
+    private final Axes axes;
 
     public SecondRenderer() {
+        axes = new Axes(this);
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         expositonShader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.exposition_fragment, this, new MainShaderAdaptor());
         lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());
@@ -123,7 +126,7 @@ public class SecondRenderer extends GamePageClass {
         expouseSettings.gamma = gamma.value;
         frameBuffer.apply();
         camera.resetFor3d();
-        camera.cameraSettings.eyeZ = 0f;
+        camera.cameraSettings.eyeZ = 1f;
         camera.cameraSettings.eyeX = camPos.value;
         float x = 3.5f * Utils.sin(millis() / 1000.0f);
         camera.cameraSettings.centerY = 0;
@@ -133,14 +136,15 @@ public class SecondRenderer extends GamePageClass {
         skyBox.prepareAndDraw();
         applyShader(lightShader);
         material.apply();
-        glClearColor(1f, 1, 1, 1);
+        //glClearColor(1f, 1, 1, 1);
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);
         Matrix.translateM(mMatrix, 0, 0, -0f, 0);
-        Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);
+        Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.5f);
         applyMatrix(mMatrix);
         s.prepareAndDraw();
+        axes.drawAxes(6,0.5f, 0.2f,null, camera);
         connectDefaultFrameBuffer();
         applyShader(expositonShader);
         camera.resetFor2d();

@@ -22,5 +22,10 @@ public abstract class ShaderData {
 
     protected abstract void forwardData();
 
+    public void forwardNow() {
+        this.getLocations(Shader.getActiveShader().getAdaptor().programId);
+        this.forwardData();
+    }
+
     protected abstract void delete();
 }

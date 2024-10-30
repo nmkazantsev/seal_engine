@@ -19,6 +19,7 @@ import com.seal.gl_engine.default_adaptors.LineShaderAdaptor;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
+import com.seal.gl_engine.engine.main.debugger.Axes;
 import com.seal.gl_engine.engine.main.engine_object.SealObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
@@ -38,7 +39,9 @@ public class MainRenderer extends GamePageClass {
     private final TouchProcessor touchProcessor;
     //private final FrameBuffer frameBuffer;
     private final LinePolygon linePolygon;
-    private final  Shader lineShader;
+    private final Shader lineShader;
+    private final Axes axes;
+
     public MainRenderer() {
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -67,8 +70,9 @@ public class MainRenderer extends GamePageClass {
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         // frameBuffer = new FrameBuffer((int) x, (int) y, this);
-         lineShader = new Shader(com.example.gl_engine.R.raw.line_vertex, com.example.gl_engine.R.raw.line_fragmant, this, new LineShaderAdaptor());
+        lineShader = new Shader(com.example.gl_engine.R.raw.line_vertex, com.example.gl_engine.R.raw.line_fragmant, this, new LineShaderAdaptor());
         linePolygon = new LinePolygon(this);
+        axes = new Axes(this);
     }
 
 
@@ -92,8 +96,9 @@ public class MainRenderer extends GamePageClass {
         camera.apply();
         applyMatrix(resetTranslateMatrix(new float[16]));
         linePolygon.setColor(new Vec3(1, 0, 0));
-        linePolygon.draw(new Line(new Vec3(0, 0, 0), new Vec3(1, 1, 1)));
+        linePolygon.draw(new Line(new Vec3(0, 0, 0), new Vec3(1, -1, -1)));
         applyShader(shader);
+        axes.drawAxes(3, 0.3f, 0.2f,null, camera);
         //connectDefaultFrameBuffer();
         camera.resetFor2d();
         camera.apply(false);
