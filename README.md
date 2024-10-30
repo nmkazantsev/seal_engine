@@ -504,6 +504,93 @@ GamePageInterface является центральной сущностью д�
 # Пакет maths
 На данный момент находится на стадии разработки
 
+## Vec3
+Доступны конструкторы:
+```
+public Vec3(float x, float y, float z) {  
+    this.x = x;  
+    this.y = y;  
+    this.z = z;  
+}  
+  
+public Vec3() {  
+    this.x = 0;  
+    this.y = 0;  
+    this.z = 0;  
+}  
+  
+// Creates vector with values taken from give array. Reads 3 values, starting from i index.  
+public Vec3(float[] arr, int i) {  
+    x = arr[i];  
+    y = arr[i + 1];  
+    z = arr[i + 2];  
+}  
+  
+public Vec3(Vec3 v) {  
+    this.x = v.x;  
+    this.y = v.y;  
+    this.z = v.z;  
+}  
+  
+public Vec3(float v) {  
+    this.x = v;  
+    this.y = v;  
+    this.z = v;  
+}  
+  
+public Vec3(float x, float y) {  
+    this.x = x;  
+    this.y = y;  
+}
+```
+### выгрузка данных
+ Получить вектор в виде массива длины 3:
+` public float[] getArray() `
+
+### преобразования над векторами
+ Далее для каждой функции есть static  аналог, принимающий на вход на 1 вектор больше. Если метод класса вектора действует  на объект (и возвращает this), то статический метод на объекты не действует, но возвращает искомый результат.
+ `public void normalize()` - нормировать
+
+`public float length()` -  длина по теореме Пифагора
+
+`public Vec3 add(Vec3 v)` - прибавить 2 вектора
+
+`public Vec3 sub(Vec3 v)` - вычесть из 1го второй (из this в случае метода )
+
+ `public Vec3 mul(float i)` - скалярное умножение
+
+`public void cross(Vec3 u)` - векторное произведение
+  
+`public Vec3 div(float i)` - скалярное деление
+
+ `public static float getAngle(Vec3 v, Vec3 u)` - угол в радианах между векторами
+
+```
+/**  
+     * rotates vector around axis for a specified angle     *     
+     * @param axis axis, around which to rotate  
+     * @param a    angle in degrees  
+     */    public void rotateVec3(Vec3 axis, float a) {  
+        //create empty translate matrix  
+        float[] matrix;  
+        matrix = resetTranslateMatrix(new float[16]);  
+        Matrix.rotateM(matrix, 0, a, axis.x, axis.y, axis.z);  
+        float[] resultVec = new float[4];  
+        Matrix.multiplyMV(resultVec, 0, matrix, 0, new float[]{this.x, this.y, this.z, 0}, 0);  
+        //return new Vec3(resultVec[0], resultVec[1], resultVec[2]);  
+        this.x = resultVec[0];  
+        this.y = resultVec[1];  
+        this.z = resultVec[2];  
+    }  
+```  
+}
+ 
+## Line
+`Line(Vec3 A, Vec3 B)` - поздание отрезка из точки А и точку Б
+`public Vec3 getDirectionVector() ` - возвращает вектор из точки Б а точку А
+`public Vec3 getBaseVector()` - возвращает точку А
+`public Vec3 findCross(Line n)` - вернет точку пересечения 2х отрезков или null, если они не пересекаются
+
 # Utils
 Содежрит множество постоянно дорабатываемх функций, решаюших простейшие задачи. Самые полезные:
 
