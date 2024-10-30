@@ -6,7 +6,6 @@ import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glGenTextures;
-import static android.opengl.GLES20.glGenerateMipmap;
 
 import android.opengl.GLES20;
 
