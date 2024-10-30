@@ -1,16 +1,8 @@
 package com.seal.gl_engine;
 
-import static android.opengl.GLES10.GL_MULTISAMPLE;
-import static android.opengl.GLES10.glDisable;
-import static android.opengl.GLES20.GL_SAMPLES;
-import static android.opengl.GLES20.glEnable;
-import static android.opengl.GLES20.glHint;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
-import android.opengl.GLES20;
-import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -28,7 +20,29 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
 
 public class Engine {
-    public static final String version = "3.1.0";
+    public static final String version = "3.1.1";
+    private static boolean shadowsPass = false;
+
+    public static boolean getShadowPass() {
+        return shadowsPass;
+    }
+
+    protected static void setShadowsPass(boolean shadowPass) {
+        shadowsPass = shadowPass;
+    }
+
+    public static class touch {
+        public float x;
+        public float y;
+    }
+
+    static float[][] touchEvents = new float[100][22];//[x ,y,length]*10+ type(0 - started , 1 - moved , 2 - eneded)
+    public static int pointsNumber;
+    static int touchEventsNumb = 0;
+    public static touch[] touches;
+    static String touchEvent = "";
+    static float[][] tch = new float[10][2];//float touches
+
     private GLSurfaceView glSurfaceView;
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
@@ -51,7 +65,7 @@ public class Engine {
         }
         glSurfaceView = new GLSurfaceView(context);
         glSurfaceView.setEGLContextClientVersion(3);
-        glSurfaceView.setEGLConfigChooser(new MyConfigChooser(MSAA? 4:1));
+        glSurfaceView.setEGLConfigChooser(new MyConfigChooser(MSAA ? 4 : 1));
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(displayMetrics);

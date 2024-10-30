@@ -21,7 +21,7 @@ import com.seal.gl_engine.engine.main.textures.CubeMap;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.Utils;
 
 import java.io.ByteArrayInputStream;
@@ -67,6 +67,53 @@ public class SkyBox implements VerticesSet {
         ByteArrayInputStream inputStream;
         Obj object;
 
+        //library projects con not have assets
+        String cube_file = "# Blender v3.2.2 OBJ File: ''\n" +
+                "# www.blender.org\n" +
+                "mtllib cube.mtl\n" +
+                "o Cube\n" +
+                "v 1.000000 1.000000 -1.000000\n" +
+                "v 1.000000 -1.000000 -1.000000\n" +
+                "v 1.000000 1.000000 1.000000\n" +
+                "v 1.000000 -1.000000 1.000000\n" +
+                "v -1.000000 1.000000 -1.000000\n" +
+                "v -1.000000 -1.000000 -1.000000\n" +
+                "v -1.000000 1.000000 1.000000\n" +
+                "v -1.000000 -1.000000 1.000000\n" +
+                "vt 0.875000 0.500000\n" +
+                "vt 0.625000 0.750000\n" +
+                "vt 0.625000 0.500000\n" +
+                "vt 0.375000 1.000000\n" +
+                "vt 0.375000 0.750000\n" +
+                "vt 0.625000 0.000000\n" +
+                "vt 0.375000 0.250000\n" +
+                "vt 0.375000 0.000000\n" +
+                "vt 0.375000 0.500000\n" +
+                "vt 0.125000 0.750000\n" +
+                "vt 0.125000 0.500000\n" +
+                "vt 0.625000 0.250000\n" +
+                "vt 0.875000 0.750000\n" +
+                "vt 0.625000 1.000000\n" +
+                "vn 0.0000 1.0000 0.0000\n" +
+                "vn 0.0000 0.0000 1.0000\n" +
+                "vn -1.0000 0.0000 0.0000\n" +
+                "vn 0.0000 -1.0000 0.0000\n" +
+                "vn 1.0000 0.0000 0.0000\n" +
+                "vn 0.0000 0.0000 -1.0000\n" +
+                "usemtl Material\n" +
+                "s off\n" +
+                "f 5/1/1 3/2/1 1/3/1\n" +
+                "f 3/2/2 8/4/2 4/5/2\n" +
+                "f 7/6/3 6/7/3 8/8/3\n" +
+                "f 2/9/4 8/10/4 6/11/4\n" +
+                "f 1/3/5 4/5/5 2/9/5\n" +
+                "f 5/12/6 2/9/6 6/7/6\n" +
+                "f 5/1/1 7/13/1 3/2/1\n" +
+                "f 3/2/2 7/14/2 8/4/2\n" +
+                "f 7/6/3 5/12/3 6/7/3\n" +
+                "f 2/9/4 4/5/4 8/10/4\n" +
+                "f 1/3/5 3/2/5 4/5/5\n" +
+                "f 5/12/6 1/3/6 2/9/6\n";
         inputStream = new ByteArrayInputStream(cube_file.getBytes(StandardCharsets.UTF_8));
 
         object = ObjUtils.convertToRenderable(
@@ -76,24 +123,24 @@ public class SkyBox implements VerticesSet {
         //конвертируем в Face
         this.faces = new Face[object.getNumFaces()];
         for (int i = 0; i < object.getNumFaces(); i++) {
-            faces[i] = new Face(new Point[]{
-                    new Point(object.getVertex(object.getFace(i).getVertexIndex(0)).getX(),
+            faces[i] = new Face(new Vec3[]{
+                    new Vec3(object.getVertex(object.getFace(i).getVertexIndex(0)).getX(),
                             object.getVertex(object.getFace(i).getVertexIndex(0)).getY(),
                             object.getVertex(object.getFace(i).getVertexIndex(0)).getZ()),
-                    new Point(object.getVertex(object.getFace(i).getVertexIndex(1)).getX(),
+                    new Vec3(object.getVertex(object.getFace(i).getVertexIndex(1)).getX(),
                             object.getVertex(object.getFace(i).getVertexIndex(1)).getY(),
                             object.getVertex(object.getFace(i).getVertexIndex(1)).getZ()),
-                    new Point(object.getVertex(object.getFace(i).getVertexIndex(2)).getX(),
+                    new Vec3(object.getVertex(object.getFace(i).getVertexIndex(2)).getX(),
                             object.getVertex(object.getFace(i).getVertexIndex(2)).getY(),
                             object.getVertex(object.getFace(i).getVertexIndex(2)).getZ())},
-                    new Point[]{
-                            new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getX(),
+                    new Vec3[]{
+                            new Vec3(object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getX(),
                                     object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getY()),
-                            new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getX(),
+                            new Vec3(object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getX(),
                                     object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getY()),
-                            new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getX(),
+                            new Vec3(object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getX(),
                                     object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getY())},
-                    new Point(
+                    new Vec3(
                             object.getNormal(object.getFace(i).getNormalIndex(0)).getX(),
                             object.getNormal(object.getFace(i).getNormalIndex(0)).getY(),
                             object.getNormal(object.getFace(i).getNormalIndex(0)).getZ()
@@ -202,52 +249,5 @@ public class SkyBox implements VerticesSet {
         onRedraw();
     }
 
-    //library projects con not have assets
-    private final String cube_file = "# Blender v3.2.2 OBJ File: ''\n" +
-            "# www.blender.org\n" +
-            "mtllib cube.mtl\n" +
-            "o Cube\n" +
-            "v 1.000000 1.000000 -1.000000\n" +
-            "v 1.000000 -1.000000 -1.000000\n" +
-            "v 1.000000 1.000000 1.000000\n" +
-            "v 1.000000 -1.000000 1.000000\n" +
-            "v -1.000000 1.000000 -1.000000\n" +
-            "v -1.000000 -1.000000 -1.000000\n" +
-            "v -1.000000 1.000000 1.000000\n" +
-            "v -1.000000 -1.000000 1.000000\n" +
-            "vt 0.875000 0.500000\n" +
-            "vt 0.625000 0.750000\n" +
-            "vt 0.625000 0.500000\n" +
-            "vt 0.375000 1.000000\n" +
-            "vt 0.375000 0.750000\n" +
-            "vt 0.625000 0.000000\n" +
-            "vt 0.375000 0.250000\n" +
-            "vt 0.375000 0.000000\n" +
-            "vt 0.375000 0.500000\n" +
-            "vt 0.125000 0.750000\n" +
-            "vt 0.125000 0.500000\n" +
-            "vt 0.625000 0.250000\n" +
-            "vt 0.875000 0.750000\n" +
-            "vt 0.625000 1.000000\n" +
-            "vn 0.0000 1.0000 0.0000\n" +
-            "vn 0.0000 0.0000 1.0000\n" +
-            "vn -1.0000 0.0000 0.0000\n" +
-            "vn 0.0000 -1.0000 0.0000\n" +
-            "vn 1.0000 0.0000 0.0000\n" +
-            "vn 0.0000 0.0000 -1.0000\n" +
-            "usemtl Material\n" +
-            "s off\n" +
-            "f 5/1/1 3/2/1 1/3/1\n" +
-            "f 3/2/2 8/4/2 4/5/2\n" +
-            "f 7/6/3 6/7/3 8/8/3\n" +
-            "f 2/9/4 8/10/4 6/11/4\n" +
-            "f 1/3/5 4/5/5 2/9/5\n" +
-            "f 5/12/6 2/9/6 6/7/6\n" +
-            "f 5/1/1 7/13/1 3/2/1\n" +
-            "f 3/2/2 7/14/2 8/4/2\n" +
-            "f 7/6/3 5/12/3 6/7/3\n" +
-            "f 2/9/4 4/5/4 8/10/4\n" +
-            "f 1/3/5 3/2/5 4/5/5\n" +
-            "f 5/12/6 1/3/6 2/9/6\n";
 }
 

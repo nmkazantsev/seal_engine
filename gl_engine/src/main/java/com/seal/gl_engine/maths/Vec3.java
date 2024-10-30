@@ -42,6 +42,11 @@ public class Vec3 {
         this.z = v;
     }
 
+    public Vec3(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public float[] getArray() {
         return new float[]{x, y, z};
     }
@@ -61,6 +66,10 @@ public class Vec3 {
 
     public float length() {
         return Utils.sqrt(Utils.sq(x) + Utils.sq(y) + Utils.sq(z));
+    }
+
+    public static float length(Vec3 v) {
+        return v.length();
     }
 
     public Vec3 add(Vec3 v) {
@@ -101,6 +110,11 @@ public class Vec3 {
         return new Vec3(v.y * u.z - v.z * u.y, v.z * u.x - v.x * u.z, v.x * u.y - v.y * u.x);
     }
 
+    public void cross(Vec3 u) {
+        this.x = this.y * u.z - this.z * u.y;
+        this.y = this.z * u.x - this.x * u.z;
+        this.z = this.x * u.y - this.y * u.x;
+    }
 
     public Vec3 div(float i) {
         this.x /= i;
@@ -127,33 +141,35 @@ public class Vec3 {
     }
 
     /**
-     rotates vector around axis for a specified angle
-     @param vec  source vector
-     @param axis  axis, around which to rotate
-     @param a  angle in degrees
-     @return  new Vec3, equal to rotated vector
+     * rotates vector around axis for a specified angle
+     *
+     * @param vec  source vector
+     * @param axis axis, around which to rotate
+     * @param a    angle in degrees
+     * @return new Vec3, equal to rotated vector
      */
     public static Vec3 rotateVec3(Vec3 vec, Vec3 axis, float a) {
         //create empty translate matrix
-        float [] matrix;
+        float[] matrix;
         matrix = resetTranslateMatrix(new float[16]);
         Matrix.rotateM(matrix, 0, a, axis.x, axis.y, axis.z);
-        float [] resultVec = new float[4];
+        float[] resultVec = new float[4];
         Matrix.multiplyMV(resultVec, 0, matrix, 0, new float[]{vec.x, vec.y, vec.z, 0}, 0);
         return new Vec3(resultVec[0], resultVec[1], resultVec[2]);
     }
 
     /**
-     rotates vector around axis for a specified angle
-     @param axis  axis, around which to rotate
-     @param a  angle in degrees
+     * rotates vector around axis for a specified angle
+     *
+     * @param axis axis, around which to rotate
+     * @param a    angle in degrees
      */
     public void rotateVec3(Vec3 axis, float a) {
         //create empty translate matrix
-        float [] matrix;
+        float[] matrix;
         matrix = resetTranslateMatrix(new float[16]);
         Matrix.rotateM(matrix, 0, a, axis.x, axis.y, axis.z);
-        float [] resultVec = new float[4];
+        float[] resultVec = new float[4];
         Matrix.multiplyMV(resultVec, 0, matrix, 0, new float[]{this.x, this.y, this.z, 0}, 0);
         //return new Vec3(resultVec[0], resultVec[1], resultVec[2]);
         this.x = resultVec[0];

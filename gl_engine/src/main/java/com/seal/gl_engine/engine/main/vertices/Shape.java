@@ -23,7 +23,7 @@ import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.textures.Texture;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
-import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.maths.Vec3;
 import com.seal.gl_engine.utils.Utils;
 
 import java.io.IOException;
@@ -74,24 +74,24 @@ public class Shape implements VerticesSet {
             //convert to Face
             this.faces = new Face[object.getNumFaces()];
             for (int i = 0; i < object.getNumFaces(); i++) {
-                faces[i] = new Face(new Point[]{
-                        new Point(object.getVertex(object.getFace(i).getVertexIndex(0)).getX(),
+                faces[i] = new Face(new Vec3[]{
+                        new Vec3(object.getVertex(object.getFace(i).getVertexIndex(0)).getX(),
                                 object.getVertex(object.getFace(i).getVertexIndex(0)).getY(),
                                 object.getVertex(object.getFace(i).getVertexIndex(0)).getZ()),
-                        new Point(object.getVertex(object.getFace(i).getVertexIndex(1)).getX(),
+                        new Vec3(object.getVertex(object.getFace(i).getVertexIndex(1)).getX(),
                                 object.getVertex(object.getFace(i).getVertexIndex(1)).getY(),
                                 object.getVertex(object.getFace(i).getVertexIndex(1)).getZ()),
-                        new Point(object.getVertex(object.getFace(i).getVertexIndex(2)).getX(),
+                        new Vec3(object.getVertex(object.getFace(i).getVertexIndex(2)).getX(),
                                 object.getVertex(object.getFace(i).getVertexIndex(2)).getY(),
                                 object.getVertex(object.getFace(i).getVertexIndex(2)).getZ())},
-                        new Point[]{
-                                new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getX(),
+                        new Vec3[]{
+                                new Vec3(object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getX(),
                                         object.getTexCoord(object.getFace(i).getTexCoordIndex(0)).getY()),
-                                new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getX(),
+                                new Vec3(object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getX(),
                                         object.getTexCoord(object.getFace(i).getTexCoordIndex(1)).getY()),
-                                new Point(object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getX(),
+                                new Vec3(object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getX(),
                                         object.getTexCoord(object.getFace(i).getTexCoordIndex(2)).getY())},
-                        new Point(
+                        new Vec3(
                                 object.getNormal(object.getFace(i).getNormalIndex(0)).getX(),
                                 object.getNormal(object.getFace(i).getNormalIndex(0)).getY(),
                                 object.getNormal(object.getFace(i).getNormalIndex(0)).getZ()
