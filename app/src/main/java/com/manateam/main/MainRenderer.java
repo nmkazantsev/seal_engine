@@ -4,6 +4,7 @@ import static android.opengl.GLES20.glClearColor;
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;
 import static com.seal.gl_engine.OpenGLRenderer.pageMillis;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
+import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBuffer.connectDefaultFrameBuffer;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
 import static com.seal.gl_engine.utils.Utils.freezeMillis;
@@ -36,9 +37,8 @@ public class MainRenderer extends GamePageClass {
     boolean f = true;
     private final TouchProcessor touchProcessor;
     //private final FrameBuffer frameBuffer;
-    private LinePolygon linePolygon;
-    private Shader lineShader;
-
+    private final LinePolygon linePolygon;
+    private final  Shader lineShader;
     public MainRenderer() {
         Animator.initialize();
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
@@ -67,7 +67,7 @@ public class MainRenderer extends GamePageClass {
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         // frameBuffer = new FrameBuffer((int) x, (int) y, this);
-        lineShader = new Shader(com.example.gl_engine.R.raw.line_vertex, com.example.gl_engine.R.raw.line_fragmant, this, new LineShaderAdaptor());
+         lineShader = new Shader(com.example.gl_engine.R.raw.line_vertex, com.example.gl_engine.R.raw.line_fragmant, this, new LineShaderAdaptor());
         linePolygon = new LinePolygon(this);
     }
 
@@ -86,9 +86,14 @@ public class MainRenderer extends GamePageClass {
         camera.cameraSettings.eyeZ = 5;
         camera.apply();
         // connectFrameBuffer(frameBuffer.getFrameBuffer());
+
         s.prepareAndDraw();
+        applyShader(lineShader);
+        camera.apply();
+        applyMatrix(resetTranslateMatrix(new float[16]));
         linePolygon.setColor(new Vec3(1, 0, 0));
         linePolygon.draw(new Line(new Vec3(0, 0, 0), new Vec3(1, 1, 1)));
+        applyShader(shader);
         //connectDefaultFrameBuffer();
         camera.resetFor2d();
         camera.apply(false);
