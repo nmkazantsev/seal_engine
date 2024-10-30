@@ -35,7 +35,7 @@ import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
-public class Shape implements VerticesSet, DrawableShape {
+public class Shape implements VerticesSet {
     private boolean isVertexLoaded = false, globalLoaded = false;
 
     private final Texture texture;

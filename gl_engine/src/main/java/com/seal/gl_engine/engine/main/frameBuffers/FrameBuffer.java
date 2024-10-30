@@ -18,12 +18,11 @@ import android.opengl.GLES20;
 
 import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.engine.main.vertices.DrawableShape;
 import com.seal.gl_engine.engine.main.vertices.Face;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.maths.Point;
 
-public class FrameBuffer extends VRAMobject implements DrawableShape {
+public class FrameBuffer extends VRAMobject {
     protected int texture;
     protected int depth;
     protected int frameBuffer;

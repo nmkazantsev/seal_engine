@@ -26,7 +26,7 @@ import java.util.function.Function;
 /**
  * this is 3D glShape (glShape deleted in version 3.0.0)
  */
-public class Polygon implements VerticesSet, DrawableShape {
+public class Polygon implements VerticesSet {
     private Face face1;
     private Face face2;
     private final boolean saveMemory;
