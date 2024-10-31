@@ -20,29 +20,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
 
 public class Engine {
-    public static final String version = "3.1.1";
-    private static boolean shadowsPass = false;
-
-    public static boolean getShadowPass() {
-        return shadowsPass;
-    }
-
-    protected static void setShadowsPass(boolean shadowPass) {
-        shadowsPass = shadowPass;
-    }
-
-    public static class touch {
-        public float x;
-        public float y;
-    }
-
-    static float[][] touchEvents = new float[100][22];//[x ,y,length]*10+ type(0 - started , 1 - moved , 2 - eneded)
-    public static int pointsNumber;
-    static int touchEventsNumb = 0;
-    public static touch[] touches;
-    static String touchEvent = "";
-    static float[][] tch = new float[10][2];//float touches
-
+    public static final String version = "3.1.2";
     private GLSurfaceView glSurfaceView;
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
