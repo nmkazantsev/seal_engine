@@ -30,6 +30,10 @@ public class Line {
         return new float[]{mat[0] * vec[0] + mat[1] * vec[1], mat[2] * vec[0] + mat[3] * vec[1]};
     }
 
+    public Vec3 getSecond(){
+        return getBaseVector().add(getDirectionVector());
+    }
+
     public Vec3 findCross(Line n) {
         Vec3 a, b, c, d;
         b = this.getBaseVector();

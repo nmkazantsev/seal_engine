@@ -176,4 +176,8 @@ public class Vec3 {
         this.y = resultVec[1];
         this.z = resultVec[2];
     }
+
+    public static float dot(Vec3 a, Vec3 b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
 }
