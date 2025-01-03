@@ -47,7 +47,7 @@ public class MainRenderer extends GamePageClass {
         shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());
         camera = new Camera();
         if (simplePolygon == null) {
-            simplePolygon = new SimplePolygon(MainRedrawFunctions::redrawBox2, true, 0, null);
+            simplePolygon = new SimplePolygon(MainRedrawFunctions::redrawBox2, true, 0, null, true);
             simplePolygon.redrawNow();
         }
 

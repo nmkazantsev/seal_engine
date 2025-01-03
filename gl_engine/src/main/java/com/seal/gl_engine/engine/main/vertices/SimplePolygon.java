@@ -12,6 +12,9 @@ public class SimplePolygon extends Polygon {
     public SimplePolygon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page) {
         super(redrawFunction, saveMemory, paramSize, page);
     }
+    public SimplePolygon(Function<List<Object>, PImage> redrawFunction, boolean saveMemory, int paramSize, GamePageClass page, boolean mipMap) {
+        super(redrawFunction, saveMemory, paramSize, page, mipMap);
+    }
 
     public void prepareAndDraw(float x, float y, float b, float z) {
         Vec3 A = new Vec3(x, y, z);
