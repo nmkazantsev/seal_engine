@@ -7,7 +7,7 @@ public abstract class ShaderData {
 
     protected ShaderData(GamePageClass gamePageClass) {
         this.gamePageClass = gamePageClass;
-        Shader.getActiveShader().getAdaptor().addLightAdaptor(this);
+        Adaptor.addLightAdaptor(this);
     }
 
 
@@ -21,6 +21,11 @@ public abstract class ShaderData {
     protected abstract void getLocations(int programId);
 
     protected abstract void forwardData();
+
+    public void forwardNow() {
+        this.getLocations(Shader.getActiveShader().getAdaptor().programId);
+        this.forwardData();
+    }
 
     protected abstract void delete();
 }

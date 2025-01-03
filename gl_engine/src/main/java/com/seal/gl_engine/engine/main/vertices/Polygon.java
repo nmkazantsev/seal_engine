@@ -17,7 +17,7 @@ import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.images.PImage;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.textures.Texture;
-import com.seal.gl_engine.maths.Point;
+import com.seal.gl_engine.maths.Vec3;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.function.Function;
 /**
  * this is 3D glShape (glShape deleted in version 3.0.0)
  */
-public class Polygon implements VerticesSet, DrawableShape {
+public class Polygon implements VerticesSet {
     private Face face1;
     private Face face2;
     private final boolean saveMemory;
@@ -80,7 +80,7 @@ public class Polygon implements VerticesSet, DrawableShape {
         }
     }
 
-    public void prepareData(Point a, Point b, Point d) {
+    public void prepareData(Vec3 a, Vec3 b, Vec3 d) {
         /*
         a-----b
         |     |
@@ -88,7 +88,7 @@ public class Polygon implements VerticesSet, DrawableShape {
         d-----c
          */
 
-        Point c = new Point(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
+        Vec3 c = new Vec3(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
         float[][] vertexes = new float[][]{
                 {a.x, a.y, a.z},
                 {d.x, d.y, d.z},
@@ -103,32 +103,32 @@ public class Polygon implements VerticesSet, DrawableShape {
                 {1, 1}
         };
         face1 = new Face(
-                new Point[]{
-                        new Point(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
-                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                new Vec3[]{
+                        new Vec3(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
+                        new Vec3(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new Vec3(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
                 },
-                new Point[]{
-                        new Point(textCoords[0][0], textCoords[0][1]),
-                        new Point(textCoords[1][0], textCoords[1][1]),
-                        new Point(textCoords[2][0], textCoords[2][1]),
+                new Vec3[]{
+                        new Vec3(textCoords[0][0], textCoords[0][1]),
+                        new Vec3(textCoords[1][0], textCoords[1][1]),
+                        new Vec3(textCoords[2][0], textCoords[2][1]),
                 },
-                new Point(0, 0, 1));
+                new Vec3(0, 0, 1));
         face2 = new Face(
-                new Point[]{
-                        new Point(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
-                        new Point(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
-                        new Point(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                new Vec3[]{
+                        new Vec3(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new Vec3(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                        new Vec3(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
                 },
-                new Point[]{
-                        new Point(textCoords[1][0], textCoords[1][1]),
-                        new Point(textCoords[2][0], textCoords[2][1]),
-                        new Point(textCoords[3][0], textCoords[3][1]),
+                new Vec3[]{
+                        new Vec3(textCoords[1][0], textCoords[1][1]),
+                        new Vec3(textCoords[2][0], textCoords[2][1]),
+                        new Vec3(textCoords[3][0], textCoords[3][1]),
                 },
-                new Point(0, 0, 1));
+                new Vec3(0, 0, 1));
     }
 
-    protected void prepareData(Point A, Point B, float texx, float texy, float texa, float texb) {
+    protected void prepareData(Vec3 A, Vec3 B, float texx, float texy, float texa, float texb) {
         /*
         a-----b
         |     |
@@ -192,13 +192,13 @@ public class Polygon implements VerticesSet, DrawableShape {
         }
     }
 
-    public void prepareAndDraw(Point a, Point b, Point c) {
+    public void prepareAndDraw(Vec3 a, Vec3 b, Vec3 c) {
         prepareData(a, b, c);
         bindData();
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
-    public void prepareAndDraw(Point a, Point b, float texx, float texy, float teexa, float texb) {
+    public void prepareAndDraw(Vec3 a, Vec3 b, float texx, float texy, float teexa, float texb) {
         prepareData(a, b, texx, texy, teexa, texb);
         bindData();
         glDrawArrays(GL_TRIANGLES, 0, 6);

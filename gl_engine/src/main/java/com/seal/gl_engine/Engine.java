@@ -1,16 +1,8 @@
 package com.seal.gl_engine;
 
-import static android.opengl.GLES10.GL_MULTISAMPLE;
-import static android.opengl.GLES10.glDisable;
-import static android.opengl.GLES20.GL_SAMPLES;
-import static android.opengl.GLES20.glEnable;
-import static android.opengl.GLES20.glHint;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
-import android.opengl.GLES20;
-import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,7 +43,7 @@ public class Engine {
         }
         glSurfaceView = new GLSurfaceView(context);
         glSurfaceView.setEGLContextClientVersion(3);
-        glSurfaceView.setEGLConfigChooser(new MyConfigChooser(MSAA? 4:1));
+        glSurfaceView.setEGLConfigChooser(new MyConfigChooser(MSAA ? 4 : 1));
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(displayMetrics);
