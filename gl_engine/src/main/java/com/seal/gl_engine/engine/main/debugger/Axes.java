@@ -8,20 +8,20 @@ import androidx.annotation.NonNull;
 
 import com.example.gl_engine.R;
 import com.seal.gl_engine.GamePageClass;
-import com.seal.gl_engine.default_adaptors.LineShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.SectionShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.shaders.Shader;
-import com.seal.gl_engine.engine.main.vertices.LinePolygon;
+import com.seal.gl_engine.engine.main.vertices.SectionPolygon;
 import com.seal.gl_engine.maths.Section;
 import com.seal.gl_engine.maths.PVector;
 
 public class Axes {
-    private final LinePolygon line;
+    private final SectionPolygon line;
     private static Shader shader = null;
 
     public Axes(@NonNull GamePageClass gamePageClass) {
-        line = new LinePolygon(gamePageClass);
-        shader = new Shader(R.raw.line_vertex, R.raw.line_fragmant, gamePageClass, new LineShaderAdaptor()); //compile only once
+        line = new SectionPolygon(gamePageClass);
+        shader = new Shader(R.raw.line_vertex, R.raw.line_fragmant, gamePageClass, new SectionShaderAdaptor()); //compile only once
 
     }
 

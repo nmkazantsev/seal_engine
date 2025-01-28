@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class LineShaderAdaptor extends Adaptor {
+public class SectionShaderAdaptor extends Adaptor {
     private int aPositionLocation;
     private int projectionMatrixLoation;
     private int viewMatrixLocation;

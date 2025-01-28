@@ -17,13 +17,13 @@ import com.seal.gl_engine.maths.PVector;
 import java.lang.ref.WeakReference;
 
 //in fact implementation of interface, that automatically redraws textures needed for bind data to be called when needed
-public class LinePolygon implements VerticesSet {
+public class SectionPolygon implements VerticesSet {
     private GamePageClass page;
     private final String creatorClassName;
     private PVector color = new PVector(1);
     ShaderData lineColorData;
 
-    public LinePolygon(@NonNull GamePageClass page) {
+    public SectionPolygon(@NonNull GamePageClass page) {
         VerticesShapesManager.allShapes.add(new WeakReference<>(this));//add link to this object
 
         creatorClassName = page.getClass().getName();

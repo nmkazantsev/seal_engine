@@ -15,7 +15,7 @@ import static com.seal.gl_engine.utils.Utils.x;
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
-import com.seal.gl_engine.default_adaptors.LineShaderAdaptor;
+import com.seal.gl_engine.default_adaptors.SectionShaderAdaptor;
 import com.seal.gl_engine.default_adaptors.MainShaderAdaptor;
 import com.seal.gl_engine.engine.main.animator.Animator;
 import com.seal.gl_engine.engine.main.camera.Camera;
@@ -24,7 +24,7 @@ import com.seal.gl_engine.engine.main.engine_object.SealObject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchPoint;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
-import com.seal.gl_engine.engine.main.vertices.LinePolygon;
+import com.seal.gl_engine.engine.main.vertices.SectionPolygon;
 import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.engine.main.vertices.SimplePolygon;
 import com.seal.gl_engine.maths.Section;
@@ -38,7 +38,7 @@ public class MainRenderer extends GamePageClass {
     boolean f = true;
     private final TouchProcessor touchProcessor;
     //private final FrameBuffer frameBuffer;
-    private final LinePolygon linePolygon;
+    private final SectionPolygon sectionPolygon;
     private final Shader lineShader;
     private final Axes axes;
 
@@ -70,8 +70,8 @@ public class MainRenderer extends GamePageClass {
         s.animMotion(1f, 0, 0, 500, 6000, true);
         TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
         // frameBuffer = new FrameBuffer((int) x, (int) y, this);
-        lineShader = new Shader(com.example.gl_engine.R.raw.line_vertex, com.example.gl_engine.R.raw.line_fragmant, this, new LineShaderAdaptor());
-        linePolygon = new LinePolygon(this);
+        lineShader = new Shader(com.example.gl_engine.R.raw.line_vertex, com.example.gl_engine.R.raw.line_fragmant, this, new SectionShaderAdaptor());
+        sectionPolygon = new SectionPolygon(this);
         axes = new Axes(this);
     }
 
@@ -95,8 +95,8 @@ public class MainRenderer extends GamePageClass {
         applyShader(lineShader);
         camera.apply();
         applyMatrix(resetTranslateMatrix(new float[16]));
-        linePolygon.setColor(new PVector(1, 0, 0));
-        linePolygon.draw(new Section(new PVector(0, 0, 0), new PVector(1, -1, -1)));
+        sectionPolygon.setColor(new PVector(1, 0, 0));
+        sectionPolygon.draw(new Section(new PVector(0, 0, 0), new PVector(1, -1, -1)));
         applyShader(shader);
         axes.drawAxes(3, 0.3f, 0.2f,null, camera);
         //connectDefaultFrameBuffer();
