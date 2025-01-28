@@ -1,15 +1,27 @@
 package com.seal.gl_engine.maths;
 
+import static com.seal.gl_engine.maths.PVector.sub;
 import static com.seal.gl_engine.utils.Utils.abs;
 
 public class Section {
     private final PVector base, direction;
 
-
     public Section(PVector A, PVector B) {
-        this.direction = PVector.sub(B, A);
+        this.direction = sub(B, A);
         this.base = new PVector(A);
+    }
 
+    public Section(Vec3 A, Vec3 B) {
+        this.direction = new PVector(A.sub(B));
+        this.base = new PVector(A);
+    }
+
+    public static Section createSectionByBaseAndDirection(Vec3 a, Vec3 b) {
+        return new Section(a, a.add(b));
+    }
+
+    public static Section createSectionByBaseAndDirection(PVector a, PVector b) {
+        return new Section(a, a.add(b));
     }
 
     public PVector getDirectionVector() {
@@ -22,7 +34,7 @@ public class Section {
 
     //inverse 2x2 matrix
     private float[] invertMat(float[] mat, float det) {
-        return new float[]{mat[3]/det,  -mat[1]/det, -mat[2]/det, mat[0]/det};
+        return new float[]{mat[3] / det, -mat[1] / det, -mat[2] / det, mat[0] / det};
     }
 
     //mat 2x2 * vec 2
@@ -30,7 +42,7 @@ public class Section {
         return new float[]{mat[0] * vec[0] + mat[1] * vec[1], mat[2] * vec[0] + mat[3] * vec[1]};
     }
 
-    public PVector getSecond(){
+    public PVector getSecond() {
         return getBaseVector().add(getDirectionVector());
     }
 

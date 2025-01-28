@@ -10,6 +10,12 @@ import com.seal.gl_engine.utils.Utils;
 public class Vec3 {
     public float x, y, z;
 
+    public Vec3(Vec3 v) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
     public Vec3(float x, float y, float z) {
         this.x = x;
         this.y = y;

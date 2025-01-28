@@ -1,7 +1,5 @@
 package com.seal.gl_engine.engine.main.animator;
 
-import static com.seal.gl_engine.utils.Utils.contactArray;
-
 import com.seal.gl_engine.maths.PVector;
 import com.seal.gl_engine.utils.Utils;
 

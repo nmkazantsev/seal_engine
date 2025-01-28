@@ -11,6 +11,12 @@ import com.seal.gl_engine.utils.Utils;
 public class PVector {
     public float x, y, z;
 
+    public PVector(Vec3 v) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
     public PVector(float x, float y, float z) {
         this.x = x;
         this.y = y;
