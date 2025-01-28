@@ -11,19 +11,19 @@ import androidx.annotation.NonNull;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.shaders.ShaderData;
-import com.seal.gl_engine.maths.Line;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.Section;
+import com.seal.gl_engine.maths.PVector;
 
 import java.lang.ref.WeakReference;
 
 //in fact implementation of interface, that automatically redraws textures needed for bind data to be called when needed
-public class LinePolygon implements VerticesSet {
+public class SectionPolygon implements VerticesSet {
     private GamePageClass page;
     private final String creatorClassName;
-    private Vec3 color = new Vec3(1);
+    private PVector color = new PVector(1);
     ShaderData lineColorData;
 
-    public LinePolygon(@NonNull GamePageClass page) {
+    public SectionPolygon(@NonNull GamePageClass page) {
         VerticesShapesManager.allShapes.add(new WeakReference<>(this));//add link to this object
 
         creatorClassName = page.getClass().getName();
@@ -48,18 +48,18 @@ public class LinePolygon implements VerticesSet {
         };
     }
 
-    private void bindData(Line line) {
-        Shader.getActiveShader().getAdaptor().bindDataLine(line.getBaseVector(), line.getBaseVector().add(line.getDirectionVector()), color);
+    private void bindData(Section section) {
+        Shader.getActiveShader().getAdaptor().bindDataLine(section.getBaseVector(), section.getBaseVector().add(section.getDirectionVector()), color);
 
     }
 
-    public void draw(Line line) {
+    public void draw(Section section) {
         lineColorData.forwardNow();
-        bindData(line);
+        bindData(section);
         glDrawArrays(GL_LINES, 0, 2);
     }
 
-    public void setColor(Vec3 color) {
+    public void setColor(PVector color) {
         this.color = color;
     }
 

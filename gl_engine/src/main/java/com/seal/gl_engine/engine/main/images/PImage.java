@@ -7,7 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import com.seal.gl_engine.maths.Line;
+import com.seal.gl_engine.maths.Section;
 import com.seal.gl_engine.utils.Utils;
 
 public class PImage {
@@ -253,8 +253,8 @@ public class PImage {
         canvas.drawLine(x1, y1, x2, y2, stroke);
     }
 
-    public void line(Line line) {
-        canvas.drawLine(line.getBaseVector().x, line.getBaseVector().y, line.getBaseVector().x + line.getDirectionVector().x, line.getBaseVector().y + line.getDirectionVector().y, stroke);
+    public void line(Section section) {
+        canvas.drawLine(section.getBaseVector().x, section.getBaseVector().y, section.getBaseVector().x + section.getDirectionVector().x, section.getBaseVector().y + section.getDirectionVector().y, stroke);
     }
 
     public void noStroke() {

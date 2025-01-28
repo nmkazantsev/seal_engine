@@ -10,13 +10,13 @@ import android.opengl.GLES30;
 import com.seal.gl_engine.engine.main.shaders.Adaptor;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
 import com.seal.gl_engine.engine.main.vertices.Face;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class LineShaderAdaptor extends Adaptor {
+public class SectionShaderAdaptor extends Adaptor {
     private int aPositionLocation;
     private int projectionMatrixLoation;
     private int viewMatrixLocation;
@@ -33,7 +33,7 @@ public class LineShaderAdaptor extends Adaptor {
     }
 
     @Override
-    public void bindDataLine(Vec3 a, Vec3 b, Vec3 color) {
+    public void bindDataLine(PVector a, PVector b, PVector color) {
         float[] vertices = new float[]{a.x, a.y, a.z, b.x, b.y, b.z, color.x, color.y, color.z};
         int vertexesNumber = 0;
 

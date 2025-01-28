@@ -6,12 +6,12 @@ import android.opengl.GLES30;
 
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.shaders.ShaderData;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 
 public class Material extends ShaderData {
-    public Vec3 ambient;
-    public Vec3 diffuse;
-    public Vec3 specular;
+    public PVector ambient;
+    public PVector diffuse;
+    public PVector specular;
     public float shininess;
     private int ambLoc, diffLoc, specLoc, shininessLoc;
 

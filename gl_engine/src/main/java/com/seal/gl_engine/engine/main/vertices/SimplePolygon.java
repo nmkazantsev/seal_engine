@@ -1,6 +1,6 @@
 package com.seal.gl_engine.engine.main.vertices;
 
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 import com.seal.gl_engine.utils.Utils;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.images.PImage;
@@ -17,17 +17,17 @@ public class SimplePolygon extends Polygon {
     }
 
     public void prepareAndDraw(float x, float y, float b, float z) {
-        Vec3 A = new Vec3(x, y, z);
-        Vec3 B = new Vec3(x + b, y, z);
-        Vec3 C = new Vec3(x, y + b, z);
+        PVector A = new PVector(x, y, z);
+        PVector B = new PVector(x + b, y, z);
+        PVector C = new PVector(x, y + b, z);
         super.prepareAndDraw(A, B, C);
     }
 
     public void prepareAndDraw(float rot, float x, float y, float a, float b, float z) {
         float[][] ver = glrectRotated(rot, x, y, a, b, z);
-        Vec3 A = new Vec3(ver[0][0], ver[0][1], z);
-        Vec3 B = new Vec3(ver[1][0], ver[1][1], z);
-        Vec3 C = new Vec3(ver[2][0], ver[2][1], z);
+        PVector A = new PVector(ver[0][0], ver[0][1], z);
+        PVector B = new PVector(ver[1][0], ver[1][1], z);
+        PVector C = new PVector(ver[2][0], ver[2][1], z);
         super.prepareAndDraw(A, B, C);
     }
 

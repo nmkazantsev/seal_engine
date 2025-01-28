@@ -4,7 +4,7 @@ package com.seal.gl_engine.engine.main.shaders;
 import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
 import com.seal.gl_engine.engine.main.vertices.Face;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -51,7 +51,7 @@ public abstract class Adaptor {
 
     public abstract int bindData(Face[] faces, VertexBuffer vertexBuffer, boolean vboLoaded);
 
-    public abstract void bindDataLine(Vec3 a, Vec3 b, Vec3 color);
+    public abstract void bindDataLine(PVector a, PVector b, PVector color);
 
     public abstract void updateLocations();
 

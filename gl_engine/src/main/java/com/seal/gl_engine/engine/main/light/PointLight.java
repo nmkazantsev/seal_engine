@@ -6,15 +6,15 @@ import android.opengl.GLES30;
 
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.engine.main.shaders.ShaderData;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PointLight extends ShaderData {
-    public Vec3 color;
-    public Vec3 position;
+    public PVector color;
+    public PVector position;
     public float diffuse;
     public float specular;
     public float constant, linear, quadratic;

@@ -1,5 +1,7 @@
 package com.seal.gl_engine.engine.main.camera;
 
+import com.seal.gl_engine.maths.PVector;
+
 public class CameraSettings {
     public float eyeX;
     public float eyeY;
@@ -21,13 +23,32 @@ public class CameraSettings {
         resetFor3d();
     }
 
-    public void resetFor3d(){
-        eyeX=eyeY=0;
-        eyeZ=7;
-        centerX=centerY=centerZ=0;
-       // upX=upZ=0;
-        upY=1;
+    public void setPos(PVector pos) {
+        eyeX = pos.x;
+        eyeY = pos.y;
+        eyeZ = pos.z;
     }
+
+    public void SetUpVector(PVector up) {
+        upX = up.x;
+        upY = up.y;
+        upZ = up.z;
+    }
+
+    public void setCenter(PVector center) {
+        centerX = center.x;
+        centerY = center.y;
+        centerZ = center.z;
+    }
+
+    public void resetFor3d() {
+        eyeX = eyeY = 0;
+        eyeZ = 7;
+        centerX = centerY = centerZ = 0;
+        // upX=upZ=0;
+        upY = 1;
+    }
+
     public void resetFor2d() {
         eyeX = 0;//-x / 2;
         eyeY = 0;
