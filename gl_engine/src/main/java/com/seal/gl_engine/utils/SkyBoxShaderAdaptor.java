@@ -11,7 +11,7 @@ import android.opengl.GLES30;
 import com.seal.gl_engine.engine.main.shaders.Adaptor;
 import com.seal.gl_engine.engine.main.vertex_bueffer.VertexBuffer;
 import com.seal.gl_engine.engine.main.vertices.Face;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -57,7 +57,7 @@ public class SkyBoxShaderAdaptor extends Adaptor {
     }
 
     @Override
-    public void bindDataLine(Vec3 a, Vec3 b, Vec3 color) {
+    public void bindDataLine(PVector a, PVector b, PVector color) {
 
     }
 

@@ -2,7 +2,7 @@ package com.seal.gl_engine.maths;
 
 public class Plane {
     private final float a,b,c,d;//for equastion
-    public Plane(Vec3 A, Vec3 B, Vec3 C){
+    public Plane(PVector A, PVector B, PVector C){
         float [] temp = equationPlane(A.x, A.y, A.z, B.x, B.y, B.z, C.x, C.y, C.z);
         a=temp[0];
         b=temp[1];
@@ -22,13 +22,13 @@ public class Plane {
         float d = (- a * x1 - b * y1 - c * z1);
         return new float[]{a,b,c,d};
     }
-    public boolean pointInPlane(Vec3 A){
+    public boolean pointInPlane(PVector A){
         return a*A.x+b*A.y+c*A.z+d==0;
     }
     public float[] getEquation(){
         return new float[]{a,b,c,d};
     }
-    public Vec3 getNormal(){
-        return new Vec3(a,b,c);
+    public PVector getNormal(){
+        return new PVector(a,b,c);
     }
 }

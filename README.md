@@ -423,7 +423,7 @@ r радиан по часовой. z - высота над плоскостью
 `void setColor(Vec3 color)` - задает цвет по rgb от 0 до 1
 
 **Рисовать только с применением шейдера линии!**
-`draw(Line line)` - рисует линию (поддерживается 3д)
+`draw(Line section)` - рисует линию (поддерживается 3д)
 
 ### как создать сам шейдер линии:
 
@@ -925,7 +925,7 @@ import com.seal.gl_engine.engine.main.verticles.Poligon;
 import com.seal.gl_engine.engine.main.verticles.Shape;
 import com.seal.gl_engine.engine.main.verticles.SkyBox;
 import com.seal.gl_engine.maths.Point;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 

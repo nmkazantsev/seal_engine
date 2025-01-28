@@ -20,7 +20,7 @@ import com.seal.gl_engine.engine.main.VRAMobject;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.vertices.Face;
 import com.seal.gl_engine.GamePageClass;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 
 public class FrameBuffer extends VRAMobject {
     protected int texture;
@@ -70,8 +70,8 @@ public class FrameBuffer extends VRAMobject {
         texture = frameBufferTextures[0];
     }
 
-    public void drawTexture(Vec3 a, Vec3 b, Vec3 d) {
-        Vec3 c = new Vec3(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
+    public void drawTexture(PVector a, PVector b, PVector d) {
+        PVector c = new PVector(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
         float[][] vertices = new float[][]{
                 {a.x, a.y, a.z},
                 {d.x, d.y, d.z},
@@ -86,29 +86,29 @@ public class FrameBuffer extends VRAMobject {
                 {0, 0},
         };
         Face face1 = new Face(
-                new Vec3[]{
-                        new Vec3(vertices[0][0], vertices[0][1], vertices[0][2]),
-                        new Vec3(vertices[1][0], vertices[1][1], vertices[1][2]),
-                        new Vec3(vertices[2][0], vertices[2][1], vertices[2][2]),
+                new PVector[]{
+                        new PVector(vertices[0][0], vertices[0][1], vertices[0][2]),
+                        new PVector(vertices[1][0], vertices[1][1], vertices[1][2]),
+                        new PVector(vertices[2][0], vertices[2][1], vertices[2][2]),
                 },
-                new Vec3[]{
-                        new Vec3(textCoords[0][0], textCoords[0][1]),
-                        new Vec3(textCoords[1][0], textCoords[1][1]),
-                        new Vec3(textCoords[2][0], textCoords[2][1]),
+                new PVector[]{
+                        new PVector(textCoords[0][0], textCoords[0][1]),
+                        new PVector(textCoords[1][0], textCoords[1][1]),
+                        new PVector(textCoords[2][0], textCoords[2][1]),
                 },
-                new Vec3(0, 0, 1));
+                new PVector(0, 0, 1));
         Face face2 = new Face(
-                new Vec3[]{
-                        new Vec3(vertices[1][0], vertices[1][1], vertices[1][2]),
-                        new Vec3(vertices[2][0], vertices[2][1], vertices[2][2]),
-                        new Vec3(vertices[3][0], vertices[3][1], vertices[3][2]),
+                new PVector[]{
+                        new PVector(vertices[1][0], vertices[1][1], vertices[1][2]),
+                        new PVector(vertices[2][0], vertices[2][1], vertices[2][2]),
+                        new PVector(vertices[3][0], vertices[3][1], vertices[3][2]),
                 },
-                new Vec3[]{
-                        new Vec3(textCoords[1][0], textCoords[1][1]),
-                        new Vec3(textCoords[2][0], textCoords[2][1]),
-                        new Vec3(textCoords[3][0], textCoords[3][1]),
+                new PVector[]{
+                        new PVector(textCoords[1][0], textCoords[1][1]),
+                        new PVector(textCoords[2][0], textCoords[2][1]),
+                        new PVector(textCoords[3][0], textCoords[3][1]),
                 },
-                new Vec3(0, 0, 1));
+                new PVector(0, 0, 1));
         Shader.getActiveShader().getAdaptor().bindData(new Face[]{face1, face2});
         //place texture to target 2D of unit 0
         glActiveTexture(GL_TEXTURE0);

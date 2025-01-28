@@ -3,8 +3,8 @@ package com.manateam.main.redrawFunctions;
 import static com.seal.gl_engine.utils.Utils.loadImage;
 
 import com.seal.gl_engine.engine.main.images.PImage;
-import com.seal.gl_engine.maths.Line;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.Section;
+import com.seal.gl_engine.maths.PVector;
 
 import java.util.List;
 
@@ -33,11 +33,11 @@ public class MainRedrawFunctions {
         //image.ellipse(100, 100, 50, 50);
         image.strokeWeight(5);
         image.stroke(255);
-        Line line = new Line(new Vec3(0,0, 0), new Vec3(150, 150, 50));
-        Line line2 = new Line(new Vec3(140, 120, 0), new Vec3(0, 110, 0));
-        image.line(line);
-        image.line(line2);
-        Vec3 p = line.findCross(line2);
+        Section section = new Section(new PVector(0,0, 0), new PVector(150, 150, 50));
+        Section section2 = new Section(new PVector(140, 120, 0), new PVector(0, 110, 0));
+        image.line(section);
+        image.line(section2);
+        PVector p = section.findCross(section2);
         if(p!=null) {
             image.ellipse(p.x, p.y, 5, 5);
         }

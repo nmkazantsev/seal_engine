@@ -34,7 +34,7 @@ import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.engine.main.vertices.SkyBox;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
@@ -70,8 +70,8 @@ public class SecondRenderer extends GamePageClass {
         // ambientLight.color = new Vec3(0.3f, 0.3f, 0.3f);
 
         directedLight1 = new DirectedLight(this);
-        directedLight1.direction = new Vec3(-1, 0, 0);
-        directedLight1.color = new Vec3(0.9f);
+        directedLight1.direction = new PVector(-1, 0, 0);
+        directedLight1.color = new PVector(0.9f);
         directedLight1.diffuse = 0.2f;
         directedLight1.specular = 0.8f;
        /* directedLight2 = new DirectedLight(this);
@@ -87,16 +87,16 @@ public class SecondRenderer extends GamePageClass {
         sourceLight.constant = 1f;
         sourceLight.linear = 0.01f;
         sourceLight.quadratic = 0.01f;
-        sourceLight.color = new Vec3(0.5f);
-        sourceLight.position = new Vec3(2.7f, 0, 0);
-        sourceLight.direction = new Vec3(-0.3f, 0, 0);
+        sourceLight.color = new PVector(0.5f);
+        sourceLight.position = new PVector(2.7f, 0, 0);
+        sourceLight.direction = new PVector(-0.3f, 0, 0);
         sourceLight.outerCutOff = cos(radians(40));
         sourceLight.cutOff = cos(radians(30f));
 
         material = new Material(this);
-        material.ambient = new Vec3(1);
-        material.specular = new Vec3(1);
-        material.diffuse = new Vec3(1);
+        material.ambient = new PVector(1);
+        material.specular = new PVector(1);
+        material.diffuse = new PVector(1);
         material.shininess = 1.1f;
 
         skyBox = new SkyBox("skybox/", "jpg", this);
@@ -150,6 +150,6 @@ public class SecondRenderer extends GamePageClass {
         camera.apply();
         mMatrix = resetTranslateMatrix(mMatrix);
         applyMatrix(mMatrix);
-        frameBuffer.drawTexture(new Vec3(0, 0, 1), new Vec3(Utils.x, 0, 1), new Vec3(0, y, 1));
+        frameBuffer.drawTexture(new PVector(0, 0, 1), new PVector(Utils.x, 0, 1), new PVector(0, y, 1));
     }
 }

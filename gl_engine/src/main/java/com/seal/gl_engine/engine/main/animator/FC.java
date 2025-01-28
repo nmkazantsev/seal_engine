@@ -2,7 +2,7 @@ package com.seal.gl_engine.engine.main.animator;
 
 import static com.seal.gl_engine.utils.Utils.contactArray;
 
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.PVector;
 import com.seal.gl_engine.utils.Utils;
 
 // Function Collection
@@ -25,8 +25,8 @@ public class FC {
     public static float[] rotate(Animator.Animation animation) {
         float[] attrs = animation.getAttrs();
         float[] args = animation.getArgs();
-        Vec3 rot = new Vec3(attrs, 3);
-        Vec3 ang = new Vec3(args, 0);
+        PVector rot = new PVector(attrs, 3);
+        PVector ang = new PVector(args, 0);
         float dt = animation.getDeltaT();
         rot.add(ang.mul(dt));
         System.arraycopy(rot.getArray(), 0, attrs, 3, 3);
@@ -36,8 +36,8 @@ public class FC {
     public static float[] shift(Animator.Animation animation) {
         float[] attrs = animation.getAttrs();
         float[] args = animation.getArgs();
-        Vec3 pos = new Vec3(animation.getAttrs(), 0);
-        Vec3 shift = new Vec3(animation.getArgs(), 0);
+        PVector pos = new PVector(animation.getAttrs(), 0);
+        PVector shift = new PVector(animation.getArgs(), 0);
         float dt = animation.getDeltaT();
         pos.add(shift.mul(dt)).getArray();
         System.arraycopy(pos.getArray(), 0, attrs, 0, 3);
@@ -49,14 +49,14 @@ public class FC {
     public static float[] pivotRotation(Animator.Animation animation) {
         float[] attrs = animation.getAttrs();
         float[] args = animation.getArgs();
-        Vec3 pos = new Vec3(attrs, 0);
-        Vec3 rot = new Vec3(attrs, 3);
-        Vec3 pivPos = new Vec3(args, 0);
-        Vec3 rotVec = new Vec3(args, 3);
+        PVector pos = new PVector(attrs, 0);
+        PVector rot = new PVector(attrs, 3);
+        PVector pivPos = new PVector(args, 0);
+        PVector rotVec = new PVector(args, 3);
         float dt = animation.getDeltaT();
-        Vec3 dir = Vec3.sub(pos, pivPos);
-        Vec3 rotated = Vec3.rotateToVec(dir, rotVec, Vec3.getAngle(dir, rotVec) * dt);
-        return Utils.contactArray((Vec3.normalize(rotated)).mul(dir.length()).add(pivPos).getArray(), rot.getArray());
+        PVector dir = PVector.sub(pos, pivPos);
+        PVector rotated = PVector.rotateToVec(dir, rotVec, PVector.getAngle(dir, rotVec) * dt);
+        return Utils.contactArray((PVector.normalize(rotated)).mul(dir.length()).add(pivPos).getArray(), rot.getArray());
     }
 
     public static float[] moveThroughBezierCurve(Animator.Animation animation) {

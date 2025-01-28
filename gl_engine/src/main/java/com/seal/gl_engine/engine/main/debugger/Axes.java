@@ -1,6 +1,5 @@
 package com.seal.gl_engine.engine.main.debugger;
 
-import static android.opengl.GLES10.glLineWidth;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.resetTranslateMatrix;
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;
@@ -13,8 +12,8 @@ import com.seal.gl_engine.default_adaptors.LineShaderAdaptor;
 import com.seal.gl_engine.engine.main.camera.Camera;
 import com.seal.gl_engine.engine.main.shaders.Shader;
 import com.seal.gl_engine.engine.main.vertices.LinePolygon;
-import com.seal.gl_engine.maths.Line;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.Section;
+import com.seal.gl_engine.maths.PVector;
 
 public class Axes {
     private final LinePolygon line;
@@ -35,47 +34,47 @@ public class Axes {
         applyMatrix(matrix);
         camera.apply();
         //x
-        line.setColor(new Vec3(1, 0, 0));
-        line.draw(new Line(new Vec3(0), new Vec3(limit, 0, 0)));
+        line.setColor(new PVector(1, 0, 0));
+        line.draw(new Section(new PVector(0), new PVector(limit, 0, 0)));
         for (float i = 0; i < limit; i += step) {
-            line.draw(new Line(new Vec3(i, -tickSize, 0), new Vec3(i, tickSize, 0)));
-            line.draw(new Line(new Vec3(i, 0, -tickSize), new Vec3(i, 0, tickSize)));
+            line.draw(new Section(new PVector(i, -tickSize, 0), new PVector(i, tickSize, 0)));
+            line.draw(new Section(new PVector(i, 0, -tickSize), new PVector(i, 0, tickSize)));
         }
 
-        line.setColor(new Vec3(0.5f, 0, 0));
-        line.draw(new Line(new Vec3(0), new Vec3(-limit, 0, 0)));
+        line.setColor(new PVector(0.5f, 0, 0));
+        line.draw(new Section(new PVector(0), new PVector(-limit, 0, 0)));
         for (float i = -limit; i < 0; i += step) {
-            line.draw(new Line(new Vec3(i, -tickSize, 0), new Vec3(i, tickSize, 0)));
-            line.draw(new Line(new Vec3(i, 0, -tickSize), new Vec3(i, 0, tickSize)));
+            line.draw(new Section(new PVector(i, -tickSize, 0), new PVector(i, tickSize, 0)));
+            line.draw(new Section(new PVector(i, 0, -tickSize), new PVector(i, 0, tickSize)));
         }
 
         //y
-        line.setColor(new Vec3(0, 1, 0));
-        line.draw(new Line(new Vec3(0), new Vec3(0, limit, 0)));
+        line.setColor(new PVector(0, 1, 0));
+        line.draw(new Section(new PVector(0), new PVector(0, limit, 0)));
         for (float i = 0; i < limit; i += step) {
-            line.draw(new Line(new Vec3(-tickSize, i, 0), new Vec3(tickSize, i, 0)));
-            line.draw(new Line(new Vec3(0, i, -tickSize), new Vec3(0, i, tickSize)));
+            line.draw(new Section(new PVector(-tickSize, i, 0), new PVector(tickSize, i, 0)));
+            line.draw(new Section(new PVector(0, i, -tickSize), new PVector(0, i, tickSize)));
         }
 
-        line.setColor(new Vec3(0, 0.5f, 0));
-        line.draw(new Line(new Vec3(0), new Vec3(0, -limit, 0)));
+        line.setColor(new PVector(0, 0.5f, 0));
+        line.draw(new Section(new PVector(0), new PVector(0, -limit, 0)));
         for (float i = -limit; i < 0; i += step) {
-            line.draw(new Line(new Vec3(-tickSize, i, 0), new Vec3(tickSize, i, 0)));
-            line.draw(new Line(new Vec3(0, i, -tickSize), new Vec3(0, i, tickSize)));
+            line.draw(new Section(new PVector(-tickSize, i, 0), new PVector(tickSize, i, 0)));
+            line.draw(new Section(new PVector(0, i, -tickSize), new PVector(0, i, tickSize)));
         }
         //z
-        line.setColor(new Vec3(0, 0, 1));
-        line.draw(new Line(new Vec3(0), new Vec3(0, 0, limit)));
+        line.setColor(new PVector(0, 0, 1));
+        line.draw(new Section(new PVector(0), new PVector(0, 0, limit)));
         for (float i = 0; i < limit; i += step) {
-            line.draw(new Line(new Vec3(-tickSize, 0, i), new Vec3(tickSize, 0, i)));
-            line.draw(new Line(new Vec3(0, -tickSize, i), new Vec3(0, tickSize, i)));
+            line.draw(new Section(new PVector(-tickSize, 0, i), new PVector(tickSize, 0, i)));
+            line.draw(new Section(new PVector(0, -tickSize, i), new PVector(0, tickSize, i)));
         }
 
-        line.setColor(new Vec3(0, 0, 0.5f));
-        line.draw(new Line(new Vec3(0), new Vec3(0, 0, -limit)));
+        line.setColor(new PVector(0, 0, 0.5f));
+        line.draw(new Section(new PVector(0), new PVector(0, 0, -limit)));
         for (float i = -limit; i < 0; i += step) {
-            line.draw(new Line(new Vec3(-tickSize, 0, i), new Vec3(tickSize, 0, i)));
-            line.draw(new Line(new Vec3(0, -tickSize, i), new Vec3(0, tickSize, i)));
+            line.draw(new Section(new PVector(-tickSize, 0, i), new PVector(tickSize, 0, i)));
+            line.draw(new Section(new PVector(0, -tickSize, i), new PVector(0, tickSize, i)));
         }
 
 

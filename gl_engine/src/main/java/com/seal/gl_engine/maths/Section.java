@@ -2,22 +2,22 @@ package com.seal.gl_engine.maths;
 
 import static com.seal.gl_engine.utils.Utils.abs;
 
-public class Line {
-    private final Vec3 base, direction;
+public class Section {
+    private final PVector base, direction;
 
 
-    public Line(Vec3 A, Vec3 B) {
-        this.direction =Vec3.sub(B, A);
-        this.base = new Vec3(A);
+    public Section(PVector A, PVector B) {
+        this.direction = PVector.sub(B, A);
+        this.base = new PVector(A);
 
     }
 
-    public Vec3 getDirectionVector() {
-        return new Vec3(direction);
+    public PVector getDirectionVector() {
+        return new PVector(direction);
     }
 
-    public Vec3 getBaseVector() {
-        return new Vec3(base);
+    public PVector getBaseVector() {
+        return new PVector(base);
     }
 
     //inverse 2x2 matrix
@@ -30,12 +30,12 @@ public class Line {
         return new float[]{mat[0] * vec[0] + mat[1] * vec[1], mat[2] * vec[0] + mat[3] * vec[1]};
     }
 
-    public Vec3 getSecond(){
+    public PVector getSecond(){
         return getBaseVector().add(getDirectionVector());
     }
 
-    public Vec3 findCross(Line n) {
-        Vec3 a, b, c, d;
+    public PVector findCross(Section n) {
+        PVector a, b, c, d;
         b = this.getBaseVector();
         a = this.getDirectionVector();
         d = n.getBaseVector();

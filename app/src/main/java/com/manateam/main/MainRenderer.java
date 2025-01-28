@@ -27,8 +27,8 @@ import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 import com.seal.gl_engine.engine.main.vertices.LinePolygon;
 import com.seal.gl_engine.engine.main.vertices.Shape;
 import com.seal.gl_engine.engine.main.vertices.SimplePolygon;
-import com.seal.gl_engine.maths.Line;
-import com.seal.gl_engine.maths.Vec3;
+import com.seal.gl_engine.maths.Section;
+import com.seal.gl_engine.maths.PVector;
 
 public class MainRenderer extends GamePageClass {
     private final Shader shader;
@@ -95,8 +95,8 @@ public class MainRenderer extends GamePageClass {
         applyShader(lineShader);
         camera.apply();
         applyMatrix(resetTranslateMatrix(new float[16]));
-        linePolygon.setColor(new Vec3(1, 0, 0));
-        linePolygon.draw(new Line(new Vec3(0, 0, 0), new Vec3(1, -1, -1)));
+        linePolygon.setColor(new PVector(1, 0, 0));
+        linePolygon.draw(new Section(new PVector(0, 0, 0), new PVector(1, -1, -1)));
         applyShader(shader);
         axes.drawAxes(3, 0.3f, 0.2f,null, camera);
         //connectDefaultFrameBuffer();
