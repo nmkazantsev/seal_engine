@@ -190,10 +190,10 @@ public class Polygon implements VerticesSet {
         if (saveMemory) {
             image.delete();
         }
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     public void prepareAndDraw(PVector a, PVector b, PVector c) {
-        postToGlNeeded = true;
         prepareData(a, b, c);
         bindData();
         glDrawArrays(GL_TRIANGLES, 0, 6);
