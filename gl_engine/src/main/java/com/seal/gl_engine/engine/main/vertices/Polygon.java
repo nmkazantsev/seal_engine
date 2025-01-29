@@ -193,6 +193,7 @@ public class Polygon implements VerticesSet {
     }
 
     public void prepareAndDraw(PVector a, PVector b, PVector c) {
+        postToGlNeeded = true;
         prepareData(a, b, c);
         bindData();
         glDrawArrays(GL_TRIANGLES, 0, 6);
