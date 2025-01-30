@@ -77,7 +77,7 @@ public class LorRenderer extends GamePageClass {
 
         Page(int num, GamePageClass pageClass) {
             this.num = num;
-            polygon = new Polygon(this::redrawTextLor, true, 0, pageClass);
+            polygon = new Polygon(this::redrawTextLor, true, 0, pageClass, true);
         }
 
         public void draw(float move) {
