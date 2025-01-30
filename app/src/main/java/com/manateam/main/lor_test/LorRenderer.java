@@ -83,7 +83,8 @@ public class LorRenderer extends GamePageClass {
         public void draw(float move) {
             polygon.prepareAndDraw(new PVector(xRight, move - yFar * num + shiftVert, 0),
                     new PVector(xLeft, move - yFar * num + shiftVert, 0),
-                    new PVector(xRight, move - yFar - yFar * num + shiftVert, 0));
+                    new PVector(xRight, move - yFar - yFar * num + shiftVert, 0),
+                    0, 0, 0.8f, 1);
         }
 
         private PImage redrawTextLor(List<Object> params) {

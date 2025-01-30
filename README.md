@@ -34,8 +34,10 @@
   
     @SuppressLint("ClickableViewAccessibility")    @Override    public boolean onTouch(View v, MotionEvent event) {        return Engine.onTouch(v, event);    }  
     @Override    public void onPointerCaptureChanged(boolean hasCapture) {        super.onPointerCaptureChanged(hasCapture);    }  
+
 7. Теперь создаим класс MainRenderer. Это будет входная точка в наш проект. Навзние класса можно  
-   изменить в строке `GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);`  
+   изменить в
+   строке `GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false);`  
    Данный класс является классом страницы, он обязательно должен implement `GamePageInterface`.  
    Конструтор странц может быть любым, но для входной точки обязательно наличие пустого (в процем,  
    мы сами вызываем его из MainActivity). После переопределения всех функций движок готов к  
@@ -43,15 +45,18 @@
 
 ## Устройство движка (коротко)
 
-В основе всего лежит идея многостраничного приложения, в котором каждой страницы есть свои локальные  
+В основе всего лежит идея многостраничного приложения, в котором каждой страницы есть свои
+локальные  
 переменные, удаляемые при ее закрытии. Такой подход позволит абстрагироваться от других страниц,  
 экономить RAM и VRAM, не засорять пространство имён.  
 GamePageInterface является центральной сущностью движка и устроен следующим образом:
 
     package com.seal.gl_engine;        public interface GamePageInterface {  
         public void draw();        public void touchStarted();        public void touchMoved();        public void touchEnded();    }  
+
 Не спрашивайте почему тюлень. Мем.  
-Мы видим, что получив досутп к нашем листенерам, движок отслеживает открытие страницы, вызыввет draw  
+Мы видим, что получив досутп к нашем листенерам, движок отслеживает открытие страницы, вызыввет
+draw  
 и колбеки на тач каждый кадр.  
 Так же движок отслеживает использование видеопамяти и автоматически удаляет оттуда объекты, когда  
 они не нужны.  
@@ -60,7 +65,8 @@ GamePageInterface является центральной сущностью д�
 названия класса открытой страницы и класса создателя объекта, все используемые видеоресурсы  
 удаляются, а сам объект становится null, чтобы не было соблазна его использовать дальше.
 
-**Объект движка не будет удален после закрытия вашей страницы сборщиком мусора сразу, так как движок  
+**Объект движка не будет удален после закрытия вашей страницы сборщиком мусора сразу, так как
+движок  
 ещё какое-то время будет хранить на него ссылку.**
 
 Если нужно, чтобы объект не удалялся каждый раз (напрмер, тяжелый меш), то его нужно объявить  
@@ -74,19 +80,25 @@ static, а в вместо this предать null.
 Движок поддерживает как создание классической пары vertex+fragment:
 
     shader = new Shader(com.example.gl_engine.R.raw.vertex_shader,com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());//create default example shader  
+
 так и использование геометрического шейдера:
 
     shader = new Shader(vertex_shader, geom_shader, fragment_shader, this, new MainShaderAdaptor());  
+
 Шейдеры рекомендуется объявлять final:
 
     private final Shader shader;  
+
 Чтобы применить шейдер:
 
     applyShader(shader);//static method of class ShaderUtils  
+
 Логи о компиляции будут выводиться с тегом Info. Отсутсвие логов - признак успешной компиляции.  
-При примении шейдера все объекты, унаследованные от ShaderData автоматически прогрузят свои значения  
+При примении шейдера все объекты, унаследованные от ShaderData автоматически прогрузят свои
+значения  
 туда (исключение - Material).  
-В движке в стандартной папке ресурсов есть дефолтные шейдеры для рендеринга, для света и для работы  
+В движке в стандартной папке ресурсов есть дефолтные шейдеры для рендеринга, для света и для
+работы  
 со skyBox.
 
 **Остальные объекты, такие как: CameraSettings, ProectionMatrixSettings, матрица преобразования,  
@@ -113,6 +125,7 @@ Material требуют ручного вызова функции отправ�
     public abstract int getNormalTextureLocation();  
     public abstract int getNormalMapEnableLocation();  
     public abstract int getCameraPosLlocation();  
+
 Пример реализации см в MainShaderAdator, LightShaderAdaptor, SkyboxAdaptor.
 
 ## Класс ShaderData
@@ -129,7 +142,8 @@ Material требуют ручного вызова функции отправ�
 Функции вызываются движком при применении шейдера или смене страницы.
 
 При применении вызываются getLocstions, при смене страницы - delete.  
-Смысла удалять uniform переменную нет, но есть смысл удалять ссылки на объект из массивов, например,  
+Смысла удалять uniform переменную нет, но есть смысл удалять ссылки на объект из массивов,
+например,  
 удалить объект света из массива источников для данной страницы.
 
 Если ссылка на переменную 0, то ничего не произойдёт. Если на переменную ссылаются 2 ссылки, то  
@@ -139,13 +153,15 @@ Material требуют ручного вызова функции отправ�
 
 ## Camera
 
-Класс игровой камеры. Объединяет в себе CameraSettings и ProjectionMatrixSettings (которые вяляются  
+Класс игровой камеры. Объединяет в себе CameraSettings и ProjectionMatrixSettings (которые
+вяляются  
 его полями).
 
 Конструктор сразу настраивает камеру для работы с 3д, вызывая соответствующие методы у обоих полей  
 класса.
 
-`void apply()` - применние настроек камеры, вызывать перед рисованием объектов. Если перед этим была  
+`void apply()` - применние настроек камеры, вызывать перед рисованием объектов. Если перед этим
+была  
 вызвана resetFor3d(), то перспектива будет включена, если перед этим была вызвана restFor2d() -  
 выключена.
 
@@ -155,12 +171,12 @@ Material требуют ручного вызова функции отправ�
 рекомендуется**
 
 Также доступны методы для быстрой передачи данных (копирование) в камеру:
+
 ```
      void setPos(PVector pos)
      void SetUpVector(PVector up) 
      void setCenter(PVector center) 
 ```
-
 
 ## CameraSettings
 
@@ -168,11 +184,14 @@ Material требуют ручного вызова функции отправ�
 Содежрит в себе набор переменных, настройки камеры происходят с помощью
 
     Matrix.setLookAtM(mViewMatrix, 0, cam.eyeX, cam.eyeY, cam.eyeZ, cam.centerX, cam.centerY, cam.centerZ, cam.upX, cam.upY, cam.upZ);  
+
 Соответствующие переменные отвечают за положение, направление камеры и направление UP-вектора.  
 Автоматически настройки камеры не применяются, нужно вызвать
 
     applyCameraSettings(cameraSettings);  
-Функции resetFor3d(), resetFor2d() сбрасывают значения переменных на дефолтные для рисования в одном  
+
+Функции resetFor3d(), resetFor2d() сбрасывают значения переменных на дефолтные для рисования в
+одном  
 из режимов с учётом ориентации устройства.
 
 ## ProjectionMatrixSettings
@@ -181,13 +200,17 @@ Material требуют ручного вызова функции отправ�
 Автоматически настройки не применяются, нужно вызвать
 
     applyProjectionMatrix(projectionMatrixSettings, boolean perspectiveEnabled);  
+
 или
 
     applyProjectionMatrix(projectionMatrixSettings); // perspectiveEnabled = true;  
-Класс поддерживает настройку границ основания призмы проекции, а также положения ближнего и дальнего  
+
+Класс поддерживает настройку границ основания призмы проекции, а также положения ближнего и
+дальнего  
 сечений.
 
-Функции resetFor3d(), resetFor2d() сбрасывают значения переменных на дефолтные для рисования в одном  
+Функции resetFor3d(), resetFor2d() сбрасывают значения переменных на дефолтные для рисования в
+одном  
 из режимов с учётом ориентации устройства.
 
 ## Матрица преобразований
@@ -213,7 +236,10 @@ float[16]);</code>
 
 `void prepareAndDraw(Point a, Point b, Point c)` - отрисовка по 3м точкам.
 
-`prepareAndDraw(Point a, Point b, float texx, float texy, float teexa, float texb)` - deprecated
+`prepareAndDraw(Point a, Point b, float texx, float texy, float teexa, float texb)`
+
+` public void prepareAndDraw(PVector a, PVector b, PVector c, float texx, float texy, float teexa, float texb)` -
+отрисовка с учетом текстурных координат
 
 `void setRedrawNeeded` - перед началом следующего цикла отрисовки вызвать (или нет) функцию  
 перерисовки (по умолчанию вызывается при перезаходе в приложение и после создания объекта полигона)
@@ -229,8 +255,10 @@ float[16]);</code>
 Конструктор аналогичный.
 
 `void prepareAndDraw(float rot, float x, float y, float a, float b, float z)` - отрисовывает на  
-прямоугольинке, левый верхний угол в положении x,y, размеры a,b, потом поворачивает прямоугольник на  
-r радиан по часовой. z - высота над плоскостью z=0. **Идеально для рисования танчика в 2д.** Раньше  
+прямоугольинке, левый верхний угол в положении x,y, размеры a,b, потом поворачивает прямоугольник
+на  
+r радиан по часовой. z - высота над плоскостью z=0. **Идеально для рисования танчика в 2д.**
+Раньше  
 это был метод класса танка.
 
 `void prepareAndDraw(float x, float y, float b, float z)` - квадрат стороной b c левым верхниим  
@@ -242,7 +270,8 @@ r радиан по часовой. z - высота над плоскостью
 виде массива чисел (массива объектов Face) и в виде vbo+vao в видеопамяти. **Вся работа с видео  
 памятью автоматизирована**, в том числе подгрузка карты нормалей и вершин.
 
-`Shape(String fileName, String textureFileName, GamePageInterface page)` - конструктор с асинхронной  
+`Shape(String fileName, String textureFileName, GamePageInterface page)` - конструктор с
+асинхронной  
 подгрузкой файла вершин и синхронной (в основном потоке) загрузкой текстуры  
 В основе загрузчика вершин лежит сторонняя библиотека, а текстура загружается методом  
 переопределения redrawFunction.  
@@ -251,7 +280,8 @@ r радиан по часовой. z - высота над плоскостью
 Пока вершины не загружены, вызовы рисования shape не дадут никакого резуьтата.
 
 `void addNormalMap(String normalMapFileName)` - загрузка карты нормалей. При этом соответствующая  
-шейдерная переменная (вызов `getNormalMapEnableLocation()` у адаптора) будет установлена в единицу (  
+шейдерная переменная (вызов `getNormalMapEnableLocation()` у адаптора) будет установлена в
+единицу (  
 иначе 0).  
 **В дефолтном lighting шейдере не происходит отключения перехода в касательное пространство при  
 отключении карты нормалей.**
@@ -274,14 +304,18 @@ r радиан по часовой. z - высота над плоскостью
 
 `addAnimation(sealObject target, Function<Animation, float[]> tf, float[] args, Function<float[], Float> vf, float duration, float vfa, long st, boolean recurring)`
 
-Первый аргумент — это экземпляр EnObject, который является объектом анимации. Второй аргумент — это  
+Первый аргумент — это экземпляр EnObject, который является объектом анимации. Второй аргумент —
+это  
 функция, которая принимает экземпляр Animation и возвращает массив из 6 чисел с плавающей точкой,  
 Первые 3 - это положение, вторые 3 определяют вращение (Заметьте, что это не дельты, не разность  
 положений, это новые координаты). Третий аргумент - это функция, которая определяет скорость  
-воздействия на атрибуты (закон их изменеия), она принимает массив содержащее значение от 0 до 1 (0 —  
-начало анимации, 1 — самый последний момент) и некоторого аргумента, функция также должна возвращать  
+воздействия на атрибуты (закон их изменеия), она принимает массив содержащее значение от 0 до 1 (
+0 —  
+начало анимации, 1 — самый последний момент) и некоторого аргумента, функция также должна
+возвращать  
 значение от 0 до 1, как было упомянуто ранее 0 - это первая позиция анимации, 1 - самая последняя.  
-Затем идет длительность, функция скорости и начальное время. Последний аргумент позволяет закциклить  
+Затем идет длительность, функция скорости и начальное время. Последний аргумент позволяет
+закциклить  
 анимацию (объект будет стартовать из начальных координат).  
 Можно добавлять несколько анимаций, они будут выполняться параллельно, их эффекты будут  
 накладываться.  
@@ -516,6 +550,7 @@ Polygon).
 скалярного произведения на соответствующие компоненты света.  
   
 ```  
+
     public PVector ambient;  - компонента рассеянного света    public PVector diffuse;  - компонента диффузии падающго света    public PVector specular;  - компонента блика    public float shininess;  - компонента яркости блика```  
 
 ## Экспозиция
@@ -530,11 +565,13 @@ Polygon).
 экземпеляра класса `ExpouseSettings` в него передаются значения и вызывается отрисовка.  
   
 ```  
+
        expouseSettings.expouse = expouse.value;            expouseSettings.gamma = gamma.value;```  
 
 # Обработка касаний
 
-**до версии 3.1.0 использовались вызовы touchStarted, touchMoved и touchEnded, которые были удалены  
+**до версии 3.1.0 использовались вызовы touchStarted, touchMoved и touchEnded, которые были
+удалены  
 в связи со сложностями работы в режиме мультитчача**
 
 С версии 3.1.0 основным инструментом является TouchProcessor.
@@ -561,6 +598,7 @@ Polygon).
        //выполнить действия            return null;     }         private Void touchMovedCallback(TouchPoint p) {  
        //выполнить действия            return null;     }         private Void touchEndCallback(TouchPoint t) {  
             //выполнить действия            return null;     }  ```  
+
 Функции можно объявить и лямбда функциями или с другими именами.  
 **Все, кроме первого параметра, могут быть null**  
 Последний параметр - страница-родитель, **не рекомендуется ставить null.**  
@@ -570,7 +608,8 @@ Polygon).
 
 ## правила обработки касаний
 
-* В случае пересечения заданных в touchProcHitbox (первый параметр коннструктора), выше приоритет у  
+* В случае пересечения заданных в touchProcHitbox (первый параметр коннструктора), выше приоритет
+  у  
   того класса, который был создан позже во время исполнения (исключение - дебаггер при его  
   использовании, он обладает высшим приоритетом)
 * При появлении нового касания, происходит проверка всех хитбоксов в порядке приоритета
@@ -601,7 +640,11 @@ Polygon).
 На данный момент находится на стадии разработки
 
 ## Vec3 и PVector
-**два класса решают одну и ту же задачу преобразования над векторами. PVector ведет себя как в процесинге, если метод не статик, то копирование вектора не происходит и изменяются его данные. Статические методы делают копирование. У Vec3 почти нет статических методов, все операции над векторами по умолчанию выполняют копирование.**
+
+**два класса решают одну и ту же задачу преобразования над векторами. PVector ведет себя как в
+процесинге, если метод не статик, то копирование вектора не происходит и изменяются его данные.
+Статические методы делают копирование. У Vec3 почти нет статических методов, все операции над
+векторами по умолчанию выполняют копирование.**
 
 Доступны конструкторы:
 
@@ -635,14 +678,17 @@ public Vec3(float x, float y) {
     this.x = x;    
 this.y = y;  }  
 ```  
+
 Также через конструкторы можно конвертировать PVector в Vec3 и назад.
 **Все эти конструкторы и методы доступны и для PVector.**
+
 ### выгрузка данных
 
 Получить вектор в виде массива длины 3:  
 ` public float[] getArray() `
 
 ### преобразования над векторами
+
 `public void normalize()` - нормировать
 
 `public float length()` - длина по теореме Пифагора
@@ -776,6 +822,7 @@ max - границы, в которых пользователь может из
 ## Пример простейшего класса страницы с отрисовкой 3д  
   
 ```  
+
 package com.manateam.main;
 
 import static android.opengl.GLES20.GL_BLEND;  
@@ -821,34 +868,56 @@ import com.seal.gl_engine.utils.SkyBoxShaderAdaptor;
 import com.seal.gl_engine.utils.Utils;
 
 public class SecondRenderer extends GamePageClass {  
-private final Poligon fpsPoligon;    private final Shader shader, lightShader, skyBoxShader;    Camera camera;    private final Shape s;    private final SkyBox skyBox;    private final SourceLight sourceLight;    private final AmbientLight ambientLight;    private final DirectedLight directedLight1;    private final Material material;    private FrameBuffer frameBuffer;  
+private final Poligon fpsPoligon; private final Shader shader, lightShader, skyBoxShader; Camera
+camera; private final Shape s; private final SkyBox skyBox; private final SourceLight sourceLight;
+private final AmbientLight ambientLight; private final DirectedLight directedLight1; private final
+Material material; private FrameBuffer frameBuffer;  
 TouchProcessor touchProcessor;  
 DebugValueFloat camPos;  
-public SecondRenderer() {        shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());        lightShader = new Shader(com.example.gl_engine.R.raw.vertex_shader_light, com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor());        fpsPoligon = new Poligon(MainRedrawFunctions::redrawFps, true, 1, this);        camera = new Camera();        s = new Shape("ponchik.obj", "texture.png", this);        s.addNormalMap("noral_tex.png");  
-ambientLight = new AmbientLight(this);        // ambientLight.color = new PVector(0.3f, 0.3f, 0.3f);  
-directedLight1 = new DirectedLight(this);        directedLight1.direction = new PVector(-1, 0, 0);        directedLight1.color = new PVector(0.9f);        directedLight1.diffuse = 0.2f;        directedLight1.specular = 0.8f;       /* directedLight2 = new DirectedLight(this);        directedLight2.direction = new PVector(0, 1, 0);        directedLight2.color = new PVector(0.6f);        directedLight2.diffuse = 0.9f;        directedLight2.specular = 0.8f;  
-*/        sourceLight = new SourceLight(this);        sourceLight.diffuse = 0.8f;        sourceLight.specular = 0.9f;        sourceLight.constant = 1f;        sourceLight.Sectionar = 0.01f;        sourceLight.quadratic = 0.01f;        sourceLight.color = new PVector(0.5f);        sourceLight.position = new PVector(2.7f, 0, 0);        sourceLight.direction = new PVector(-0.3f, 0, 0);        sourceLight.outerCutOff = cos(radians(40));        sourceLight.cutOff = cos(radians(30f));  
-material = new Material(this);        material.ambient = new PVector(1);        material.specular = new PVector(1);        material.diffuse = new PVector(1);        material.shininess = 1.1f;  
-skyBox = new SkyBox("skybox/", "jpg", this);        skyBoxShader = new Shader(com.example.gl_engine.R.raw.skybox_vertex, com.example.gl_engine.R.raw.skybox_fragment, this, new SkyBoxShaderAdaptor());  
-touchProcessor = new TouchProcessor(MotionEvent -> true, touchPoint -> {            OpenGLRenderer.startNewPage(new MainRenderer());            return null;        }, null, null, this);        frameBuffer = createFrameBuffer((int) x, (int) y, this);  
-camPos = Debugger.addDebugValueFloat(2, 5, "cam pos");        camPos.value = 4;    }
+public SecondRenderer() { shader = new Shader(com.example.gl_engine.R.raw.vertex_shader,
+com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor()); lightShader = new
+Shader(com.example.gl_engine.R.raw.vertex_shader_light,
+com.example.gl_engine.R.raw.fragment_shader_light, this, new LightShaderAdaptor()); fpsPoligon = new
+Poligon(MainRedrawFunctions::redrawFps, true, 1, this); camera = new Camera(); s = new Shape("
+ponchik.obj", "texture.png", this); s.addNormalMap("noral_tex.png");  
+ambientLight = new AmbientLight(this); // ambientLight.color = new PVector(0.3f, 0.3f, 0.3f);  
+directedLight1 = new DirectedLight(this); directedLight1.direction = new PVector(-1, 0, 0);
+directedLight1.color = new PVector(0.9f); directedLight1.diffuse = 0.2f; directedLight1.specular =
+0.8f; /* directedLight2 = new DirectedLight(this); directedLight2.direction = new PVector(0, 1, 0);
+directedLight2.color = new PVector(0.6f); directedLight2.diffuse = 0.9f; directedLight2.specular =
+0.8f;  
+*/ sourceLight = new SourceLight(this); sourceLight.diffuse = 0.8f; sourceLight.specular = 0.9f;
+sourceLight.constant = 1f; sourceLight.Sectionar = 0.01f; sourceLight.quadratic = 0.01f;
+sourceLight.color = new PVector(0.5f); sourceLight.position = new PVector(2.7f, 0, 0);
+sourceLight.direction = new PVector(-0.3f, 0, 0); sourceLight.outerCutOff = cos(radians(40));
+sourceLight.cutOff = cos(radians(30f));  
+material = new Material(this); material.ambient = new PVector(1); material.specular = new PVector(
+1); material.diffuse = new PVector(1); material.shininess = 1.1f;  
+skyBox = new SkyBox("skybox/", "jpg", this); skyBoxShader = new Shader(
+com.example.gl_engine.R.raw.skybox_vertex, com.example.gl_engine.R.raw.skybox_fragment, this, new
+SkyBoxShaderAdaptor());  
+touchProcessor = new TouchProcessor(MotionEvent -> true, touchPoint -> {
+OpenGLRenderer.startNewPage(new MainRenderer()); return null; }, null, null, this); frameBuffer =
+createFrameBuffer((int) x, (int) y, this);  
+camPos = Debugger.addDebugValueFloat(2, 5, "cam pos"); camPos.value = 4; }
 
     @Override    public void draw() {        GLES30.glDisable(GL_BLEND);        FrameBufferUtils.connectFrameBuffer(frameBuffer.getFrameBuffer());        camera.resetFor3d();        camera.cameraSettings.eyeZ = 0f;        camera.cameraSettings.eyeX = camPos.value;        float x = 3.5f * Utils.sin(millis() / 1000.0f);        camera.cameraSettings.centerY = 0;        camera.cameraSettings.centerZ = x;        applyShader(skyBoxShader);        camera.apply();        skyBox.prepareAndDraw();        applyShader(lightShader);        material.apply();        glClearColor(1f, 1, 1, 1);        camera.apply();        mMatrix = resetTranslateMatrix(mMatrix);        Matrix.rotateM(mMatrix, 0, map(millis() % 10000, 0, 10000, 0, 360), 1, 0.5f, 0);        Matrix.translateM(mMatrix, 0, 0, -0f, 0);        Matrix.scaleM(mMatrix, 0, 0.5f, 0.5f, 0.55f);        applyMatrix(mMatrix);        s.prepareAndDraw();        FrameBufferUtils.connectDefaultFrameBuffer();  
         applyShader(shader);        fpsPoligon.setRedrawNeeded(true);        camera.resetFor2d();        camera.apply();        mMatrix = resetTranslateMatrix(mMatrix);        applyMatrix(mMatrix);        fpsPoligon.redrawParams.set(0, String.valueOf(fps));        fpsPoligon.redrawNow();        //  fpsPoligon.prepareAndDraw(new Point(0 * kx, 0, 1), new Point(100 * kx, 0, 1), new Point(0 * kx, 100 * ky, 1));        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));    }}  
-
 
 ```  
   
 ## пример работы в режиме 2д и использования класса анимаций  
   
 ```  
+
 package com.manateam.main;
 
 import static android.opengl.GLES20.glClearColor;  
 import static com.seal.gl_engine.OpenGLRenderer.mMatrix;  
 import static com.seal.gl_engine.OpenGLRenderer.pageMillis;  
 import static com.seal.gl_engine.engine.config.MainConfigurationFunctions.applyMatrix;  
-import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;  
+import static
+com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectDefaultFrameBuffer;  
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.connectFrameBuffer;  
 import static com.seal.gl_engine.engine.main.frameBuffers.FrameBufferUtils.createFrameBuffer;  
 import static com.seal.gl_engine.engine.main.shaders.Shader.applyShader;  
@@ -875,10 +944,24 @@ import com.seal.gl_engine.maths.Point;
 import com.seal.gl_engine.utils.Utils;
 
 public class MainRenderer extends GamePageClass {  
-private final Poligon polygon;    private final Shader shader;    private final Camera camera;    private static SimplePoligon simplePolygon;    private final sealObject s;    boolean f = true;    private final TouchProcessor touchProcessor;    private final FrameBuffer frameBuffer;  
-public MainRenderer() {        Animator.initialize();        shader = new Shader(com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new MainShaderAdaptor());        polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);        polygon.redrawNow();        camera = new Camera();        if (simplePolygon == null) {            simplePolygon = new SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null);            simplePolygon.redrawNow();        }  
-touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);        TouchProcessor touchProcessor2 = new TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);  
-s = new sealObject(new Shape("building_big.obj", "box.jpg", this));        s.setObjScale(0.2f);        s.animMotion(1f, 0f, -6f, 1000, 1000, false);        s.animRotation(0f, 0f, 90f, 3000, 1000, false);        s.animRotation(90f, 0, 0, 1000, 3000, false);        s.animMotion(1f, 0, 0, 500, 6000, true);        TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);        frameBuffer = createFrameBuffer((int) x, (int) y, this);    }
+private final Poligon polygon; private final Shader shader; private final Camera camera; private
+static SimplePoligon simplePolygon; private final sealObject s; boolean f = true; private final
+TouchProcessor touchProcessor; private final FrameBuffer frameBuffer;  
+public MainRenderer() { Animator.initialize(); shader = new Shader(
+com.example.gl_engine.R.raw.vertex_shader, com.example.gl_engine.R.raw.fragment_shader, this, new
+MainShaderAdaptor()); polygon = new Poligon(MainRedrawFunctions::redrawFps, true, 0, this);
+polygon.redrawNow(); camera = new Camera(); if (simplePolygon == null) { simplePolygon = new
+SimplePoligon(MainRedrawFunctions::redrawBox2, true, 0, null); simplePolygon.redrawNow(); }  
+touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::
+touchMovedCallback, this::touchEndCallback, this); TouchProcessor touchProcessor2 = new
+TouchProcessor(MotionEvent -> true, this::touchStartedCallback, this::touchMovedCallback, this::
+touchEndCallback, this);  
+s = new sealObject(new Shape("building_big.obj", "box.jpg", this)); s.setObjScale(0.2f);
+s.animMotion(1f, 0f, -6f, 1000, 1000, false); s.animRotation(0f, 0f, 90f, 3000, 1000, false);
+s.animRotation(90f, 0, 0, 1000, 3000, false); s.animMotion(1f, 0, 0, 500, 6000, true);
+TouchProcessor touchProcessor = new TouchProcessor(this::touchProcHitbox, this::
+touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this); frameBuffer =
+createFrameBuffer((int) x, (int) y, this); }
 
     @Override    public void draw() {        if (f && pageMillis() >= 500) {            s.stopAnimations();            f = false;        }        if (pageMillis() >= 1500) s.continueAnimations();        applyShader(shader);        glClearColor(1f, 1f, 1f, 1);        camera.resetFor3d();        camera.cameraSettings.eyeZ = 5;        camera.apply();        connectFrameBuffer(frameBuffer.getFrameBuffer());        s.prepareAndDraw();        connectDefaultFrameBuffer();        camera.resetFor2d();        camera.apply(false);        applyMatrix(mMatrix);        polygon.prepareAndDraw(new Point(110 * kx, 0, 1), new Point(200 * kx, 0, 1), new Point(110 * kx, 100 * ky, 1));        if (touchProcessor.getTouchAlive()) {            simplePolygon.prepareAndDraw(0, touchProcessor.lastTouchPoint.touchX, touchProcessor.lastTouchPoint.touchY, 300, 300, 0.01f);        }        frameBuffer.drawTexture(new Point(Utils.x, Utils.y, 1), new Point(0, y, 1), new Point(Utils.x, 0, 1));  
     }  
@@ -886,6 +969,5 @@ s = new sealObject(new Shape("building_big.obj", "box.jpg", this));        s.set
     private Void touchStartedCallback(TouchPoint p) {        return null;    }  
     private Void touchMovedCallback(TouchPoint p) {        return null;    }  
     private Void touchEndCallback(TouchPoint t) {        OpenGLRenderer.startNewPage(new SecondRenderer());//запуск страницы только если тач начался в нужном хитбоксе        return null;    }}  
-
 
 ```
