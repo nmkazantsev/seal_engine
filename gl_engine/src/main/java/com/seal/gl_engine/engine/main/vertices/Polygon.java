@@ -239,7 +239,7 @@ public class Polygon implements VerticesSet {
         if (saveMemory) {
             image.delete();
         }
-        glBindTexture(GL_TEXTURE_2D, 0);
+       // glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     public void prepareAndDraw(PVector a, PVector b, PVector c) {
