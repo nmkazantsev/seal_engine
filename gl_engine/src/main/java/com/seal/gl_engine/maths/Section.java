@@ -12,7 +12,7 @@ public class Section {
     }
 
     public Section(Vec3 A, Vec3 B) {
-        this.direction = new PVector(A.sub(B));
+        this.direction = new PVector(B.sub(A));
         this.base = new PVector(A);
     }
 
