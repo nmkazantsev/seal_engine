@@ -9,7 +9,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import  com.seal.gl_engine.Engine;
+
+import com.manateam.main.lor_test.LorRenderer;
+import com.seal.gl_engine.Engine;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 
 
@@ -21,10 +23,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), false,true, true);
+        GLSurfaceView v = engine.onCreate(this, unused -> new LorRenderer(), true, true, true);
         setContentView(v);
         assert v != null;
         v.setOnTouchListener(this);

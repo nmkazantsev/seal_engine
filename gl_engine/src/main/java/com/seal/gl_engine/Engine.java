@@ -20,7 +20,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
 
 public class Engine {
-    public static final String version = "3.1.3";
+    public static final String version = "3.1.4";
     private GLSurfaceView glSurfaceView;
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;

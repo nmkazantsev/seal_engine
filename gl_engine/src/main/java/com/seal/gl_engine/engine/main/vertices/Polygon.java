@@ -128,6 +128,55 @@ public class Polygon implements VerticesSet {
                 new PVector(0, 0, 1));
     }
 
+    public void prepareData(PVector a, PVector b, PVector d, float texx, float texy, float texa, float texb) {
+        /*
+        a-----b
+        |     |
+        |     |
+        d-----c
+         */
+
+        PVector c = new PVector(d.x + b.x - a.x, b.y + d.y - a.y, b.z + d.z - a.z);
+        float[][] vertexes = new float[][]{
+                {a.x, a.y, a.z},
+                {d.x, d.y, d.z},
+                {b.x, b.y, b.z},
+                {c.x, c.y, c.z}
+        };
+
+        float[][] textCoords = new float[][]{
+                {texx, texy},
+                {texx, texy + texb},
+                {texx + texa, texy},
+                {texx + texa, texy + texb}
+        };
+
+        face1 = new Face(
+                new PVector[]{
+                        new PVector(vertexes[0][0], vertexes[0][1], vertexes[0][2]),
+                        new PVector(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new PVector(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                },
+                new PVector[]{
+                        new PVector(textCoords[0][0], textCoords[0][1]),
+                        new PVector(textCoords[1][0], textCoords[1][1]),
+                        new PVector(textCoords[2][0], textCoords[2][1]),
+                },
+                new PVector(0, 0, 1));
+        face2 = new Face(
+                new PVector[]{
+                        new PVector(vertexes[1][0], vertexes[1][1], vertexes[1][2]),
+                        new PVector(vertexes[2][0], vertexes[2][1], vertexes[2][2]),
+                        new PVector(vertexes[3][0], vertexes[3][1], vertexes[3][2]),
+                },
+                new PVector[]{
+                        new PVector(textCoords[1][0], textCoords[1][1]),
+                        new PVector(textCoords[2][0], textCoords[2][1]),
+                        new PVector(textCoords[3][0], textCoords[3][1]),
+                },
+                new PVector(0, 0, 1));
+    }
+
     protected void prepareData(PVector A, PVector B, float texx, float texy, float texa, float texb) {
         /*
         a-----b
@@ -190,6 +239,7 @@ public class Polygon implements VerticesSet {
         if (saveMemory) {
             image.delete();
         }
+       // glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     public void prepareAndDraw(PVector a, PVector b, PVector c) {
@@ -200,6 +250,12 @@ public class Polygon implements VerticesSet {
 
     public void prepareAndDraw(PVector a, PVector b, float texx, float texy, float teexa, float texb) {
         prepareData(a, b, texx, texy, teexa, texb);
+        bindData();
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+
+    public void prepareAndDraw(PVector a, PVector b, PVector c, float texx, float texy, float teexa, float texb) {
+        prepareData(a, b, c, texx, texy, teexa, texb);
         bindData();
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
