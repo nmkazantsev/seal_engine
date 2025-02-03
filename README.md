@@ -325,7 +325,13 @@ r радиан по часовой. z - высота над плоскостью
 Пример вызова:
 
 ```  
-   Animator.addAnimation(        this,        (Animator.Animation animation) -> {            float[] attrs = animation.getAttrs();            float[] args = animation.getArgs();            return attrs;        },        new float[3],        (float[] f) -> {            float k = f[0];            float a = f[1];            return f[0];        },        1000,        1.0f,        5000    );```  
+Animator.addAnimation( this, (Animator.Animation animation) -> {            float[] attrs = animation.getAttrs();            
+float[] args = animation.getArgs();            return attrs;        },        new float[3],        
+(float[] f) -> { float k = f[0]; 
+float a = f[1];
+return f[0];
+},1000,1.0f,5000);
+   ```  
   
 В движке есть встроенные функции анимаций, чтобы страдания не были слишком сильными.  
   
