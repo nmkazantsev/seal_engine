@@ -722,9 +722,9 @@ this.y = y;  }
         this.x = resultVec[0];    
         this.y = resultVec[1];    
         this.z = resultVec[2];    
-}  ```    
+}      
 }  
-  
+  ```
 ## Section 
   
 `Section(Vec3 A, Vec3 B)` - поздание отрезка из точки А и точку Б  
