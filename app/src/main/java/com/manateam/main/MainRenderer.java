@@ -12,6 +12,8 @@ import static com.seal.gl_engine.utils.Utils.getMillisFrozen;
 import static com.seal.gl_engine.utils.Utils.unfreezeMillis;
 import static com.seal.gl_engine.utils.Utils.x;
 
+import android.util.Log;
+
 import com.manateam.main.redrawFunctions.MainRedrawFunctions;
 import com.seal.gl_engine.GamePageClass;
 import com.seal.gl_engine.OpenGLRenderer;
@@ -109,6 +111,16 @@ public class MainRenderer extends GamePageClass {
         simplePolygon.prepareAndDraw(0, 500, 500, 300, 300, 0.01f);
         // frameBuffer.drawTexture(new Vec3(Utils.x, Utils.y, 1), new Vec3(0, y, 1), new Vec3(Utils.x, 0, 1));
 
+    }
+
+    @Override
+    public void onResume() {
+        Log.e("main renderer", "on resume");
+    }
+
+    @Override
+    public void onPause() {
+        Log.e("main renderer", "on pause");
     }
 
     private Boolean touchProcHitbox(TouchPoint event) {

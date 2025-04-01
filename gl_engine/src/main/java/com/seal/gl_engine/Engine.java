@@ -20,7 +20,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
 
 public class Engine {
-    public static final String version = "3.1.4";
+    public static final String version = "3.1.5";
     private GLSurfaceView glSurfaceView;
     public Context context;
     protected static Function<Void, GamePageClass> getStartPage;
@@ -86,11 +86,13 @@ public class Engine {
     public void onPause() {
         glSurfaceView.onPause();
         Utils.onPause();
+        OpenGLRenderer.onPause();
     }
 
     public void onResume() {
         glSurfaceView.onResume();
         Utils.onResume();
+        OpenGLRenderer.onResume();
     }
 
     static class MyConfigChooser implements GLSurfaceView.EGLConfigChooser {

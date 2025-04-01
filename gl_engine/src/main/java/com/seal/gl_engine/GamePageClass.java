@@ -5,4 +5,8 @@ public abstract class GamePageClass {
         OpenGLRenderer.resetPageMillis();
     }
     public abstract void draw();
+
+    public abstract void onResume();
+
+    public abstract void onPause();
 }
