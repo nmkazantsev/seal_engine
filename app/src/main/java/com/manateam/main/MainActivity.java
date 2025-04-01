@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        GLSurfaceView v = engine.onCreate(this, unused -> new LorRenderer(), true, true, true);
+        GLSurfaceView v = engine.onCreate(this, unused -> new MainRenderer(), true, true, true);
         setContentView(v);
         assert v != null;
         v.setOnTouchListener(this);
