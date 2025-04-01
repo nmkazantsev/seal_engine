@@ -78,6 +78,18 @@ public class OpenGLRenderer implements Renderer {
         VerticesShapesManager.onRedrawSetup();
     }
 
+    protected static void onPause() {
+        if (gamePage != null) {
+            gamePage.onPause();
+        }
+    }
+
+    protected static void onResume() {
+        if (gamePage != null) {
+            gamePage.onResume();
+        }
+    }
+
     private void setup() {
         prevPageChangeTime = Utils.millis();
     }

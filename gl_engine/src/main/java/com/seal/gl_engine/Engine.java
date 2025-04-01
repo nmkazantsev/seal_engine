@@ -86,11 +86,13 @@ public class Engine {
     public void onPause() {
         glSurfaceView.onPause();
         Utils.onPause();
+        OpenGLRenderer.onPause();
     }
 
     public void onResume() {
         glSurfaceView.onResume();
         Utils.onResume();
+        OpenGLRenderer.onResume();
     }
 
     static class MyConfigChooser implements GLSurfaceView.EGLConfigChooser {

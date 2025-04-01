@@ -68,6 +68,16 @@ public class LorRenderer extends GamePageClass {
         frameBuffer.drawTexture(new PVector(0, 0, 1), new PVector(x, 0, 1), new PVector(0, y, 1));
     }
 
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
 
     private static class Page {
         public float shiftVert = 0;

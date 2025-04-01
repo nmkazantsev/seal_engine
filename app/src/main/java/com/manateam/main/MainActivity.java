@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.manateam.main.lor_test.LorRenderer;
 import com.seal.gl_engine.Engine;
 import com.seal.gl_engine.engine.main.touch.TouchProcessor;
 

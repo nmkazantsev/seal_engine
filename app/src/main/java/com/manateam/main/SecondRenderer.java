@@ -152,4 +152,14 @@ public class SecondRenderer extends GamePageClass {
         applyMatrix(mMatrix);
         frameBuffer.drawTexture(new PVector(0, 0, 1), new PVector(Utils.x, 0, 1), new PVector(0, y, 1));
     }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
 }
