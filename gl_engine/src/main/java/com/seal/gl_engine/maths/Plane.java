@@ -1,6 +1,9 @@
 package com.seal.gl_engine.maths;
 
-public class Plane {
+import java.io.Serializable;
+
+public class Plane implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final float a,b,c,d;//for equastion
     public Plane(PVector A, PVector B, PVector C){
         float [] temp = equationPlane(A.x, A.y, A.z, B.x, B.y, B.z, C.x, C.y, C.z);

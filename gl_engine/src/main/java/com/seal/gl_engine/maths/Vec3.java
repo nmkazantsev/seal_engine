@@ -7,7 +7,10 @@ import android.opengl.Matrix;
 
 import com.seal.gl_engine.utils.Utils;
 
-public class Vec3 {
+import java.io.Serializable;
+
+public class Vec3 implements Serializable {
+    private static final long serialVersionUID = 1L;
     public float x, y, z;
 
     public Vec3(Vec3 v) {

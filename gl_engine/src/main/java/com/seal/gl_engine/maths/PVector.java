@@ -8,7 +8,10 @@ import android.opengl.Matrix;
 
 import com.seal.gl_engine.utils.Utils;
 
-public class PVector {
+import java.io.Serializable;
+
+public class PVector implements Serializable {
+    private static final long serialVersionUID = 1L;
     public float x, y, z;
 
     public PVector(Vec3 v) {

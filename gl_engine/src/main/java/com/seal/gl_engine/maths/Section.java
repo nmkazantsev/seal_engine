@@ -3,7 +3,10 @@ package com.seal.gl_engine.maths;
 import static com.seal.gl_engine.maths.PVector.sub;
 import static com.seal.gl_engine.utils.Utils.abs;
 
-public class Section {
+import java.io.Serializable;
+
+public class Section implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final PVector base, direction;
 
     public Section(PVector A, PVector B) {
