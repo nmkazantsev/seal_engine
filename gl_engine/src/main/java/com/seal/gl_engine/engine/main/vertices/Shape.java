@@ -14,7 +14,6 @@ import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glUniform1i;
 
 import android.opengl.GLES20;
-import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import android.util.Log;
 
@@ -28,6 +27,7 @@ import com.seal.gl_engine.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
@@ -56,14 +56,46 @@ public class Shape implements VerticesSet {
 
     private boolean vboLoaded = false;
 
+    public Shape(FaceAndObject faceAndObject, String textureFileName, GamePageClass page) {
+        creator = page;
+        this.redrawFunction = this::loadTexture;
+        this.textureFileName = textureFileName;
+        VerticesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
+        texture = new Texture(page);
+
+        faces = faceAndObject.facesArr;
+        object = (Obj) faceAndObject.object;
+
+        onRedrawSetup();
+        redrawNow();
+    }
+
     public Shape(String fileName, String textureFileName, GamePageClass page) {
         creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
-        VerticesShapesManager.allShapes.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+        VerticesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
         texture = new Texture(page);
+        loadFacesAsync(fileName, facesAndObject -> {
+            isVertexLoaded = true;
+            faces = facesAndObject.facesArr;
+            object = (Obj) facesAndObject.object;
+            return null;
+        });
+        onRedrawSetup();
+        redrawNow();
+    }
+
+    public static class FaceAndObject {
+        public Face[] facesArr;
+        public Object object;
+    }
+
+    public static void loadFacesAsync(String fileName, Function<FaceAndObject, Void> callback) {
         new Thread(() -> {
+            Face[] faces1;
             InputStreamReader inputStream;
+            Obj object = null;
             try {
                 inputStream = new InputStreamReader(Utils.context.getAssets().open(fileName), StandardCharsets.UTF_8);
                 object = ObjUtils.convertToRenderable(
@@ -71,10 +103,13 @@ public class Shape implements VerticesSet {
             } catch (IOException e) {
                 Log.e("ERROR LOADING", fileName);
             }
+            if (object == null) {
+                return;
+            }
             //convert to Face
-            this.faces = new Face[object.getNumFaces()];
+            faces1 = new Face[object.getNumFaces()];
             for (int i = 0; i < object.getNumFaces(); i++) {
-                faces[i] = new Face(new PVector[]{
+                faces1[i] = new Face(new PVector[]{
                         new PVector(object.getVertex(object.getFace(i).getVertexIndex(0)).getX(),
                                 object.getVertex(object.getFace(i).getVertexIndex(0)).getY(),
                                 object.getVertex(object.getFace(i).getVertexIndex(0)).getZ()),
@@ -97,10 +132,10 @@ public class Shape implements VerticesSet {
                                 object.getNormal(object.getFace(i).getNormalIndex(0)).getZ()
                         ));
             }
-            isVertexLoaded = true;
+            FaceAndObject faceAndObject = new FaceAndObject();
+            faceAndObject.facesArr = faces1;
+            faceAndObject.object = object;
         }).start();
-        onRedrawSetup();
-        redrawNow();
     }
 
     public void onFrameBegin() {
@@ -153,9 +188,9 @@ public class Shape implements VerticesSet {
 
         //enable or disable normal map in shader
         if (normalTexture != null) {
-            GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
+            glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 1);
         } else {
-            GLES30.glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 0);
+            glUniform1i(Shader.getActiveShader().getAdaptor().getNormalMapEnableLocation(), 0);
         }
         postToGlNeeded = false;
     }
@@ -163,14 +198,14 @@ public class Shape implements VerticesSet {
     private void postToGl() {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.getId());
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, GLES20.GL_UNSIGNED_BYTE, 0);
+        GLUtils.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.bitmap, GLES20.GL_UNSIGNED_BYTE, 0);
     }
 
     private void postToGlNormals() {
         if (normalImage != null && normalImage.isLoaded()) {
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, normalTexture.getId());
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GL_RGBA, normalImage.bitmap, 0);
+            GLUtils.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, normalImage.bitmap, 0);
             normalImage.delete();
             glActiveTexture(GL_TEXTURE0);
         }
@@ -199,10 +234,10 @@ public class Shape implements VerticesSet {
         this.redrawNeeded = redrawNeeded;
         postToGlNeeded = true;
         if (redrawNeeded) {
-            VerticesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
-        vboLoaded = false;
+            VerticesShapesManager.allShapesToRedraw.add(new WeakReference<>(this));//добавить ссылку на Poligon
+            vboLoaded = false;
             postToGlNeeded = true;
-        VerticesShapesManager.allShapesToRedraw.add(new java.lang.ref.WeakReference<>(this));//добавить ссылку на Poligon
+            VerticesShapesManager.allShapesToRedraw.add(new WeakReference<>(this));//добавить ссылку на Poligon
             vboLoaded = false;
         }
     }
