@@ -570,6 +570,8 @@ Polygon).
   
 `Utils.LoadImage(String path)` - возвращает загруженный из assets редактируемый PImage. Загрузка в  
 потоке, из которого вызвана функция  
+
+` public static void loadImageAsync(String name, Function<PImage,?> callback)` - возвращает загруженный из assets редактируемый PImage в коллбэк. Загрузка ассинхронно.
   
 # Свет  
   
