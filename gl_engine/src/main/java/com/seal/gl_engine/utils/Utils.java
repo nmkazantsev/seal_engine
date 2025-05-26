@@ -5,6 +5,7 @@ import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static java.lang.Float.parseFloat;
 import static java.lang.Thread.sleep;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -40,19 +41,14 @@ public class Utils {
 
     public static void showToast(final String text) {
         //Toast.makeText(context.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-            }
-        });
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context.getApplicationContext(), text, Toast.LENGTH_SHORT).show());
     }
 
 
     //лень искать нормальное решение
     public static boolean intInArray(int n, int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == n) {
+        for (int j : arr) {
+            if (j == n) {
                 return true;
             }
         }
@@ -171,31 +167,6 @@ public class Utils {
         img.height = img.bitmap.getHeight();
         return img;
     }
-
-    public static PImage convertTo(PImage img, int red, int green, int blue) {
-        if (img != null) {
-            int[] colors = new int[img.bitmap.getWidth() * img.bitmap.getHeight()];
-            int[] src = new int[img.bitmap.getWidth() * img.bitmap.getHeight()];
-            int width = img.bitmap.getWidth();
-            int height = img.bitmap.getHeight();
-            img.bitmap.getPixels(src, 0, width, 0, 0, width, height);
-            int porog = 90;
-            for (int x = 0; x < width * height; x++) {
-                if (src[x] < Color.rgb(porog, porog, porog)) {
-                    //img.bitmap.setPixel(x,y,0);
-                    colors[x] = Color.rgb(red, green, blue);
-                } else {
-                    //colors[x] =src[x];
-                }
-            }
-            img.bitmap = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
-            return (img);
-        }
-
-
-        return (null);
-    }
-
     public static float getDirection(float px, float py, float tx, float ty) {
         //returns direction to point in radinas. Calculated from north direction (0, top of screen) along the hour line move direction
         float a;
@@ -220,18 +191,15 @@ public class Utils {
             img.setLoaded(true);
             return img;
         } catch (Exception e) {
-            Log.e("ERROR LOADING", name + String.valueOf(e.getMessage()));
+            Log.e("ERROR LOADING", name + e.getMessage());
         }
         return null;
     }
 
     public static void loadImageAsync(String name, Function<PImage,?> callback){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PImage image = loadImage(name);
-                callback.apply(image);
-            }
+        new Thread(() -> {
+            PImage image = loadImage(name);
+            callback.apply(image);
         }).start();
     }
 
@@ -239,9 +207,8 @@ public class Utils {
         AssetManager assetManager = context.getAssets();
 
         InputStream istr = assetManager.open(fileName);
-        Bitmap bitmap = BitmapFactory.decodeStream(istr);
 
-        return bitmap;
+        return BitmapFactory.decodeStream(istr);
     }
 
     public static float random(float a, float b) {
@@ -351,14 +318,11 @@ public class Utils {
     }
 
     public static float abs(float a) {
-        return ((float) Math.abs(a));
+        return Math.abs(a);
     }
 
     public static float min(float a, float b) {
-        if (a < b) {
-            return a;
-        }
-        return b;
+        return Math.min(a, b);
     }
 
     public static float max(float a, float b) {
@@ -379,8 +343,7 @@ public class Utils {
         val -= vstart;
         float proc = val / dif;
         float dif2 = ostop - ostart;
-        float output = dif2 * proc + ostart;
-        return output;
+        return dif2 * proc + ostart;
     }
 
     private static long millisBuffer = 0;
@@ -417,29 +380,20 @@ public class Utils {
     }
 
     public static String loadFile(String fileName) {
-        String content = "";
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(
-                    new InputStreamReader(Utils.context.getAssets().open(fileName), StandardCharsets.UTF_8));
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(Utils.context.getAssets().open(fileName), StandardCharsets.UTF_8))) {
 
             // do reading, usually loop until end of file reading
             String mLine;
             while ((mLine = reader.readLine()) != null) {
-                content += mLine + '\n';
+                content.append(mLine).append('\n');
             }
         } catch (IOException e) {
             //log the exception
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    //log the exception
-                }
-            }
         }
-        return content;
+        //log the exception
+        return content.toString();
     }
 
     public static int countSubstrs(String str, String target) {
