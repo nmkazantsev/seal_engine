@@ -56,15 +56,15 @@ public class Shape implements VerticesSet {
 
     private boolean vboLoaded = false;
 
-    public Shape(FaceAndObject faceAndObject, String textureFileName, GamePageClass page) {
+    public Shape(PreLoadedMesh preLoadedMesh, String textureFileName, GamePageClass page) {
         creator = page;
         this.redrawFunction = this::loadTexture;
         this.textureFileName = textureFileName;
         VerticesShapesManager.allShapes.add(new WeakReference<>(this));//добавить ссылку на Poligon
         texture = new Texture(page);
 
-        faces = faceAndObject.facesArr;
-        object = (Obj) faceAndObject.object;
+        faces = preLoadedMesh.facesArr;
+        object = (Obj) preLoadedMesh.object;
 
         onRedrawSetup();
         redrawNow();
@@ -86,12 +86,12 @@ public class Shape implements VerticesSet {
         redrawNow();
     }
 
-    public static class FaceAndObject {
-        public Face[] facesArr;
-        public Object object;
+    public static class PreLoadedMesh {
+        private Face[] facesArr;
+        private Object object;
     }
 
-    public static void loadFacesAsync(String fileName, Function<FaceAndObject, Void> callback) {
+    public static void loadFacesAsync(String fileName, Function<PreLoadedMesh, Void> callback) {
         new Thread(() -> {
             Face[] faces1;
             InputStreamReader inputStream;
@@ -132,10 +132,10 @@ public class Shape implements VerticesSet {
                                 object.getNormal(object.getFace(i).getNormalIndex(0)).getZ()
                         ));
             }
-            FaceAndObject faceAndObject = new FaceAndObject();
-            faceAndObject.facesArr = faces1;
-            faceAndObject.object = object;
-            callback.apply(faceAndObject);
+            PreLoadedMesh preLoadedMesh = new PreLoadedMesh();
+            preLoadedMesh.facesArr = faces1;
+            preLoadedMesh.object = object;
+            callback.apply(preLoadedMesh);
         }).start();
     }
 
