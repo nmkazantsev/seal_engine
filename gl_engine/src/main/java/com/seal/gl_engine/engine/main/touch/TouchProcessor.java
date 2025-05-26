@@ -2,7 +2,6 @@ package com.seal.gl_engine.engine.main.touch;
 
 import static com.seal.gl_engine.utils.Utils.millis;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -185,7 +184,7 @@ public class TouchProcessor {
             class PrioritySorter implements Comparator<TouchProcessor> {
                 @Override
                 public int compare(TouchProcessor a, TouchProcessor b) {
-                    return a.priority - b.priority;
+                    return b.priority - a.priority;
                 }
             }
             allProcessors.sort(new PrioritySorter());
