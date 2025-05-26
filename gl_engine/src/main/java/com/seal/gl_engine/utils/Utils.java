@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
+import java.util.function.Function;
 
 public class Utils {
     public static Context context;
@@ -222,6 +223,16 @@ public class Utils {
             Log.e("ERROR LOADING", name + String.valueOf(e.getMessage()));
         }
         return null;
+    }
+
+    public static void loadImageAsync(String name, Function<PImage,?> callback){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PImage image = loadImage(name);
+                callback.apply(image);
+            }
+        }).start();
     }
 
     private static Bitmap getBitmapFromAssets(String fileName, Context context) throws IOException {
