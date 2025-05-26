@@ -135,6 +135,7 @@ public class Shape implements VerticesSet {
             FaceAndObject faceAndObject = new FaceAndObject();
             faceAndObject.facesArr = faces1;
             faceAndObject.object = object;
+            callback.apply(faceAndObject);
         }).start();
     }
 
