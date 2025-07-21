@@ -10,6 +10,7 @@ import com.seal.gl_engine.OpenGLRenderer;
 import com.seal.gl_engine.engine.main.debugger.Debugger;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +38,9 @@ public class TouchProcessor {
     private boolean blocked = false;
     private long startTime;
 
+    private int priority = 0;
+    private static boolean resSortNeeeded = false;
+
     /**
      * Create a new TouchProcessor
      *
@@ -61,6 +65,16 @@ public class TouchProcessor {
         this.touchMovedCallback = touchMovedCallback;
         this.touchEndedCallback = touchEndedCallback;
         allProcessors.add(this);
+        resSortNeeeded = true;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+        resSortNeeeded = true;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     /**
@@ -124,6 +138,7 @@ public class TouchProcessor {
     public boolean getTouchAlive() {
         return touchAlive;
     }
+
     //**********STATIC METHODS********************
     public static boolean onTouch(View v, MotionEvent event) {
         synchronized (commandQueue) {
@@ -164,6 +179,16 @@ public class TouchProcessor {
     }
 
     private static void touchStarted(MotionEvent event) {
+        if (resSortNeeeded) {
+            resSortNeeeded = false;
+            class PrioritySorter implements Comparator<TouchProcessor> {
+                @Override
+                public int compare(TouchProcessor a, TouchProcessor b) {
+                    return b.priority - a.priority;
+                }
+            }
+            allProcessors.sort(new PrioritySorter());
+        }
         if (Debugger.getPage() == 0) { //do not process touches when debugger available
             for (TouchProcessor t : allProcessors) {
                 if (t.checkHitbox(new TouchPoint(event.getX(event.getActionIndex()), event.getY(event.getActionIndex()))) && (t.creatorClassName == OpenGLRenderer.getPageClass() || t.creatorClassName == null) && !t.touchAlive && !t.blocked) { //not to start the same processor twice if 2 touches in 1 area

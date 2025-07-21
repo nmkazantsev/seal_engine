@@ -54,6 +54,7 @@ public class MainRenderer extends GamePageClass {
         }
 
         touchProcessor = new TouchProcessor(this::touchProcHitbox, this::touchStartedCallback, this::touchMovedCallback, this::touchEndCallback, this);
+        touchProcessor.setPriority(1);
         new TouchProcessor(TouchPoint -> TouchPoint.touchX > x / 2, TouchPoint -> {
             if (!getMillisFrozen()) {
                 freezeMillis();
