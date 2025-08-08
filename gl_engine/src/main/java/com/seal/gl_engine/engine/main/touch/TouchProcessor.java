@@ -178,6 +178,14 @@ public class TouchProcessor {
         pageChanged = false;
     }
 
+    public void delete() {
+        if (!touchEndProcessed) {
+            terminate();
+        }
+        allProcessors.remove(this);
+
+    }
+
     private static void touchStarted(MotionEvent event) {
         if (resSortNeeeded) {
             resSortNeeeded = false;

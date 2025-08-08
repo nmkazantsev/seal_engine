@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 
 import com.seal.gl_engine.maths.Section;
@@ -261,5 +262,37 @@ public class PImage {
         stroke.setStrokeWidth(0);
         stroke.setARGB(0, 0, 0, 0);
     }
+
+    public void drawSector(float centerX,
+                           float centerY,
+                           float radius,
+                           float startAngle,
+                           float sweepAngle,
+                           boolean includeCenter) {
+        //use magic from depp seek
+        drawSect(canvas, centerX, centerY, radius, startAngle, sweepAngle, paint, includeCenter);
+    }
+
+    //magic from depp seek
+    private static void drawSect(
+            Canvas canvas,
+            float centerX,
+            float centerY,
+            float radius,
+            float startAngle,
+            float sweepAngle,
+            Paint paint,
+            boolean includeCenter
+    ) {
+        RectF rect = new RectF(
+                centerX - radius,
+                centerY - radius,
+                centerX + radius,
+                centerY + radius
+        );
+
+        canvas.drawArc(rect, startAngle, sweepAngle, includeCenter, paint);
+    }
+
 
 }
