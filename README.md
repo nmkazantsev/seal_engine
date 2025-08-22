@@ -302,6 +302,8 @@ r радиан по часовой. z - высота над плоскостью
 Раньше  
 это был метод класса танка.
 
+`void prepareAndDraw(float rot, float x, float y, float a, float b, float z)` - то же самое, но экономит на повороте, потому что он не обсчитывается вообще. Самый ходовой метод.
+
 `void prepareAndDraw(float x, float y, float b, float z)` - квадрат стороной b c левым верхниим  
 углом в x,y
 
