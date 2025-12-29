@@ -1,11 +1,9 @@
 package com.example.gl_engine_3_1;
 
+import static com.seal.gl_engine.maths.Vec3.getDirection;
 import static com.seal.gl_engine.utils.Utils.cos;
-import static com.seal.gl_engine.utils.Utils.degrees;
 import static com.seal.gl_engine.utils.Utils.radians;
 import static com.seal.gl_engine.utils.Utils.sin;
-import static com.seal.gl_engine.utils.Utils.sq;
-import static com.seal.gl_engine.utils.Utils.sqrt;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -13,7 +11,7 @@ import com.seal.gl_engine.maths.Vec3;
 
 import org.junit.Test;
 
-public class GetDirectionTest {
+public class GetDirectionVec3Test {
     @Test
     public void getDirection_isCorrect() {
         float[] arr = new float[360];
@@ -64,7 +62,6 @@ public class GetDirectionTest {
                 Vec3 b = new Vec3(1 * cos(radians(g)), 1 * sin(radians(g)), 0);
                 float res = getDirection(a, b);
                 float expect = g - i;
-                System.out.println(expect + " " + i + " " + g);
                 if (expect < 0) {
                     expect = 360 + expect;
                 }
@@ -83,50 +80,5 @@ public class GetDirectionTest {
         Vec3 a = new Vec3(1, 0, 0);
         Vec3 b = new Vec3(1 * cos(radians(ang)), 1 * sin(radians(ang)), 0);
         return getDirection(a, b);
-    }
-
-
-    private float getDirection(Vec3 a, Vec3 b) {
-        /*
-                     b
-                   *
-                 *  ) alpha
-        -------*------> a
-
-         */
-        Vec3 an = a.normalize();
-        Vec3 bn = b.normalize();
-        float projection = an.dot(bn);
-        Vec3 an_ort = an.cross(new Vec3(0, 0, 1)).mul(-1);
-        float ort = bn.dot(an_ort);
-        float alpha = 0;
-        if (projection > 0) {
-            if (projection > 0.5) {
-                alpha = degrees((float) Math.atan(ort / projection));
-                if (ort <= 0) {
-                    alpha = 360 + alpha;
-                }
-            } else {
-                float d = sqrt(sq(projection) + sq(ort));
-                alpha = degrees((float) Math.acos(projection / d));
-                if (ort <= 0) {
-                    alpha = 360 - alpha;
-                }
-            }
-        } else if (projection < 0) {
-            if (projection < -0.5) {
-                alpha = 180 + degrees((float) Math.atan(ort / projection));
-            } else {
-                float d = sqrt(sq(projection) + sq(ort));
-                alpha = degrees((float) Math.acos(projection / d));
-                if (ort <= 0) {
-                    alpha = 360 - alpha;
-                }
-            }
-        }
-        if (alpha >= 360) {
-            alpha -= 360;
-        }
-        return alpha;
     }
 }
