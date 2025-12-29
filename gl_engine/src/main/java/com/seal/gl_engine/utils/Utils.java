@@ -5,12 +5,10 @@ import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static java.lang.Float.parseFloat;
 import static java.lang.Thread.sleep;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.os.Handler;
 import android.os.Looper;
@@ -168,7 +166,9 @@ public class Utils {
         return img;
     }
     public static float getDirection(float px, float py, float tx, float ty) {
-        //returns direction to point in radinas. Calculated from north direction (0, top of screen) along the hour line move direction
+        //returns direction to point in radinas. Calculated from north direction (0, top of screen) along the hour line move direction and divided by 2
+        //so to convert real value to this shit :  (i / 2.0f + 90) % 360; if i is real right value
+
         float a;
         a = (degrees((atan((py - ty) / (px - tx)))) + 180);
         if (tx <= px) {
