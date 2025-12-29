@@ -143,6 +143,9 @@ public class Vec3 implements Serializable {
      * @return direction in degrees
      */
     public static float getDirection(Vec3 a, Vec3 b) {
+        if (a.z != 0 || b.z != 0) {
+            throw new IllegalArgumentException("3d vectors currently not supported!");
+        }
         /*
                      b
                    *
@@ -193,46 +196,6 @@ public class Vec3 implements Serializable {
      * @return direction in degrees
      */
     public float getDirection(Vec3 b) {
-        /*
-                     b
-                   *
-                 *  ) alpha
-        -------*------> a
-
-         */
-        Vec3 an = this.normalize();
-        Vec3 bn = b.normalize();
-        float projection = an.dot(bn);
-        Vec3 an_ort = an.cross(new Vec3(0, 0, 1)).mul(-1);
-        float ort = bn.dot(an_ort);
-        float alpha = 0;
-        if (projection > 0) {
-            if (projection > 0.5) {
-                alpha = degrees((float) Math.atan(ort / projection));
-                if (ort <= 0) {
-                    alpha = 360 + alpha;
-                }
-            } else {
-                float d = sqrt(sq(projection) + sq(ort));
-                alpha = degrees((float) Math.acos(projection / d));
-                if (ort <= 0) {
-                    alpha = 360 - alpha;
-                }
-            }
-        } else if (projection < 0) {
-            if (projection < -0.5) {
-                alpha = 180 + degrees((float) Math.atan(ort / projection));
-            } else {
-                float d = sqrt(sq(projection) + sq(ort));
-                alpha = degrees((float) Math.acos(projection / d));
-                if (ort <= 0) {
-                    alpha = 360 - alpha;
-                }
-            }
-        }
-        if (alpha >= 360) {
-            alpha -= 360;
-        }
-        return alpha;
+        return getDirection(this, b);
     }
 }
