@@ -20,7 +20,6 @@ public class GetDirectionVec3Test {
             res[i] = get_vec_angle(i);
             arr[i] = i;
         }
-        int i = 0;
         assertArrayEquals(arr, res, 0.1f);
     }
 
