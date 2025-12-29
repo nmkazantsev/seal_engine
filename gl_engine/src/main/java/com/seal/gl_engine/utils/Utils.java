@@ -5,12 +5,10 @@ import static com.seal.gl_engine.OpenGLRenderer.fps;
 import static java.lang.Float.parseFloat;
 import static java.lang.Thread.sleep;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.os.Handler;
 import android.os.Looper;
