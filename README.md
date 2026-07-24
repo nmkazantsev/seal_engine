@@ -1,3 +1,7 @@
+# АХТУНГ!
+
+движок переехал в новый репозиторий: https://github.com/nmkazantsev/Seal-Engine-3M
+
 # SealEngine
 
 ## Что это? Зачем оно надо?
